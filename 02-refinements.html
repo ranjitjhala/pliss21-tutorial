@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <title>02-refinements</title>
+
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/bootstrap-theme.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/rust-book-slides.css">
+    <link rel="stylesheet" type="text/css" href="/css/editor-slides.css">
+    <link rel="stylesheet" type="text/css" href="/css/code-format.css">
+    <link rel="stylesheet" type="text/css" href="/css/slideshow.css">
+    <style>
+      body {
+        text-align: center;
+      }
+      .mybreak {
+        line-height: 1em;
+      }
+      table {
+        margin-left: 150px;
+        margin-right: auto;
+      }
+    </style>
+
+    <!-- JQUERY MOBILE -->
+
+    <!-- Include jQuery Mobile stylesheets -->
+
+    <!-- Include the jQuery library -->
+     <!-- <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+     <script src="./js/jquery/jquery-1.11.3.min.js"></script>
+     <script src="./js/jquery/init-mobile.js"></script>
+
+     <!-- Include the jQuery Mobile library -->
+     <!-- <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+     <script src="./js/jquery/jquery.mobile-1.4.5.min.js"></script>
+
+<!-- JQUERY LOCAL
+
+<script type="text/javascript" src="./js/jquery/jquery-2.0.3.min.js"></script>
+
+-->
+
+
+
+<script type="text/javascript" src="/js/angular/angular.js"></script>
+<script type="text/javascript" src="/js/bootstrap/bootstrap.js"></script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+    extensions: ["color.js"],
+    Macros: {
+      True: "\\mathit{True}",
+      RR:   "{\\bf R}",
+      Int:  "\\mathtt{Int}",
+      Nat:  "\\mathtt{Nat}",
+      Zero: "\\mathtt{Zero}",
+      foo:   ["{\\bf Jhala FOO #1}", 1],
+      kvar:  ["{\\color[rgb]{1,0,0}{K_{#1}({#2})}}", 2],
+      bindx: ["{{#1}\\!:\\!{#2}}", 2],
+      reft:  ["\\{\\bindx{#1}{#2} \\mid {#3}\\}", 3],
+      ereft: ["\\bindx{#1}{\\{#2 \\mid #3\\}}", 3],
+      reftx: ["\\{{#1}\\mid{#2}\\}", 2],
+      inferrule: ["\\frac{#2}{#3}\\;{#1}", 3]
+  }
+  }
+});
+</script>
+
+<!-- GITHUB
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+-->
+
+<!-- LOCAL -->
+<script src="js/MathJax-2.6.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+
+</head>
+
+<body class="rustdoc" data-spy="scroll" data-target=".bs-docs-sidebar" ng-app="liquidDemo" ng-controller="LiquidDemoCtrl">
+
+
+
+  <div id="nav">
+
+        <button class="btn btn-xs btn-link actbutton firstbutton" type="button" style="font-size:15px; color:black; z-index:1">
+          <span class="glyphicon glyphicon-backward"></span>
+        </button>
+
+        <button class="btn btn-xs btn-link actbutton prevbutton" type="button" style="font-size:15px; color:black;  z-index:1">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </button>
+
+        <button id="toggle-nav" class="toggle-nav">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+
+        <button class="btn btn-xs btn-link actbutton nextbutton" type="button" style="font-size:15px; color:black; z-index:1">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
+
+        <button class="btn btn-xs btn-link actbutton lastbutton" type="button" style="font-size:15px; color:black; z-index:1">
+          <span class="glyphicon glyphicon-forward"></span>
+        </button>
+
+  </div>
+
+<div id='toc' class='mobile-hidden'>
+<ul class='chapter'>
+<li><a href='01-intro.html'><b>1.</b>title: "Habits"</a></li>
+<ul class='section'>
+<li><a href='01-intro.html#'><b>1.1.</b> Follow Along at This URL</a></li>
+<li><a href='01-intro.html#'><b>1.2.</b> Program Analysis &amp; Verification</a></li>
+<li><a href='01-intro.html#'><b>1.3.</b> Program Analysis &amp; Verification</a></li>
+<li><a href='01-intro.html#'><b>1.4.</b> Program Analysis &amp; Verification</a></li>
+<li><a href='01-intro.html#'><b>1.5.</b> Program<em>mer's</em> Analysis &amp; Verification</a></li>
+<li><a href='01-intro.html#'><b>1.6.</b> Analysis Influences Program's Design</a></li>
+<li><a href='01-intro.html#'><b>1.7.</b> Analysis Influences Program's Design</a></li>
+<li><a href='01-intro.html#'><b>1.8.</b> Analysis Influences Program's Design</a></li>
+<li><a href='01-intro.html#'><b>1.9.</b> Analysis Influences Program's Design</a></li>
+<li><a href='01-intro.html#'><b>1.10.</b> Analysis Influences Program's Design</a></li>
+<li><a href='01-intro.html#'><b>1.11.</b> Program<em>mer's</em> Analysis &amp; Verification</a></li>
+<li><a href='01-intro.html#'><b>1.12.</b> Program Influences Analysis' Abilities</a></li>
+<li><a href='01-intro.html#'><b>1.13.</b> Program Influences Analysis' Abilities</a></li>
+<li><a href='01-intro.html#'><b>1.14.</b> Language Integrated Verification (LIVE)</a></li>
+<li><a href='01-intro.html#'><b>1.15.</b> LIVE with Refinement Types</a></li>
+<li><a href='01-intro.html#'><b>1.16.</b> Plan</a></li>
+</ul>
+<li><a href='02-refinements.html'><b>2.</b>Basic Refinement Types</a></li>
+<ul class='section'>
+<li><a href='02-refinements.html#'><b>2.1.</b> Types</a></li>
+<li><a href='02-refinements.html#'><b>2.2.</b> Predicates</a></li>
+<li><a href='02-refinements.html#'><b>2.3.</b> Predicates</a></li>
+<li><a href='02-refinements.html#'><b>2.4.</b> Predicates</a></li>
+<li><a href='02-refinements.html#'><b>2.5.</b> Predicates</a></li>
+<li><a href='02-refinements.html#'><b>2.6.</b> Predicates</a></li>
+<li><a href='02-refinements.html#'><b>2.7.</b> Example: "Singletons"</a></li>
+<li><a href='02-refinements.html#'><b>2.8.</b> Example: Natural Numbers</a></li>
+<li><a href='02-refinements.html#'><b>2.9.</b> A Term Can Have <em>Many</em> Types</a></li>
+<li><a href='02-refinements.html#'><b>2.10.</b> 1. Predicate Subtyping <a href="http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf">[NUPRL, PVS]</a></a></li>
+<li><a href='02-refinements.html#'><b>2.11.</b> 1. Predicate Subtyping <a href="http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf">[NUPRL, PVS]</a></a></li>
+<li><a href='02-refinements.html#'><b>2.12.</b> 1. Predicate Subtyping <a href="http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf">[NUPRL, PVS]</a></a></li>
+<li><a href='02-refinements.html#'><b>2.13.</b> Example: Natural Numbers</a></li>
+<li><a href='02-refinements.html#'><b>2.14.</b> Example: Natural Numbers</a></li>
+<li><a href='02-refinements.html#'><b>2.15.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.16.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.17.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.18.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.19.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.20.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.21.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.22.</b> Recap: Basic Refinement Types</a></li>
+<li><a href='02-refinements.html#'><b>2.23.</b> Recap: Basic Refinement Types</a></li>
+<li><a href='02-refinements.html#'><b>2.24.</b> Recap: Refinement Types 101</a></li>
+<li><a href='02-refinements.html#'><b>2.25.</b> Plan</a></li>
+</ul>
+<li><a href='03-example-vectors.html'><b>3.</b>Case Study: Vector Bounds</a></li>
+<ul class='section'>
+<li><a href='03-example-vectors.html#'><b>3.1.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.2.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.3.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.4.</b> Specifications: Pre-Conditions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.5.</b> Specifications: Pre-Conditions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.6.</b> Specifications: Post-Conditions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.7.</b> Specifications: Post-Conditions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.8.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.9.</b> Verification: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.10.</b> Verification: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.11.</b> Verification: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.12.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.13.</b> Inference</a></li>
+<li><a href='03-example-vectors.html#'><b>3.14.</b> Inference: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.15.</b> Inference: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.16.</b> Inference: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.17.</b> Inference: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.18.</b> Inference: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.19.</b> Inference: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.20.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.21.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.22.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.23.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.24.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.25.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.26.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.27.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.28.</b> Refinement Types and Collections</a></li>
+<li><a href='03-example-vectors.html#'><b>3.29.</b> Refinement Types and Collections</a></li>
+<li><a href='03-example-vectors.html#'><b>3.30.</b> Refinement Types and Collections</a></li>
+<li><a href='03-example-vectors.html#'><b>3.31.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.32.</b> Putting it All Together: Binary Search</a></li>
+<li><a href='03-example-vectors.html#'><b>3.33.</b> Plan</a></li>
+</ul>
+<li><a href='04-data-properties.html'><b>4.</b>Properties of Data Structures</a></li>
+<ul class='section'>
+<li><a href='04-data-properties.html#'><b>4.1.</b> Properties of Data Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.2.</b> Example: List <code>average</code></a></li>
+<li><a href='04-data-properties.html#'><b>4.3.</b> Example: List <code>average</code></a></li>
+<li><a href='04-data-properties.html#'><b>4.4.</b> Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.5.</b> Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.6.</b> Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.7.</b> Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.8.</b> Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.9.</b> Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.10.</b> Example: <code>map</code> over Lists</a></li>
+<li><a href='04-data-properties.html#'><b>4.11.</b> Recap: Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.12.</b> Recap: Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.13.</b> Recap: Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.14.</b> Recap: Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.15.</b> Multiple Measures are Conjoined</a></li>
+<li><a href='04-data-properties.html#'><b>4.16.</b> Multiple Measures are Conjoined</a></li>
+<li><a href='04-data-properties.html#'><b>4.17.</b> Plan</a></li>
+</ul>
+<li><a href='05-example-sort.html'><b>5.</b>Case Study: Sorting Lists</a></li>
+<ul class='section'>
+<li><a href='05-example-sort.html#'><b>5.1.</b> Case Study: Sorting Lists</a></li>
+<li><a href='05-example-sort.html#'><b>5.2.</b> Insertion Sort</a></li>
+<li><a href='05-example-sort.html#'><b>5.3.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='05-example-sort.html#'><b>5.4.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='05-example-sort.html#'><b>5.5.</b> Property 1: Size</a></li>
+<li><a href='05-example-sort.html#'><b>5.6.</b> Property 1: Size</a></li>
+<li><a href='05-example-sort.html#'><b>5.7.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='05-example-sort.html#'><b>5.8.</b> Property 2: Permutation</a></li>
+<li><a href='05-example-sort.html#'><b>5.9.</b> SMT Solvers Reason About Sets</a></li>
+<li><a href='05-example-sort.html#'><b>5.10.</b> Specifying A List's Elements</a></li>
+<li><a href='05-example-sort.html#'><b>5.11.</b> Property 2: Permutation</a></li>
+<li><a href='05-example-sort.html#'><b>5.12.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='05-example-sort.html#'><b>5.13.</b> Case Study: Sorting Lists</a></li>
+<li><a href='05-example-sort.html#'><b>5.14.</b> MergeSort: Size</a></li>
+<li><a href='05-example-sort.html#'><b>5.15.</b> MergeSort: Permutation</a></li>
+<li><a href='05-example-sort.html#'><b>5.16.</b> Plan</a></li>
+</ul>
+<li><a href='06-data-legal.html'><b>6.</b>Invariants of Data Structures</a></li>
+<ul class='section'>
+<li><a href='06-data-legal.html#'><b>6.1.</b> Invariants of Data Structures</a></li>
+<li><a href='06-data-legal.html#'><b>6.2.</b> Recall: Properties of Structures</a></li>
+<li><a href='06-data-legal.html#'><b>6.3.</b> Recall: Properties of Structures</a></li>
+<li><a href='06-data-legal.html#'><b>6.4.</b> Strategy: Encode Invariants in <em>Constructors</em></a></li>
+<li><a href='06-data-legal.html#'><b>6.5.</b> Strategy: Encode Invariants in <em>Constructors</em></a></li>
+<li><a href='06-data-legal.html#'><b>6.6.</b> Invariant: Ordered Pairs</a></li>
+<li><a href='06-data-legal.html#'><b>6.7.</b> Invariant via Refined Constructors</a></li>
+<li><a href='06-data-legal.html#'><b>6.8.</b> Invariant via Refined Constructors</a></li>
+<li><a href='06-data-legal.html#'><b>6.9.</b> Invariant via Refined Constructors</a></li>
+<li><a href='06-data-legal.html#'><b>6.10.</b> Refined Data: CSV Tables</a></li>
+<li><a href='06-data-legal.html#'><b>6.11.</b> Exercise: Legal CSV Tables</a></li>
+<li><a href='06-data-legal.html#'><b>6.12.</b> Ordered Lists</a></li>
+<li><a href='06-data-legal.html#'><b>6.13.</b> Ordered Lists</a></li>
+<li><a href='06-data-legal.html#'><b>6.14.</b> Recap: Invariant via Refined Constructors</a></li>
+<li><a href='06-data-legal.html#'><b>6.15.</b> Recap: Invariant via Refined Constructors</a></li>
+<li><a href='06-data-legal.html#'><b>6.16.</b> Plan</a></li>
+</ul>
+<li><a href='07-example-interpreter.html'><b>7.</b>Case Study: Interpreting an Imperative Language</a></li>
+<ul class='section'>
+<li><a href='07-example-interpreter.html#'><b>7.1.</b> Proving Something is Impossible</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.2.</b> Proving Something is Impossible</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.3.</b> State</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.4.</b> Arithmetic Expressions</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.5.</b> Evaluating Arithmetic Expressions</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.6.</b> Variables Read in an Expression</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.7.</b> Statements</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.8.</b> Evaluating Statements</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.9.</b> Specify Used-Before-Defined Variables</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.10.</b> Statically Verifying a Dynamic Check</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.11.</b> Some Safe and Unsafe Programs</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.12.</b> Plan</a></li>
+</ul>
+<li><a href='08-example-bytestring.html'><b>8.</b>Case Study: Low Level Memory</a></li>
+<ul class='section'>
+<li><a href='08-example-bytestring.html#'><b>8.1.</b> "HeartBleed" in Haskell</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.2.</b> "HeartBleed" in Haskell (1/3)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.3.</b> "HeartBleed" in Haskell (2/3)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.4.</b> "HeartBleed" in Haskell (3/3)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.5.</b> Types Against Overflows</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.6.</b> 1. Low-level Pointer API</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.7.</b> API: Types</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.8.</b> API: Operations (1/2)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.9.</b> API: Operations (2/2)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.10.</b> Example</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.11.</b> Example</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.12.</b> Refined API: Types</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.13.</b> Refined API: Ops (1/3)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.14.</b> Refined API: Ops (2/3)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.15.</b> Refined API: Ops (3/3)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.16.</b> Example: Overflow Prevented</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.17.</b> 2. ByteString API</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.18.</b> ByteString Type</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.19.</b> Refined ByteString Type</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.20.</b> Refined ByteString Type</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.21.</b> Legal Bytestrings</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.22.</b> Illegal Bytestrings</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.23.</b> API <code>create</code> : Allocate and Fill a <code>ByteString</code></a></li>
+<li><a href='08-example-bytestring.html#'><b>8.24.</b> API <code>pack</code> : Convert List of <code>Char</code> into <code>ByteString</code></a></li>
+<li><a href='08-example-bytestring.html#'><b>8.25.</b> API <code>unsafeTake</code> : Extract <em>prefix</em> of size <code>n</code></a></li>
+<li><a href='08-example-bytestring.html#'><b>8.26.</b> API <code>unpack</code> : Convert <code>ByteString</code> into List of <code>Char</code></a></li>
+<li><a href='08-example-bytestring.html#'><b>8.27.</b> 3. Application API</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.28.</b> Revisit "HeartBleed"</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.29.</b> "HeartBleed" no more</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.30.</b> Recap: Types vs Overflows</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.31.</b> Nested ByteStrings</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.32.</b> \begin{code}</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.33.</b> -- Helper Code</a></li>
+</ul>
+<li><a href='08-example-sort.html'><b>9.</b>Case Study: Sorting Lists (Revisited)</a></li>
+<ul class='section'>
+<li><a href='08-example-sort.html#'><b>9.1.</b> Exercise: Insertion Sort actually Sorts</a></li>
+<li><a href='08-example-sort.html#'><b>9.2.</b> Exercise: Merge Sort actually Sorts</a></li>
+<li><a href='08-example-sort.html#'><b>9.3.</b> Invariants In Constructors</a></li>
+<li><a href='08-example-sort.html#'><b>9.4.</b> Abstracting Refinements</a></li>
+<li><a href='08-example-sort.html#'><b>9.5.</b> Abstracting Refinements</a></li>
+<li><a href='08-example-sort.html#'><b>9.6.</b> Abstracting Refinements</a></li>
+<li><a href='08-example-sort.html#'><b>9.7.</b> Abstracting Refinements</a></li>
+<li><a href='08-example-sort.html#'><b>9.8.</b> Abstract Refinements: Insertion Sort</a></li>
+<li><a href='08-example-sort.html#'><b>9.9.</b> Abstract Refinements: Merge Sort</a></li>
+<li><a href='08-example-sort.html#'><b>9.10.</b> Recap: Invariant via Refined Constructors</a></li>
+<li><a href='08-example-sort.html#'><b>9.11.</b> Plan</a></li>
+</ul>
+</ul>
+
+</div>
+
+       <div id="checker-status">
+
+         <!-- Verifying ... -->
+         <button class="btn btn-xs btn-link actbutton" type="button" style="font-size:30px; z-index:1"
+                ng-show="isChecking" ng-click="verifySource()">
+          <span class="glyphicon glyphicon-hourglass"></span>
+         </button>
+
+
+         <!-- Safe -->
+         <button class="btn btn-xs btn-link actbutton" type="button" style="font-size:30px; color:green; z-index:1"
+                 ng-show="isSafe">
+           <span class="glyphicon glyphicon-ok"></span>
+         </button>
+
+         <div class="dropdown" ng-show="isBad">
+             <button class="btn btn-xs btn-link dropdown-toggle"
+                     type="button"
+                     id="errorblockdropdown"
+                     data-toggle="dropdown"
+                     style="font-size:30px; color:red; z-index:1">
+               <span class="glyphicon glyphicon-remove" style="vertical-align:middle"></span><font size="4">{{errorBlocks.length}}</font>
+               </span>
+             </button>
+             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+               <li ng-repeat="err in errorBlocks">
+                 <a tabindex="-1" ng-click="jumpToProgPane(err)">{{err.index}}</a>
+               </li>
+             </ul>
+         </div>
+       </div>
+
+
+<div id='page-wrapper'>
+<div id='page'>
+
+--- title: "Language-Integrated Verification" author: Ranjit Jhala date: Nov 16th, 2017 documentclass: book toc: true bibliography: sw.bib notitle: true root: "." liquidserver: "https://liquid-demo.programming.systems/" pdflink: "book.pdf" ---
+<div class="hidden">
+\begin{code} {-@ LIQUID "--no-termination" @-} {-@ LIQUID "--diff" @-} {-@ LIQUID "--short-names" @-} module SimpleRefinements where import Prelude hiding (abs, max) zero, zero', zero'', four, four' :: Int nats :: [Int] {-@ plus :: x:Int -&gt; y:Int -&gt; {v:Int | v = x + y} @-} plus :: Int -&gt; Int -&gt; Int plus x y = x + y {-@ minus:: x:Int -&gt; y:Int -&gt; {v:Int | v = x - y} @-} minus :: Int -&gt; Int -&gt; Int minus x y = x - y -- zero' :: Int -- safeDiv :: Int -&gt; Int -&gt; Int -- size, size' :: [a] -&gt; Int \end{code}
+</div>
+Basic Refinement Types ----------------------<br />
+Refinement Types = **Types** + **Predicates** Types -----
+<hr />
+\begin{spec}
+<div>
+
+</div>
+b := Int | Bool | ... -- primitives | a, b, c -- type variables \end{spec} \begin{spec}
+<div>
+
+</div>
+t := {x:b | p} -- refined base | x:t -&gt; t -- refined function \end{spec} `p` is a predicate from a **decidable logic** Predicates ---------- **Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic** Predicates ---------- **Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic** \begin{spec}
+<div>
+
+</div>
+e := x, y, z, ... -- variables | 0, 1, 2, ... -- constants | e + e | c * e | ... -- arithmetic | f e1 ... en -- uninterpreted function \end{spec} Predicates ---------- **Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic** \begin{spec}
+<div>
+
+</div>
+e := x, y, z, ... -- variables | 0, 1, 2, ... -- constants | e + e | c * e | ... -- arithmetic | f e1 ... en -- uninterpreted function \end{spec} **Congruence Axiom for Uninterpreted Functions** $$\forall \overline{x}, \overline{y}.\ \overline{x} = \overline{y}\ \Rightarrow\ f(x) = f(y)$$ Predicates ---------- **Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic** \begin{spec}
+<div>
+
+</div>
+e := x, y, z, ... -- variables | 0, 1, 2, ... -- constants | e + e | c * e | ... -- arithmetic | f e1 ... en -- uninterpreted function \end{spec} \begin{spec}
+<div>
+
+</div>
+p := e &lt;= e | ... -- atoms | p &amp;&amp; p | p || p | !p -- boolean combinations \end{spec} Predicates ---------- Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic<br />
+Given a **Verification Condition** (VC) $$p_1 \Rightarrow \ldots \Rightarrow p_n$$ SMT solvers can **decide if VC is Valid** ("always true") Example: "Singletons" ---------------------
+<hr />
+The alias `Zero` describes a type inhabited by a *single* `Int` value `0` \begin{code} {-@ type Zero = {v:Int | v == 0} @-} {-@ zero :: Zero @-} zero = 0 \end{code}
+Refinement types via special comments `{-@ ... @-}`
+**Exercise:** What happens if you modify the code or type? Example: Natural Numbers ------------------------
+<hr />
+\begin{code} {-@ type Nat = {v:Int | 0 &lt;= v} @-} {-@ nats :: [Nat] @-} nats = [0, 1, 2, 3] \end{code} **Exercise:** What happens if you modify the code or type? A Term Can Have *Many* Types ----------------------------
+<div class="mybreak">
+<br />
+
+</div>
+What *is* the type of `0` ?
+<div class="mybreak">
+<br />
+
+</div>
+\begin{code} {-@ zero' :: Nat @-} zero' = zero \end{code}
+Is it `{v:Int|v=0}` or is it `{v:Int|0&lt;=v}` ? 1. Predicate Subtyping [[NUPRL, PVS]](http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf) ----------------------------------
+<div class="mybreak">
+<br />
+
+</div>
+In **environment** $\Gamma$ the type $t_1$ is a **subtype** of $t_2$ $$\boxed{\Gamma \vdash t_1 \preceq t_2}$$ 1. Predicate Subtyping [[NUPRL, PVS]](http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf) ----------------------------------
+<div class="mybreak">
+<br />
+
+</div>
+In **environment** $\Gamma$ the type $t_1$ is a **subtype** of $t_2$ $$\boxed{\Gamma \vdash t_1 \preceq t_2}$$
+<div class="mybreak">
+<br />
+
+</div>
+Where $\Gamma$ is **variable-and-type** bindings that are **in-scope** $$\Gamma \doteq \overline{\bindx{x_i}{P_i}}$$
+1. Predicate Subtyping [[NUPRL, PVS]](http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf) --------------------
+<div class="mybreak">
+<br />
+
+</div>
+In **environment** $\Gamma$ the type $t_1$ is a **subtype** of $t_2$ $$\boxed{\Gamma \vdash t_1 \preceq t_2}$$
+<div class="mybreak">
+<br />
+
+</div>
+$$ \begin{array}{rll} {\mathbf{If\ VC\ is\ Valid}} &amp; \bigwedge_i p_i \Rightarrow q \Rightarrow r &amp; (\mbox{By SMT}) \\ &amp; &amp; \\ {\mathbf{Then}} &amp; \overline{\bindx{x_i}{p_i}} \vdash \reft{v}{b}{q} \preceq \reft{v}{b}{r} &amp; \\ \end{array} $$ Example: Natural Numbers ------------------------
+<div class="mybreak">
+<br />
+
+</div>
+$$ \begin{array}{rcrccll} \mathbf{VC\ is\ Valid:} &amp; \True &amp; \Rightarrow &amp; v = 0 &amp; \Rightarrow &amp; 0 \leq v &amp; \mbox{(by SMT)} \\ \mathbf{So:} &amp; \emptyset &amp; \vdash &amp; \Zero &amp; \preceq &amp; \Nat &amp; \\ \end{array} $$ Example: Natural Numbers ------------------------
+<div class="mybreak">
+<br />
+
+</div>
+$$ \begin{array}{rcrccll} \mathbf{VC\ is\ Valid:} &amp; \True &amp; \Rightarrow &amp; v = 0 &amp; \Rightarrow &amp; 0 \leq v &amp; \mbox{(by SMT)} \\ \mathbf{So:} &amp; \emptyset &amp; \vdash &amp; \Zero &amp; \preceq &amp; \Nat &amp; \\ \end{array} $$
+<div class="mybreak">
+<br />
+
+</div>
+And so, we can type: \begin{code} {-@ zero'' :: Nat @-} zero'' = 0 -- as |- Zero &lt;: Nat \end{code}
+2. Typing Applications (Function Calls) ---------------------------------------
+<div class="mybreak">
+<br />
+
+</div>
+Terms built up by function-applications. 2. Typing Applications (Function Calls) ---------------------------------------
+<div class="mybreak">
+<br />
+
+</div>
+Terms built up by function-applications.
+<div class="mybreak">
+<br />
+
+</div>
+**Built-in Functions** \begin{spec}
+<div>
+
+</div>
+plus :: x:Int -&gt; y:Int -&gt; {v:Int|v = x + y} minus :: x:Int -&gt; y:Int -&gt; {v:Int|v = x - y} \end{spec}
+<div class="mybreak">
+<br />
+
+</div>
+**Output Type is a Post-Condition** Specifies the _output_ value equals the sum/difference of the _inputs_
+2. Typing Applications (Function Calls) ---------------------------------------
+<div class="mybreak">
+<br />
+
+</div>
+Terms built up by function-applications.
+<div class="mybreak">
+<br />
+
+</div>
+\begin{code} {-@ four :: Nat @-} four = plus x 1 where x = 3 \end{code}
+<div class="mybreak">
+<br />
+
+</div>
+*How to prove* `four :: Nat` ? 2. Typing Applications (Function Calls) ---------------------------------------
+<div class="mybreak">
+<br />
+
+</div>
+**Dependent Application**
+<div class="mybreak">
+<br />
+
+</div>
+$$\begin{array}{rl} {\mathbf{If}} &amp; \Gamma \vdash f :: \bindx{x}{s} \rightarrow t \\ &amp; \Gamma \vdash y :: s \\ {\mathbf{Then}} &amp; \Gamma \vdash f\ y :: t[x \mapsto y] \\ \end{array}$$
+<div class="mybreak">
+<br />
+
+</div>
+i.e. Output type with *formals substituted by actuals* 2. Typing Applications (Function Calls) ---------------------------------------
+<div class="mybreak">
+<br />
+
+</div>
+**Dependent Application: Example**
+<div class="mybreak">
+<br />
+
+</div>
+$$ \begin{array}{rl} {\mathbf{If}} &amp; \Gamma \vdash \mathit{plus} :: \bindx{a}{\Int} \rightarrow \bindx{b}{\Int} \rightarrow \reft{v}{\Int}{v = a + b} \\ &amp; \Gamma \vdash x :: \Int \\ &amp; \Gamma \vdash 1 :: \Int \\ &amp; \\ {\mathbf{Then}} &amp; \Gamma \vdash \mathit{plus} x 1 :: \reft{v}{\Int}{v = x + 1} \end{array} $$ 2. Typing Applications (Function Calls) ---------------------------------------
+<div class="mybreak">
+<br />
+
+</div>
+And so, we can type:
+<div class="mybreak">
+<br />
+
+</div>
+\begin{code} {-@ four' :: Nat @-} four' = plus x 1 -- x = 3 |- {v = x+1} &lt;: Nat where -- as x = 3 -- x = 3 =&gt; v = x+1 =&gt; 0 &lt;= v \end{code}
+<div class="mybreak">
+<br />
+
+</div>
+**Exercise:** What happens if you replace `plus` with `minus`? 2. Typing Applications (Function Calls) ---------------------------------------
+<div class="mybreak">
+<br />
+
+</div>
+Similarly, we can type:
+<div class="mybreak">
+<br />
+
+</div>
+\begin{code} {-@ incr :: Nat -&gt; Nat @-} incr x = plus x 1 -- {0 &lt;= x} |- {v = x + 1} &lt;: Nat -- as -- (0 &lt;= x) =&gt; v = x + 1 =&gt; 0 &lt;= v \end{code}
+<div class="mybreak">
+<br />
+
+</div>
+**Exercise:** Now, what happens if you replace `plus` with `minus`? Recap: Basic Refinement Types -----------------------------
+<div class="mybreak">
+<br />
+
+</div>
+**Refinement Types** Types + Predicates Recap: Basic Refinement Types -----------------------------
+<div class="mybreak">
+<br />
+
+</div>
+**Refinement Types** Types + Predicates
+<div class="mybreak">
+<br />
+
+</div>
+**Refinement Checking** Dependent Application + Predicate Subtyping Recap: Refinement Types 101 ---------------------------
+<div class="mybreak">
+<br />
+
+</div>
+**Refinement Types** Types + Predicates
+<div class="mybreak">
+<br />
+
+</div>
+**Refinement Checking** Dependent Application + Predicate Subtyping
+<div class="mybreak">
+<br />
+
+</div>
+Plan ----<br />
+**Part I:** [Refinements 101](02-refinements.html) Case Study: **[Vector Bounds](03-example-vectors.html)** **Part II:** [Properties of Structures](04-data-properties.html) Case Study: [Sorting](05-example-sort.html), [Interpreter](06-example-interpreter.html) **Part III:** [Invariants of Data Structures](07-data-legal.html) Case Study: [Sorting actually Sorts Lists](08-example-sort.html) **Part IV:** [Termination](09-termination.html) and [Correctness Proofs](10-reflection.html) Case Study: [Optimizing Arithmetic Expressions](11-example-opt.html) [mylink]: http://www.google.com [dml]: http://www.cs.bu.edu/~hwxi/DML/DML.html [vecspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Vector.spec [vec]: http://hackage.haskell.org/package/vector [agdavec]: http://code.haskell.org/Agda/examples/Vec.agda [ref101]: /blog/2013/01/01/refinement-types-101.lhs/ [ref102]: /blog/2013/01/27/refinements-101-reax.lhs/ [data-list]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [foldl]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [listtail]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [dmlarray]: http://www.cs.bu.edu/~hwxi/academic/papers/pldi98.pdf [liquid-tutorial]: http://github.com/ucsd-progsys/liquidhaskell-tutorial.git [liquid-emacs]: https://github.com/ucsd-progsys/liquid-types.el [liquid-vim]: https://github.com/ucsd-progsys/liquid-types.vim [z3]: http://z3.codeplex.com/ [cvc4]: http://cvc4.cs.nyu.edu/ [mathsat]: http://mathsat.fbk.eu/download.html [hoogle-assert]: https://www.haskell.org/hoogle/?hoogle=assert [apple-riser]: http://blog.jbapple.com/2008/01/extra-type-safety-using-polymorphic.html [safeList]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [kmeansI]: /blog/2013/02/16/kmeans-clustering-I.lhs/ [kmeansII]: /blog/2013/02/17/kmeans-clustering-II.lhs/ [URL-take]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/List.lhs#L334 [URL-groupBy]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:groupBy [URL-transpose]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html#transpose [maru]: http://www.youtube.com/watch?v=8uDuls5TyNE [URL-kmeans]: http://hackage.haskell.org/package/kmeans [hinze-icfp09]: http://www.cs.ox.ac.uk/ralf.hinze/publications/ICFP09.pdf [smt-set]: http://www.kroening.com/smt-lib-lsm.pdf) [setspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Set.spec [mccarthy]: http://www-formal.stanford.edu/jmc/towards.ps [xmonad-stackset]: http://hackage.haskell.org/package/xmonad-0.11/docs/XMonad-StackSet.html [bst-wiki]: http://en.wikipedia.org/wiki/Binary_search_tree [foreignptr]: http://hackage.haskell.org/package/base/docs/Foreign-Ptr.html [bytestring]: https://hackage.haskell.org/package/bytestring [xmonad]: http://xmonad.org/ [wiki-zipper]: http://en.wikipedia.org/wiki/Zipper_(data_structure) [wiki-contracts]: http://en.wikipedia.org/wiki/Design_by_contract [smart-ctr-wiki]: https://www.haskell.org/haskellwiki/Smart_constructors [smt-wiki]: http://en.wikipedia.org/wiki/Satisfiability_Modulo_Theories [vazou13]: http://goto.ucsd.edu/~rjhala/liquid/abstract_refinement_types.pdf [liquidpldi08]: http://goto.ucsd.edu/~rjhala/liquid/liquid_types.pdf [bird-pearls]: http://www.amazon.com/Pearls-Functional-Algorithm-Design-Richard/dp/0521513383 [mitchell-riser]: http://neilmitchell.blogspot.com/2008/03/sorting-at-speed.html [blog-set]: /blog/2013/03/26/talking-about-sets.lhs/ [z3cal]: http://research.microsoft.com/en-us/um/people/leonardo/fmcad09.pdf [sbv]: https://github.com/LeventErkok/sbv [leon]: http://lara.epfl.ch/w/leon [ptrspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/Ptr.spec [okasaki95]: http://www.westpoint.edu/eecs/SiteAssets/SitePages/Faculty%20Publication%20Documents/Okasaki/jfp95queue.pdf [queue-wiki]: http://en.wikipedia.org/wiki/Queue_%28abstract_data_type%29 [avl-wiki]: http://en.wikipedia.org/wiki/AVL_tree [nelson-thesis]: http://research.microsoft.com/en-us/um/people/qadeer/cse599f/papers/nelsonthesis.pdf
+
+</div>
+</div>
+
+<!--Site Meter
+<div class="hidden">
+  <script type="text/javascript" src="http://s23.sitemeter.com/js/counter.js?site=s23liquidtypes"></script>
+  <noscript>
+    <a href="http://s23.sitemeter.com/stats.asp?site=s23liquidtypes"
+      target="_top">
+      <img src="http://s23.sitemeter.com/meter.asp?site=s23liquidtypes"
+      alt="Site Meter" border="0"/></a>
+  </noscript>
+</div>
+-->
+
+
+
+
+<!-- JavaScript below! ============================================== -->
+
+  <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
+  <script src="/js/liquid/tooltip.js"></script>
+  <script src="/js/liquid/annot.js"></script>
+  <script src="/js/liquid/config.js"></script>
+  <script src="/js/liquid/slideshow.js"></script>
+  <script src="/js/liquid/liquid.js"></script>
+
+  <script type="text/javascript">
+    var queryServerURL = "" ;
+  </script>
+
+  <!-- rust nav JS -->
+  <script type="text/javascript">
+    window.playgroundUrl = "";
+  </script>
+
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function(event) {
+
+ document.getElementById("toggle-nav").onclick = toggleNav;
+
+  function toggleNav() {
+    var toc         = document.getElementById("toc");
+    var pagewrapper = document.getElementById("page-wrapper");
+    var status      = document.getElementById("checker-status");
+
+    toggleClass(toc,         "mobile-hidden");
+    // toggleClass(status,      "mobile-hidden");
+    toggleClass(pagewrapper, "mobile-hidden");
+  };
+
+  function toggleClass(el, className) {
+     // from http://youmightnotneedjquery.com/
+     if (el.classList) {
+       el.classList.toggle(className);
+     } else {
+       var classes = el.className.split(' ');
+       var existingIndex = classes.indexOf(className);
+
+       if (existingIndex >= 0) {
+         classes.splice(existingIndex, 1);
+       } else {
+         classes.push(className);
+       }
+       el.className = classes.join(' ');
+     }
+  }
+});
+</script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <title>08-example-bytestring</title>
+
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/bootstrap-theme.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/rust-book-slides.css">
+    <link rel="stylesheet" type="text/css" href="/css/editor-slides.css">
+    <link rel="stylesheet" type="text/css" href="/css/code-format.css">
+    <link rel="stylesheet" type="text/css" href="/css/slideshow.css">
+    <style>
+      body {
+        text-align: center;
+      }
+      .mybreak {
+        line-height: 1em;
+      }
+      table {
+        margin-left: 150px;
+        margin-right: auto;
+      }
+    </style>
+
+    <!-- JQUERY MOBILE -->
+
+    <!-- Include jQuery Mobile stylesheets -->
+
+    <!-- Include the jQuery library -->
+     <!-- <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+     <script src="./js/jquery/jquery-1.11.3.min.js"></script>
+     <script src="./js/jquery/init-mobile.js"></script>
+
+     <!-- Include the jQuery Mobile library -->
+     <!-- <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+     <script src="./js/jquery/jquery.mobile-1.4.5.min.js"></script>
+
+<!-- JQUERY LOCAL
+
+<script type="text/javascript" src="./js/jquery/jquery-2.0.3.min.js"></script>
+
+-->
+
+
+
+<script type="text/javascript" src="/js/angular/angular.js"></script>
+<script type="text/javascript" src="/js/bootstrap/bootstrap.js"></script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+    extensions: ["color.js"],
+    Macros: {
+      True: "\\mathit{True}",
+      RR:   "{\\bf R}",
+      Int:  "\\mathtt{Int}",
+      Nat:  "\\mathtt{Nat}",
+      Zero: "\\mathtt{Zero}",
+      foo:   ["{\\bf Jhala FOO #1}", 1],
+      kvar:  ["{\\color[rgb]{1,0,0}{K_{#1}({#2})}}", 2],
+      bindx: ["{{#1}\\!:\\!{#2}}", 2],
+      reft:  ["\\{\\bindx{#1}{#2} \\mid {#3}\\}", 3],
+      ereft: ["\\bindx{#1}{\\{#2 \\mid #3\\}}", 3],
+      reftx: ["\\{{#1}\\mid{#2}\\}", 2],
+      inferrule: ["\\frac{#2}{#3}\\;{#1}", 3]
+  }
+  }
+});
+</script>
+
+<!-- GITHUB
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+-->
+
+<!-- LOCAL -->
+<script src="js/MathJax-2.6.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+
+</head>
+
+<body class="rustdoc" data-spy="scroll" data-target=".bs-docs-sidebar" ng-app="liquidDemo" ng-controller="LiquidDemoCtrl">
+
+
+
+  <div id="nav">
+
+        <button class="btn btn-xs btn-link actbutton firstbutton" type="button" style="font-size:15px; color:black; z-index:1">
+          <span class="glyphicon glyphicon-backward"></span>
+        </button>
+
+        <button class="btn btn-xs btn-link actbutton prevbutton" type="button" style="font-size:15px; color:black;  z-index:1">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </button>
+
+        <button id="toggle-nav" class="toggle-nav">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+
+        <button class="btn btn-xs btn-link actbutton nextbutton" type="button" style="font-size:15px; color:black; z-index:1">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
+
+        <button class="btn btn-xs btn-link actbutton lastbutton" type="button" style="font-size:15px; color:black; z-index:1">
+          <span class="glyphicon glyphicon-forward"></span>
+        </button>
+
+  </div>
+
+<div id='toc' class='mobile-hidden'>
+<ul class='chapter'>
+<li><a href='01-intro.html'><b>1.</b>title: "Habits"</a></li>
+<ul class='section'>
+<li><a href='01-intro.html#'><b>1.1.</b> Follow Along at This URL</a></li>
+<li><a href='01-intro.html#'><b>1.2.</b> Program Analysis &amp; Verification</a></li>
+<li><a href='01-intro.html#'><b>1.3.</b> Program Analysis &amp; Verification</a></li>
+<li><a href='01-intro.html#'><b>1.4.</b> Program Analysis &amp; Verification</a></li>
+<li><a href='01-intro.html#'><b>1.5.</b> Program<em>mer's</em> Analysis &amp; Verification</a></li>
+<li><a href='01-intro.html#'><b>1.6.</b> Analysis Influences Program's Design</a></li>
+<li><a href='01-intro.html#'><b>1.7.</b> Analysis Influences Program's Design</a></li>
+<li><a href='01-intro.html#'><b>1.8.</b> Analysis Influences Program's Design</a></li>
+<li><a href='01-intro.html#'><b>1.9.</b> Analysis Influences Program's Design</a></li>
+<li><a href='01-intro.html#'><b>1.10.</b> Analysis Influences Program's Design</a></li>
+<li><a href='01-intro.html#'><b>1.11.</b> Program<em>mer's</em> Analysis &amp; Verification</a></li>
+<li><a href='01-intro.html#'><b>1.12.</b> Program Influences Analysis' Abilities</a></li>
+<li><a href='01-intro.html#'><b>1.13.</b> Program Influences Analysis' Abilities</a></li>
+<li><a href='01-intro.html#'><b>1.14.</b> Language Integrated Verification (LIVE)</a></li>
+<li><a href='01-intro.html#'><b>1.15.</b> LIVE with Refinement Types</a></li>
+<li><a href='01-intro.html#'><b>1.16.</b> Plan</a></li>
+</ul>
+<li><a href='02-refinements.html'><b>2.</b>Basic Refinement Types</a></li>
+<ul class='section'>
+<li><a href='02-refinements.html#'><b>2.1.</b> Types</a></li>
+<li><a href='02-refinements.html#'><b>2.2.</b> Predicates</a></li>
+<li><a href='02-refinements.html#'><b>2.3.</b> Predicates</a></li>
+<li><a href='02-refinements.html#'><b>2.4.</b> Predicates</a></li>
+<li><a href='02-refinements.html#'><b>2.5.</b> Predicates</a></li>
+<li><a href='02-refinements.html#'><b>2.6.</b> Predicates</a></li>
+<li><a href='02-refinements.html#'><b>2.7.</b> Example: "Singletons"</a></li>
+<li><a href='02-refinements.html#'><b>2.8.</b> Example: Natural Numbers</a></li>
+<li><a href='02-refinements.html#'><b>2.9.</b> A Term Can Have <em>Many</em> Types</a></li>
+<li><a href='02-refinements.html#'><b>2.10.</b> 1. Predicate Subtyping <a href="http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf">[NUPRL, PVS]</a></a></li>
+<li><a href='02-refinements.html#'><b>2.11.</b> 1. Predicate Subtyping <a href="http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf">[NUPRL, PVS]</a></a></li>
+<li><a href='02-refinements.html#'><b>2.12.</b> 1. Predicate Subtyping <a href="http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf">[NUPRL, PVS]</a></a></li>
+<li><a href='02-refinements.html#'><b>2.13.</b> Example: Natural Numbers</a></li>
+<li><a href='02-refinements.html#'><b>2.14.</b> Example: Natural Numbers</a></li>
+<li><a href='02-refinements.html#'><b>2.15.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.16.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.17.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.18.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.19.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.20.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.21.</b> 2. Typing Applications (Function Calls)</a></li>
+<li><a href='02-refinements.html#'><b>2.22.</b> Recap: Basic Refinement Types</a></li>
+<li><a href='02-refinements.html#'><b>2.23.</b> Recap: Basic Refinement Types</a></li>
+<li><a href='02-refinements.html#'><b>2.24.</b> Recap: Refinement Types 101</a></li>
+<li><a href='02-refinements.html#'><b>2.25.</b> Plan</a></li>
+</ul>
+<li><a href='03-example-vectors.html'><b>3.</b>Case Study: Vector Bounds</a></li>
+<ul class='section'>
+<li><a href='03-example-vectors.html#'><b>3.1.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.2.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.3.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.4.</b> Specifications: Pre-Conditions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.5.</b> Specifications: Pre-Conditions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.6.</b> Specifications: Post-Conditions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.7.</b> Specifications: Post-Conditions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.8.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.9.</b> Verification: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.10.</b> Verification: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.11.</b> Verification: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.12.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.13.</b> Inference</a></li>
+<li><a href='03-example-vectors.html#'><b>3.14.</b> Inference: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.15.</b> Inference: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.16.</b> Inference: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.17.</b> Inference: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.18.</b> Inference: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.19.</b> Inference: Vector Sum</a></li>
+<li><a href='03-example-vectors.html#'><b>3.20.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.21.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.22.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.23.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.24.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.25.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.26.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.27.</b> Collections &amp; Higher-Order Functions</a></li>
+<li><a href='03-example-vectors.html#'><b>3.28.</b> Refinement Types and Collections</a></li>
+<li><a href='03-example-vectors.html#'><b>3.29.</b> Refinement Types and Collections</a></li>
+<li><a href='03-example-vectors.html#'><b>3.30.</b> Refinement Types and Collections</a></li>
+<li><a href='03-example-vectors.html#'><b>3.31.</b> Case Study: Vector Bounds</a></li>
+<li><a href='03-example-vectors.html#'><b>3.32.</b> Putting it All Together: Binary Search</a></li>
+<li><a href='03-example-vectors.html#'><b>3.33.</b> Plan</a></li>
+</ul>
+<li><a href='04-data-properties.html'><b>4.</b>Properties of Data Structures</a></li>
+<ul class='section'>
+<li><a href='04-data-properties.html#'><b>4.1.</b> Properties of Data Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.2.</b> Example: List <code>average</code></a></li>
+<li><a href='04-data-properties.html#'><b>4.3.</b> Example: List <code>average</code></a></li>
+<li><a href='04-data-properties.html#'><b>4.4.</b> Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.5.</b> Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.6.</b> Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.7.</b> Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.8.</b> Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.9.</b> Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.10.</b> Example: <code>map</code> over Lists</a></li>
+<li><a href='04-data-properties.html#'><b>4.11.</b> Recap: Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.12.</b> Recap: Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.13.</b> Recap: Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.14.</b> Recap: Properties of Structures</a></li>
+<li><a href='04-data-properties.html#'><b>4.15.</b> Multiple Measures are Conjoined</a></li>
+<li><a href='04-data-properties.html#'><b>4.16.</b> Multiple Measures are Conjoined</a></li>
+<li><a href='04-data-properties.html#'><b>4.17.</b> Plan</a></li>
+</ul>
+<li><a href='05-example-sort.html'><b>5.</b>Case Study: Sorting Lists</a></li>
+<ul class='section'>
+<li><a href='05-example-sort.html#'><b>5.1.</b> Case Study: Sorting Lists</a></li>
+<li><a href='05-example-sort.html#'><b>5.2.</b> Insertion Sort</a></li>
+<li><a href='05-example-sort.html#'><b>5.3.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='05-example-sort.html#'><b>5.4.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='05-example-sort.html#'><b>5.5.</b> Property 1: Size</a></li>
+<li><a href='05-example-sort.html#'><b>5.6.</b> Property 1: Size</a></li>
+<li><a href='05-example-sort.html#'><b>5.7.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='05-example-sort.html#'><b>5.8.</b> Property 2: Permutation</a></li>
+<li><a href='05-example-sort.html#'><b>5.9.</b> SMT Solvers Reason About Sets</a></li>
+<li><a href='05-example-sort.html#'><b>5.10.</b> Specifying A List's Elements</a></li>
+<li><a href='05-example-sort.html#'><b>5.11.</b> Property 2: Permutation</a></li>
+<li><a href='05-example-sort.html#'><b>5.12.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='05-example-sort.html#'><b>5.13.</b> Case Study: Sorting Lists</a></li>
+<li><a href='05-example-sort.html#'><b>5.14.</b> MergeSort: Size</a></li>
+<li><a href='05-example-sort.html#'><b>5.15.</b> MergeSort: Permutation</a></li>
+<li><a href='05-example-sort.html#'><b>5.16.</b> Plan</a></li>
+</ul>
+<li><a href='06-data-legal.html'><b>6.</b>Invariants of Data Structures</a></li>
+<ul class='section'>
+<li><a href='06-data-legal.html#'><b>6.1.</b> Invariants of Data Structures</a></li>
+<li><a href='06-data-legal.html#'><b>6.2.</b> Recall: Properties of Structures</a></li>
+<li><a href='06-data-legal.html#'><b>6.3.</b> Recall: Properties of Structures</a></li>
+<li><a href='06-data-legal.html#'><b>6.4.</b> Strategy: Encode Invariants in <em>Constructors</em></a></li>
+<li><a href='06-data-legal.html#'><b>6.5.</b> Strategy: Encode Invariants in <em>Constructors</em></a></li>
+<li><a href='06-data-legal.html#'><b>6.6.</b> Invariant: Ordered Pairs</a></li>
+<li><a href='06-data-legal.html#'><b>6.7.</b> Invariant via Refined Constructors</a></li>
+<li><a href='06-data-legal.html#'><b>6.8.</b> Invariant via Refined Constructors</a></li>
+<li><a href='06-data-legal.html#'><b>6.9.</b> Invariant via Refined Constructors</a></li>
+<li><a href='06-data-legal.html#'><b>6.10.</b> Refined Data: CSV Tables</a></li>
+<li><a href='06-data-legal.html#'><b>6.11.</b> Exercise: Legal CSV Tables</a></li>
+<li><a href='06-data-legal.html#'><b>6.12.</b> Ordered Lists</a></li>
+<li><a href='06-data-legal.html#'><b>6.13.</b> Ordered Lists</a></li>
+<li><a href='06-data-legal.html#'><b>6.14.</b> Recap: Invariant via Refined Constructors</a></li>
+<li><a href='06-data-legal.html#'><b>6.15.</b> Recap: Invariant via Refined Constructors</a></li>
+<li><a href='06-data-legal.html#'><b>6.16.</b> Plan</a></li>
+</ul>
+<li><a href='07-example-interpreter.html'><b>7.</b>Case Study: Interpreting an Imperative Language</a></li>
+<ul class='section'>
+<li><a href='07-example-interpreter.html#'><b>7.1.</b> Proving Something is Impossible</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.2.</b> Proving Something is Impossible</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.3.</b> State</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.4.</b> Arithmetic Expressions</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.5.</b> Evaluating Arithmetic Expressions</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.6.</b> Variables Read in an Expression</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.7.</b> Statements</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.8.</b> Evaluating Statements</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.9.</b> Specify Used-Before-Defined Variables</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.10.</b> Statically Verifying a Dynamic Check</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.11.</b> Some Safe and Unsafe Programs</a></li>
+<li><a href='07-example-interpreter.html#'><b>7.12.</b> Plan</a></li>
+</ul>
+<li><a href='08-example-bytestring.html'><b>8.</b>Case Study: Low Level Memory</a></li>
+<ul class='section'>
+<li><a href='08-example-bytestring.html#'><b>8.1.</b> "HeartBleed" in Haskell</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.2.</b> "HeartBleed" in Haskell (1/3)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.3.</b> "HeartBleed" in Haskell (2/3)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.4.</b> "HeartBleed" in Haskell (3/3)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.5.</b> Types Against Overflows</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.6.</b> 1. Low-level Pointer API</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.7.</b> API: Types</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.8.</b> API: Operations (1/2)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.9.</b> API: Operations (2/2)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.10.</b> Example</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.11.</b> Example</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.12.</b> Refined API: Types</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.13.</b> Refined API: Ops (1/3)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.14.</b> Refined API: Ops (2/3)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.15.</b> Refined API: Ops (3/3)</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.16.</b> Example: Overflow Prevented</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.17.</b> 2. ByteString API</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.18.</b> ByteString Type</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.19.</b> Refined ByteString Type</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.20.</b> Refined ByteString Type</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.21.</b> Legal Bytestrings</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.22.</b> Illegal Bytestrings</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.23.</b> API <code>create</code> : Allocate and Fill a <code>ByteString</code></a></li>
+<li><a href='08-example-bytestring.html#'><b>8.24.</b> API <code>pack</code> : Convert List of <code>Char</code> into <code>ByteString</code></a></li>
+<li><a href='08-example-bytestring.html#'><b>8.25.</b> API <code>unsafeTake</code> : Extract <em>prefix</em> of size <code>n</code></a></li>
+<li><a href='08-example-bytestring.html#'><b>8.26.</b> API <code>unpack</code> : Convert <code>ByteString</code> into List of <code>Char</code></a></li>
+<li><a href='08-example-bytestring.html#'><b>8.27.</b> 3. Application API</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.28.</b> Revisit "HeartBleed"</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.29.</b> "HeartBleed" no more</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.30.</b> Recap: Types vs Overflows</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.31.</b> Nested ByteStrings</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.32.</b> \begin{code}</a></li>
+<li><a href='08-example-bytestring.html#'><b>8.33.</b> -- Helper Code</a></li>
+</ul>
+<li><a href='08-example-sort.html'><b>9.</b>Case Study: Sorting Lists (Revisited)</a></li>
+<ul class='section'>
+<li><a href='08-example-sort.html#'><b>9.1.</b> Exercise: Insertion Sort actually Sorts</a></li>
+<li><a href='08-example-sort.html#'><b>9.2.</b> Exercise: Merge Sort actually Sorts</a></li>
+<li><a href='08-example-sort.html#'><b>9.3.</b> Invariants In Constructors</a></li>
+<li><a href='08-example-sort.html#'><b>9.4.</b> Abstracting Refinements</a></li>
+<li><a href='08-example-sort.html#'><b>9.5.</b> Abstracting Refinements</a></li>
+<li><a href='08-example-sort.html#'><b>9.6.</b> Abstracting Refinements</a></li>
+<li><a href='08-example-sort.html#'><b>9.7.</b> Abstracting Refinements</a></li>
+<li><a href='08-example-sort.html#'><b>9.8.</b> Abstract Refinements: Insertion Sort</a></li>
+<li><a href='08-example-sort.html#'><b>9.9.</b> Abstract Refinements: Merge Sort</a></li>
+<li><a href='08-example-sort.html#'><b>9.10.</b> Recap: Invariant via Refined Constructors</a></li>
+<li><a href='08-example-sort.html#'><b>9.11.</b> Plan</a></li>
+</ul>
+</ul>
+
+</div>
+
+       <div id="checker-status">
+
+         <!-- Verifying ... -->
+         <button class="btn btn-xs btn-link actbutton" type="button" style="font-size:30px; z-index:1"
+                ng-show="isChecking" ng-click="verifySource()">
+          <span class="glyphicon glyphicon-hourglass"></span>
+         </button>
+
+
+         <!-- Safe -->
+         <button class="btn btn-xs btn-link actbutton" type="button" style="font-size:30px; color:green; z-index:1"
+                 ng-show="isSafe">
+           <span class="glyphicon glyphicon-ok"></span>
+         </button>
+
+         <div class="dropdown" ng-show="isBad">
+             <button class="btn btn-xs btn-link dropdown-toggle"
+                     type="button"
+                     id="errorblockdropdown"
+                     data-toggle="dropdown"
+                     style="font-size:30px; color:red; z-index:1">
+               <span class="glyphicon glyphicon-remove" style="vertical-align:middle"></span><font size="4">{{errorBlocks.length}}</font>
+               </span>
+             </button>
+             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+               <li ng-repeat="err in errorBlocks">
+                 <a tabindex="-1" ng-click="jumpToProgPane(err)">{{err.index}}</a>
+               </li>
+             </ul>
+         </div>
+       </div>
+
+
+<div id='page-wrapper'>
+<div id='page'>
+
+--- title: "Language-Integrated Verification" author: Ranjit Jhala date: Nov 16th, 2017 documentclass: book toc: true bibliography: sw.bib notitle: true root: "." liquidserver: "https://liquid-demo.programming.systems/" pdflink: "book.pdf" ---
+<div class="hidden">
+\begin{code} {-@ LIQUID "--no-termination" @-} {-@ LIQUID "--short-names" @-} {-@ LIQUID "--prune-unsorted" @-} {- LIQUID "--diffcheck" @-} {-# LANGUAGE ForeignFunctionInterface #-} module Memory where import Prelude hiding (null) import Data.Char import Data.Word import Foreign.C.Types import Foreign.ForeignPtr import Foreign.Ptr import Foreign.Storable import System.IO.Unsafe import Data.ByteString.Internal (c2w, w2c) import Language.Haskell.Liquid.Prelude \end{code}
+</div>
+<br />
+Case Study: Low Level Memory ============================<br />
+"HeartBleed" in Haskell -----------------------<br />
+**Modern languages are built on top of C**<br />
+
+Implementation errors could open up vulnerabilities
+<br />
+"HeartBleed" in Haskell (1/3) -----------------------------<br />
+**A String Truncation Function**<br />
+
+<div class="hidden">
+\begin{spec} import Data.ByteString.Char8 (pack, unpack) import Data.ByteString.Unsafe (unsafeTake) \end{spec}
+</div>
+\begin{spec} chop :: String -&gt; Int -&gt; String chop s n = s' where b = pack s -- down to low-level b' = unsafeTake n b -- grab n chars s' = unpack b' -- up to high-level \end{spec}<br />
+"HeartBleed" in Haskell (2/3) ----------------------------- <img src="img/overflow.png" height="100" /> Works if you use the **valid prefix** size \begin{spec} λ&gt; let ex = "Ranjit Loves Jamon" λ&gt; heartBleed ex 10 "Ranjit Lov" \end{spec}<br />
+"HeartBleed" in Haskell (3/3) ----------------------------- <img src="img/overflow.png" height="100" /> Leaks *overflow buffer* if **invalid prefix** size! \begin{spec} λ&gt; let ex = "Ranjit Loves Jamon" λ&gt; heartBleed ex 30 "Ranjit Loves Jamon\NUL\201\&amp;1j\DC3\SOH\NUL" \end{spec} Types Against Overflows -----------------------<br />
+**Strategy: Specify and Verify Types for**<br />
+1.
+Low-level `Pointer` API
+2.
+Lib-level `ByteString` API
+3.
+User-level `Application` API
+<br />
+
+Errors at *each* level are prevented by types at *lower* levels
+1. Low-level Pointer API ========================<br />
+Strategy: Specify and Verify Types for<br />
+1. **Low-level `Pointer` API** 2. Lib-level `ByteString` API 3. User-level `Application` API<br />
+Errors at *each* level are prevented by types at *lower* levels API: Types ----------<br />
+**Low-level Pointers** \begin{spec} data Ptr a \end{spec}
+**Foreign Pointers** \begin{spec} data ForeignPtr a \end{spec} `ForeignPtr` wraps around `Ptr`; can be exported to/from C.
+API: Operations (1/2) ---------------------<br />
+
+**Read** \begin{spec} peek :: Ptr a -&gt; IO a \end{spec}
+**Write** \begin{spec} poke :: Ptr a -&gt; a -&gt; IO () \end{spec}
+**Arithmetic** \begin{spec} plusPtr :: Ptr a -&gt; Int -&gt; Ptr b \end{spec}
+API: Operations (2/2) ---------------------<br />
+
+**Create** \begin{spec} malloc :: Int -&gt; ForeignPtr a \end{spec}
+<br />
+
+**Unwrap and Use** \begin{spec} withForeignPtr :: ForeignPtr a -- pointer -&gt; (Ptr a -&gt; IO b) -- action -&gt; IO b -- result \end{spec}
+Example -------<br />
+**Allocate a block and write 4 zeros into it**<br />
+
+\begin{code} zero4 = do fp &lt;- malloc 4 withForeignPtr fp $ \p -&gt; do poke (p `plusPtr` 0) zero poke (p `plusPtr` 1) zero poke (p `plusPtr` 2) zero poke (p `plusPtr` 3) zero return fp where zero = 0 :: Word8 \end{code}
+Example -------<br />
+How to **prevent overflows** e.g. writing 5 or 50 zeros into 4-byte block ?<br />
+
+**Step 1** *Refine pointers* with allocated size
+<br />
+
+**Step 2** *Track sizes* in pointer operations
+Refined API: Types ------------------<br />
+**1. Refine pointers with allocated size** \begin{spec} measure plen :: Ptr a -&gt; Int measure fplen :: ForeignPtr a -&gt; Int \end{spec}<br />
+
+Abbreviations for pointers of size `N` \begin{spec} type PtrN a N = {v:_ | plen v = N} type ForeignPtrN a N = {v:_ | fplen v = N} \end{spec}
+Refined API: Ops (1/3) ----------------------<br />
+
+**Create** \begin{spec} malloc :: n:Nat -&gt; ForeignPtrN a n \end{spec}
+<br />
+
+**Unwrap and Use** \begin{spec} withForeignPtr :: fp:ForeignPtr a -- pointer -&gt; (PtrN a (fplen fp) -&gt; IO b) -- action -&gt; IO b -- use \end{spec}
+Refined API: Ops (2/3) ----------------------<br />
+**Arithmetic** Refine type to track *remaining* buffer size<br />
+
+\begin{spec} plusPtr :: p:Ptr a -&gt; o:{Nat | o &lt;= plen p} -- offset in bounds -&gt; PtrN b {plen b - o} -- remainder \end{spec}
+Refined API: Ops (3/3) ----------------------<br />
+**Read &amp; Write require non-empty remaining buffer**<br />
+
+**Read** \begin{spec} peek :: {v:Ptr a | 0 &lt; plen v} -&gt; IO a \end{spec}
+**Write** \begin{spec} poke :: {v:Ptr a | 0 &lt; plen v} -&gt; a -&gt; IO () \end{spec}
+<br />
+Example: Overflow Prevented ---------------------------<br />
+How to *prevent overflows* e.g. writing 5 or 50 zeros?
+\begin{code} exBad = do fp &lt;- malloc 4 withForeignPtr fp $ \p -&gt; do poke (p `plusPtr` 0) zero poke (p `plusPtr` 1) zero poke (p `plusPtr` 2) zero poke (p `plusPtr` 5) zero return fp where zero = 0 :: Word8 \end{code}
+<br />
+2. ByteString API =================<br />
+Strategy: Specify and Verify Types for<br />
+1. Low-level `Pointer` API 2. **Lib-level `ByteString` API** 3. User-level `Application` API<br />
+Errors at *each* level are prevented by types at *lower* levels<br />
+ByteString Type ---------------<br />
+<img src="img/bytestring.png" height="150" /> \begin{code} data ByteString = PS { bPtr :: ForeignPtr Word8 , bOff :: !Int , bLen :: !Int } \end{code}<br />
+Refined ByteString Type -----------------------<br />
+<img src="img/bytestring.png" height="150" /> \begin{code} {-@ data ByteString = PS { bPtr :: ForeignPtr Word8 , bOff :: {v:Nat| v &lt;= fplen bPtr} , bLen :: {v:Nat| v + bOff &lt;= fplen bPtr} } @-} \end{code}<br />
+Refined ByteString Type -----------------------<br />
+<img src="img/bytestring.png" height="150" /><br />
+**A Useful Abbreviation** \begin{spec} type ByteStringN N = {v:ByteString| bLen v = N} \end{spec}
+<div class="hidden">
+\begin{code} {-@ type ByteStringN N = {v:ByteString | bLen v = N} @-} \end{code}
+</div>
+Legal Bytestrings -----------------<br />
+\begin{code} {-@ good1 :: IO (ByteStringN 5) @-} good1 = do fp &lt;- malloc 5 return (PS fp 0 5) {-@ good2 :: IO (ByteStringN 3) @-} good2 = do fp &lt;- malloc 5 return (PS fp 2 3) \end{code}<br />
+
+**Note:** *length* of `good2` is `3` which is *less than* allocated size `5`
+Illegal Bytestrings -----------------<br />
+\begin{code} bad1 = do fp &lt;- malloc 3 return (PS fp 0 10) bad2 = do fp &lt;- malloc 3 return (PS fp 2 2) \end{code}<br />
+
+Claimed length *exceeds* allocation ... **rejected** at compile time
+API `create` : Allocate and Fill a `ByteString` -----------------------------------------------
+<div class="hidden">
+\begin{code} create :: Int -&gt; (Ptr Word8 -&gt; IO ()) -&gt; ByteString \end{code}
+</div>
+<br />
+
+**Specification** \begin{code} {-@ create :: n:Nat -&gt; (PtrN Word8 n -&gt; IO ()) -&gt; ByteStringN n @-} \end{code}
+**Implementation** \begin{code} create n fill = unsafePerformIO $ do fp &lt;- malloc n withForeignPtr fp fill return (PS fp 0 n) \end{code}
+<!-- CUT
+<div class="fragment">
+Yikes, there is an error! How to fix?
+</div>
+--> API `pack` : Convert List of `Char` into `ByteString` ------------<br />
+**Specification** \begin{code} {-@ pack :: s:String -&gt; ByteStringN (len s) @-} \end{code}
+**Implementation** \begin{code} pack str = create n $ \p -&gt; go p xs where n = length str xs = map c2w str go p (x:xs) = poke p x &gt;&gt; go (plusPtr p 1) xs go _ [] = return () \end{code}
+API `unsafeTake` : Extract *prefix* of size `n` -----------------------------------------------<br />
+
+**Specification** \begin{code} {-@ unsafeTake :: n:Nat -&gt; b:{ByteString | n &lt;= bLen b} -&gt; ByteStringN n @-} \end{code}
+**Implementation** \begin{code} unsafeTake n (PS x s l) = PS x s n \end{code}
+API `unpack` : Convert `ByteString` into List of `Char` -------------------------------------------------------<br />
+**Specification** \begin{spec} unpack :: b:ByteString -&gt; StringN (bLen b) \end{spec}<br />
+
+**Implementation** \begin{spec} unpack b = you . get . the . idea -- see source \end{spec}
+<div class="hidden">
+\begin{code} {-@ qualif Unpack(v:a, acc:b, n:int) : len v = 1 + n + len acc @-} {-@ unpack :: b:ByteString -&gt; StringN (bLen b) @-} unpack :: ByteString -&gt; String unpack (PS _ _ 0) = [] unpack (PS ps s l) = unsafePerformIO $ withForeignPtr ps $ \p -&gt; go (p `plusPtr` s) (l - 1) [] where go p 0 acc = peek p &gt;&gt;= \e -&gt; return (w2c e : acc) go p n acc = peek (p `plusPtr` n) &gt;&gt;= \e -&gt; go p (n-1) (w2c e : acc) \end{code}
+</div>
+3. Application API ==================<br />
+Strategy: Specify and Verify Types for<br />
+1. Low-level `Pointer` API 2. Lib-level `ByteString` API 3. **User-level `Application` API**<br />
+Errors at *each* level are prevented by types at *lower* levels Revisit "HeartBleed" --------------------<br />
+Lets revisit our potentially "bleeding" `chop`
+<div class="hidden">
+\begin{code} {-@ type StringN N = {v:String | len v = N} @-} \end{code}
+</div>
+\begin{code} {-@ chop :: s:String -&gt; n:{Nat | n &lt;= len s} -&gt; StringN n @-} chop s n = s' where b = pack s -- down to low-level b' = unsafeTake n b -- grab n chars s' = unpack b' -- up to high-level \end{code}
+"HeartBleed" no more --------------------<br />
+\begin{code} demo = [ex6, ex30] where ex = "St. Louis" -- has size 9 ex6 = chop ex 6 -- ok ex30 = chop ex 30 -- out of bounds \end{code}<br />
+"Bleeding" `chop ex 30` *rejected* by compiler Recap: Types vs Overflows -------------------------<br />
+**Strategy: Specify and Verify Types for**<br />
+1. Low-level `Pointer` API 2. Lib-level `ByteString` API 3. User-level `Application` API<br />
+**Errors at *each* level are prevented by types at *lower* levels**
+<div class="hidden">
+Bonus Material ============== Nested ByteStrings ------------------ For a more in depth example, let's take a look at `group`, which transforms strings like `"foobaaar"` into *lists* of strings like `["f","oo", "b", "aaa", "r"]`. The specification is that `group` should produce a list of `ByteStrings` 1. that are all *non-empty* (safety) 2. the sum of whose lengths is equal to the length of the input string (precision) We use the type alias \begin{code} {-@ type ByteStringNE = {v:ByteString | bLen v &gt; 0} @-} \end{code} to specify (safety) and introduce a new measure \begin{code} {-@ measure bLens :: [ByteString] -&gt; Int bLens ([]) = 0 bLens (x:xs) = (bLen x + bLens xs) @-} \end{code} to specify (precision). The full type-specification looks like this: \begin{code} {-@ group :: b:ByteString -&gt; {v: [ByteStringNE] | bLens v = bLen b} @-} group xs | null xs = [] | otherwise = let y = unsafeHead xs (ys, zs) = spanByte (unsafeHead xs) (unsafeTail xs) in (y `cons` ys) : group zs \end{code} As you can probably tell, `spanByte` appears to be doing a lot of the work here, so let's take a closer look at it to see why the post-condition holds. \begin{code} spanByte :: Word8 -&gt; ByteString -&gt; (ByteString, ByteString) spanByte c ps@(PS x s l) = unsafePerformIO $ withForeignPtr x $ \p -&gt; go (p `plusPtr` s) 0 where go p i | i &gt;= l = return (ps, empty) | otherwise = do c' &lt;- peekByteOff p i if c /= c' then return (unsafeTake i ps, unsafeDrop i ps) else go p (i+1) \end{code} LiquidHaskell infers that `0 &lt;= i &lt;= l` and therefore that all of the memory accesses are safe. Furthermore, due to the precise specifications given to `unsafeTake` and `unsafeDrop`, it is able to prove that `spanByte` has the type \begin{code} {-@ spanByte :: Word8 -&gt; b:ByteString -&gt; (ByteStringPair b) @-} \end{code} where `ByteStringPair b` describes a pair of `ByteString`s whose lengths sum to the length of `b`. \begin{code} {-@ type ByteStringPair B = (ByteString, ByteString)&lt;{\x1 x2 -&gt; bLen x1 + bLen x2 = bLen B}&gt; @-} \end{code} \begin{code} ----------------------------------------------------------------------- -- Helper Code ----------------------------------------------------------------------- {-@ unsafeCreate :: l:Nat -&gt; ((PtrN Word8 l) -&gt; IO ()) -&gt; (ByteStringN l) @-} unsafeCreate n f = create n f -- unsafePerformIO $ create n f {-@ invariant {v:ByteString | bLen v &gt;= 0} @-} {-@ invariant {v:[ByteString] | bLens v &gt;= 0} @-} {-@ qualif PLLen(v:a, p:b) : (len v) &lt;= (plen p) @-} {-@ qualif ForeignPtrN(v:ForeignPtr a, n:int): fplen v = n @-} {-@ qualif FPLenPLen(v:Ptr a, fp:ForeignPtr a): fplen fp = plen v @-} {-@ qualif PtrLen(v:Ptr a, xs:List b): plen v = len xs @-} {-@ qualif PlenEq(v: Ptr a, x: int): x &lt;= (plen v) @-} {-@ unsafeHead :: {v:ByteString | (bLen v) &gt; 0} -&gt; Word8 @-} unsafeHead :: ByteString -&gt; Word8 unsafeHead (PS x s l) = liquidAssert (l &gt; 0) $ unsafePerformIO $ withForeignPtr x $ \p -&gt; peekByteOff p s {-@ unsafeTail :: b:{v:ByteString | (bLen v) &gt; 0} -&gt; {v:ByteString | (bLen v) = (bLen b) - 1} @-} unsafeTail :: ByteString -&gt; ByteString unsafeTail (PS ps s l) = liquidAssert (l &gt; 0) $ PS ps (s+1) (l-1) {-@ null :: b:ByteString -&gt; {v:Bool | v &lt;=&gt; (bLen b == 0)} @-} null :: ByteString -&gt; Bool null (PS _ _ l) = liquidAssert (l &gt;= 0) $ l &lt;= 0 {-@ unsafeDrop :: n:Nat -&gt; b:{v: ByteString | n &lt;= (bLen v)} -&gt; {v:ByteString | (bLen v) = (bLen b) - n} @-} unsafeDrop :: Int -&gt; ByteString -&gt; ByteString unsafeDrop n (PS x s l) = liquidAssert (0 &lt;= n &amp;&amp; n &lt;= l) $ PS x (s+n) (l-n) {-@ cons :: Word8 -&gt; b:ByteString -&gt; {v:ByteString | (bLen v) = 1 + (bLen b)} @-} cons :: Word8 -&gt; ByteString -&gt; ByteString cons c (PS x s l) = unsafeCreate (l+1) $ \p -&gt; withForeignPtr x $ \f -&gt; do poke p c memcpy (p `plusPtr` 1) (f `plusPtr` s) (fromIntegral l) {-@ empty :: {v:ByteString | (bLen v) = 0} @-} empty :: ByteString empty = PS nullForeignPtr 0 0 {-@ assume mallocForeignPtrBytes :: n:Nat -&gt; IO (ForeignPtrN a n) @-} {-@ type ForeignPtrN a N = {v:ForeignPtr a | fplen v = N} @-} {-@ malloc :: n:Nat -&gt; IO (ForeignPtrN a n) @-} malloc = mallocForeignPtrBytes {-@ assume c_memcpy :: dst:(PtrV Word8) -&gt; src:(PtrV Word8) -&gt; size: {v:CSize | (v &lt;= (plen src) &amp;&amp; v &lt;= (plen dst))} -&gt; IO (Ptr Word8) @-} foreign import ccall unsafe "string.h memcpy" c_memcpy :: Ptr Word8 -&gt; Ptr Word8 -&gt; CSize -&gt; IO (Ptr Word8) {-@ memcpy :: dst:(PtrV Word8) -&gt; src:(PtrV Word8) -&gt; size: {v:CSize | (v &lt;= (plen src) &amp;&amp; v &lt;= (plen dst))} -&gt; IO () @-} memcpy :: Ptr Word8 -&gt; Ptr Word8 -&gt; CSize -&gt; IO () memcpy p q s = c_memcpy p q s &gt;&gt; return () {-@ assume nullForeignPtr :: {v: ForeignPtr Word8 | (fplen v) = 0} @-} nullForeignPtr :: ForeignPtr Word8 nullForeignPtr = unsafePerformIO $ newForeignPtr_ nullPtr {-# NOINLINE nullForeignPtr #-} \end{code}
+</div>
+[mylink]: http://www.google.com [dml]: http://www.cs.bu.edu/~hwxi/DML/DML.html [vecspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Vector.spec [vec]: http://hackage.haskell.org/package/vector [agdavec]: http://code.haskell.org/Agda/examples/Vec.agda [ref101]: /blog/2013/01/01/refinement-types-101.lhs/ [ref102]: /blog/2013/01/27/refinements-101-reax.lhs/ [data-list]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [foldl]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [listtail]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [dmlarray]: http://www.cs.bu.edu/~hwxi/academic/papers/pldi98.pdf [liquid-tutorial]: http://github.com/ucsd-progsys/liquidhaskell-tutorial.git [liquid-emacs]: https://github.com/ucsd-progsys/liquid-types.el [liquid-vim]: https://github.com/ucsd-progsys/liquid-types.vim [z3]: http://z3.codeplex.com/ [cvc4]: http://cvc4.cs.nyu.edu/ [mathsat]: http://mathsat.fbk.eu/download.html [hoogle-assert]: https://www.haskell.org/hoogle/?hoogle=assert [apple-riser]: http://blog.jbapple.com/2008/01/extra-type-safety-using-polymorphic.html [safeList]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [kmeansI]: /blog/2013/02/16/kmeans-clustering-I.lhs/ [kmeansII]: /blog/2013/02/17/kmeans-clustering-II.lhs/ [URL-take]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/List.lhs#L334 [URL-groupBy]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:groupBy [URL-transpose]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html#transpose [maru]: http://www.youtube.com/watch?v=8uDuls5TyNE [URL-kmeans]: http://hackage.haskell.org/package/kmeans [hinze-icfp09]: http://www.cs.ox.ac.uk/ralf.hinze/publications/ICFP09.pdf [smt-set]: http://www.kroening.com/smt-lib-lsm.pdf) [setspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Set.spec [mccarthy]: http://www-formal.stanford.edu/jmc/towards.ps [xmonad-stackset]: http://hackage.haskell.org/package/xmonad-0.11/docs/XMonad-StackSet.html [bst-wiki]: http://en.wikipedia.org/wiki/Binary_search_tree [foreignptr]: http://hackage.haskell.org/package/base/docs/Foreign-Ptr.html [bytestring]: https://hackage.haskell.org/package/bytestring [xmonad]: http://xmonad.org/ [wiki-zipper]: http://en.wikipedia.org/wiki/Zipper_(data_structure) [wiki-contracts]: http://en.wikipedia.org/wiki/Design_by_contract [smart-ctr-wiki]: https://www.haskell.org/haskellwiki/Smart_constructors [smt-wiki]: http://en.wikipedia.org/wiki/Satisfiability_Modulo_Theories [vazou13]: http://goto.ucsd.edu/~rjhala/liquid/abstract_refinement_types.pdf [liquidpldi08]: http://goto.ucsd.edu/~rjhala/liquid/liquid_types.pdf [bird-pearls]: http://www.amazon.com/Pearls-Functional-Algorithm-Design-Richard/dp/0521513383 [mitchell-riser]: http://neilmitchell.blogspot.com/2008/03/sorting-at-speed.html [blog-set]: /blog/2013/03/26/talking-about-sets.lhs/ [z3cal]: http://research.microsoft.com/en-us/um/people/leonardo/fmcad09.pdf [sbv]: https://github.com/LeventErkok/sbv [leon]: http://lara.epfl.ch/w/leon [ptrspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/Ptr.spec [okasaki95]: http://www.westpoint.edu/eecs/SiteAssets/SitePages/Faculty%20Publication%20Documents/Okasaki/jfp95queue.pdf [queue-wiki]: http://en.wikipedia.org/wiki/Queue_%28abstract_data_type%29 [avl-wiki]: http://en.wikipedia.org/wiki/AVL_tree [nelson-thesis]: http://research.microsoft.com/en-us/um/people/qadeer/cse599f/papers/nelsonthesis.pdf
+
+</div>
+</div>
+
+<!--Site Meter
+<div class="hidden">
+  <script type="text/javascript" src="http://s23.sitemeter.com/js/counter.js?site=s23liquidtypes"></script>
+  <noscript>
+    <a href="http://s23.sitemeter.com/stats.asp?site=s23liquidtypes"
+      target="_top">
+      <img src="http://s23.sitemeter.com/meter.asp?site=s23liquidtypes"
+      alt="Site Meter" border="0"/></a>
+  </noscript>
+</div>
+-->
+
+
+
+
+<!-- JavaScript below! ============================================== -->
+
+  <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
+  <script src="/js/liquid/tooltip.js"></script>
+  <script src="/js/liquid/annot.js"></script>
+  <script src="/js/liquid/config.js"></script>
+  <script src="/js/liquid/slideshow.js"></script>
+  <script src="/js/liquid/liquid.js"></script>
+
+  <script type="text/javascript">
+    var queryServerURL = "" ;
+  </script>
+
+  <!-- rust nav JS -->
+  <script type="text/javascript">
+    window.playgroundUrl = "";
+  </script>
+
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function(event) {
+
+ document.getElementById("toggle-nav").onclick = toggleNav;
+
+  function toggleNav() {
+    var toc         = document.getElementById("toc");
+    var pagewrapper = document.getElementById("page-wrapper");
+    var status      = document.getElementById("checker-status");
+
+    toggleClass(toc,         "mobile-hidden");
+    // toggleClass(status,      "mobile-hidden");
+    toggleClass(pagewrapper, "mobile-hidden");
+  };
+
+  function toggleClass(el, className) {
+     // from http://youmightnotneedjquery.com/
+     if (el.classList) {
+       el.classList.toggle(className);
+     } else {
+       var classes = el.className.split(' ');
+       var existingIndex = classes.indexOf(className);
+
+       if (existingIndex >= 0) {
+         classes.splice(existingIndex, 1);
+       } else {
+         classes.push(className);
+       }
+       el.className = classes.join(' ');
+     }
+  }
+});
+</script>
+
+
+
+
+</body>
+</html>
