@@ -6,12 +6,12 @@
     <meta name="generator" content="rustdoc">
     <title>02-refinements</title>
 
-    <link href="/css/bootstrap.css" rel="stylesheet">
-    <link href="/css/bootstrap-theme.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/rust-book-slides.css">
-    <link rel="stylesheet" type="text/css" href="/css/editor-slides.css">
-    <link rel="stylesheet" type="text/css" href="/css/code-format.css">
-    <link rel="stylesheet" type="text/css" href="/css/slideshow.css">
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/bootstrap-theme.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./css/rust-book-slides.css">
+    <link rel="stylesheet" type="text/css" href="./css/editor-slides.css">
+    <link rel="stylesheet" type="text/css" href="./css/code-format.css">
+    <link rel="stylesheet" type="text/css" href="./css/slideshow.css">
     <style>
       body {
         text-align: center;
@@ -46,8 +46,8 @@
 
 
 
-<script type="text/javascript" src="/js/angular/angular.js"></script>
-<script type="text/javascript" src="/js/bootstrap/bootstrap.js"></script>
+<script type="text/javascript" src="./js/angular/angular.js"></script>
+<script type="text/javascript" src="./js/bootstrap/bootstrap.js"></script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -359,224 +359,466 @@ MathJax.Hub.Config({
 <div id='page-wrapper'>
 <div id='page'>
 
---- title: "Language-Integrated Verification" author: Ranjit Jhala date: Nov 16th, 2017 documentclass: book toc: true bibliography: sw.bib notitle: true root: "." liquidserver: "https://liquid-demo.programming.systems/" pdflink: "book.pdf" ---
 <div class="hidden">
-\begin{code} {-@ LIQUID "--no-termination" @-} {-@ LIQUID "--diff" @-} {-@ LIQUID "--short-names" @-} module SimpleRefinements where import Prelude hiding (abs, max) zero, zero', zero'', four, four' :: Int nats :: [Int] {-@ plus :: x:Int -&gt; y:Int -&gt; {v:Int | v = x + y} @-} plus :: Int -&gt; Int -&gt; Int plus x y = x + y {-@ minus:: x:Int -&gt; y:Int -&gt; {v:Int | v = x - y} @-} minus :: Int -&gt; Int -&gt; Int minus x y = x - y -- zero' :: Int -- safeDiv :: Int -&gt; Int -&gt; Int -- size, size' :: [a] -&gt; Int \end{code}
+<div id="program-pane-0" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-0" class="programbox">{-@ LIQUID "--no-termination" @-}
+{-@ LIQUID "--diff"           @-}
+{-@ LIQUID "--short-names"    @-}
+
+module SimpleRefinements where
+import Prelude hiding (abs, max)
+
+zero, zero', zero'', four, four' :: Int
+nats :: [Int]
+
+{-@ plus :: x:Int -> y:Int -> {v:Int | v = x + y} @-}
+plus :: Int -> Int -> Int
+plus x y = x + y
+
+{-@ minus:: x:Int -> y:Int -> {v:Int | v = x - y} @-}
+minus :: Int -> Int -> Int
+minus x y = x - y
+
+
+-- zero'       :: Int
+-- safeDiv     :: Int -> Int -> Int
+-- size, size' :: [a] -> Int</div>
 </div>
-Basic Refinement Types ----------------------<br />
-Refinement Types = **Types** + **Predicates** Types -----
-<hr />
-\begin{spec}
-<div>
 
 </div>
-b := Int | Bool | ... -- primitives | a, b, c -- type variables \end{spec} \begin{spec}
-<div>
-
+<div id="slide-0" class="slide">
+<section id="basic-refinement-types" class="level2">
+<h2>Basic Refinement Types</h2>
+<p><br></p>
+<p>Refinement Types = <strong>Types</strong> + <strong>Predicates</strong></p>
+</section>
 </div>
-t := {x:b | p} -- refined base | x:t -&gt; t -- refined function \end{spec} `p` is a predicate from a **decidable logic** Predicates ---------- **Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic** Predicates ---------- **Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic** \begin{spec}
-<div>
-
+<div id="slide-1" class="slide">
+<section id="types" class="level2">
+<h2>Types</h2>
+<hr style="height:5px; visibility:hidden;" />
+<p><code>p</code> is a predicate from a <strong>decidable logic</strong></p>
+</section>
 </div>
-e := x, y, z, ... -- variables | 0, 1, 2, ... -- constants | e + e | c * e | ... -- arithmetic | f e1 ... en -- uninterpreted function \end{spec} Predicates ---------- **Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic** \begin{spec}
-<div>
-
+<div id="slide-2" class="slide">
+<section id="predicates" class="level2">
+<h2>Predicates</h2>
+<p><strong>Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic</strong></p>
+</section>
 </div>
-e := x, y, z, ... -- variables | 0, 1, 2, ... -- constants | e + e | c * e | ... -- arithmetic | f e1 ... en -- uninterpreted function \end{spec} **Congruence Axiom for Uninterpreted Functions** $$\forall \overline{x}, \overline{y}.\ \overline{x} = \overline{y}\ \Rightarrow\ f(x) = f(y)$$ Predicates ---------- **Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic** \begin{spec}
-<div>
-
+<div id="slide-3" class="slide">
+<section id="predicates-1" class="level2">
+<h2>Predicates</h2>
+<p><strong>Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic</strong></p>
+</section>
 </div>
-e := x, y, z, ... -- variables | 0, 1, 2, ... -- constants | e + e | c * e | ... -- arithmetic | f e1 ... en -- uninterpreted function \end{spec} \begin{spec}
-<div>
-
+<div id="slide-4" class="slide">
+<section id="predicates-2" class="level2">
+<h2>Predicates</h2>
+<p><strong>Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic</strong></p>
+<p><strong>Congruence Axiom for Uninterpreted Functions</strong></p>
+<p><span class="math display">\[\forall \overline{x}, \overline{y}.\ \overline{x} = \overline{y}\ \Rightarrow\ f(x) = f(y)\]</span></p>
+</section>
 </div>
-p := e &lt;= e | ... -- atoms | p &amp;&amp; p | p || p | !p -- boolean combinations \end{spec} Predicates ---------- Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic<br />
-Given a **Verification Condition** (VC) $$p_1 \Rightarrow \ldots \Rightarrow p_n$$ SMT solvers can **decide if VC is Valid** ("always true") Example: "Singletons" ---------------------
-<hr />
-The alias `Zero` describes a type inhabited by a *single* `Int` value `0` \begin{code} {-@ type Zero = {v:Int | v == 0} @-} {-@ zero :: Zero @-} zero = 0 \end{code}
-Refinement types via special comments `{-@ ... @-}`
-**Exercise:** What happens if you modify the code or type? Example: Natural Numbers ------------------------
-<hr />
-\begin{code} {-@ type Nat = {v:Int | 0 &lt;= v} @-} {-@ nats :: [Nat] @-} nats = [0, 1, 2, 3] \end{code} **Exercise:** What happens if you modify the code or type? A Term Can Have *Many* Types ----------------------------
+<div id="slide-5" class="slide">
+<section id="predicates-3" class="level2">
+<h2>Predicates</h2>
+<p><strong>Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic</strong></p>
+</section>
+</div>
+<div id="slide-6" class="slide">
+<section id="predicates-4" class="level2">
+<h2>Predicates</h2>
+<p>Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic</p>
+<p><br></p>
+<p>Given a <strong>Verification Condition</strong> (VC)</p>
+<p><span class="math display">\[p_1 \Rightarrow \ldots \Rightarrow p_n\]</span></p>
+<p>SMT solvers can <strong>decide if VC is Valid</strong> (“always true”)</p>
+</section>
+</div>
+<div id="slide-7" class="slide">
+<section id="example-singletons" class="level2">
+<h2>Example: “Singletons”</h2>
+<hr style="height:5px; visibility:hidden;" />
+<p>The alias <code>Zero</code> describes a type inhabited by a <em>single</em> <code>Int</code> value <code>0</code></p>
+<div id="program-pane-1" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-1" class="programbox">{-@ type Zero = {v:Int | v == 0} @-}
+
+{-@ zero :: Zero @-}
+zero = 0</div>
+</div>
+
+<p>Refinement types via special comments <code>{-@ ... @-}</code></p>
+<p><strong>Exercise:</strong> What happens if you modify the code or type?</p>
+</section>
+</div>
+<div id="slide-8" class="slide">
+<section id="example-natural-numbers" class="level2">
+<h2>Example: Natural Numbers</h2>
+<hr style="height:5px; visibility:hidden;" />
+<div id="program-pane-2" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-2" class="programbox">{-@ type Nat = {v:Int | 0 <= v} @-}
+
+{-@ nats :: [Nat] @-}
+nats     =  [0, 1, 2, 3]</div>
+</div>
+
+<p><strong>Exercise:</strong> What happens if you modify the code or type?</p>
+</section>
+</div>
+<div id="slide-9" class="slide">
+<section id="a-term-can-have-many-types" class="level2">
+<h2>A Term Can Have <em>Many</em> Types</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-What *is* the type of `0` ?
+<p>What <em>is</em> the type of <code>0</code> ?</p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-\begin{code} {-@ zero' :: Nat @-} zero' = zero \end{code}
-Is it `{v:Int|v=0}` or is it `{v:Int|0&lt;=v}` ? 1. Predicate Subtyping [[NUPRL, PVS]](http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf) ----------------------------------
+<div id="program-pane-3" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-3" class="programbox">{-@ zero' :: Nat @-}
+zero' = zero</div>
+</div>
+
+<p>Is it <code>{v:Int|v=0}</code> or is it <code>{v:Int|0&lt;=v}</code> ?</p>
+</section>
+</div>
+<div id="slide-10" class="slide">
+<section id="predicate-subtyping-nuprl-pvs" class="level2">
+<h2>1. Predicate Subtyping <a href="http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf">[NUPRL, PVS]</a></h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-In **environment** $\Gamma$ the type $t_1$ is a **subtype** of $t_2$ $$\boxed{\Gamma \vdash t_1 \preceq t_2}$$ 1. Predicate Subtyping [[NUPRL, PVS]](http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf) ----------------------------------
+<p>In <strong>environment</strong> <span class="math inline">\(\Gamma\)</span> the type <span class="math inline">\(t_1\)</span> is a <strong>subtype</strong> of <span class="math inline">\(t_2\)</span></p>
+<p><span class="math display">\[\boxed{\Gamma \vdash t_1 \preceq t_2}\]</span></p>
+</section>
+</div>
+<div id="slide-11" class="slide">
+<section id="predicate-subtyping-nuprl-pvs-1" class="level2">
+<h2>1. Predicate Subtyping <a href="http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf">[NUPRL, PVS]</a></h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-In **environment** $\Gamma$ the type $t_1$ is a **subtype** of $t_2$ $$\boxed{\Gamma \vdash t_1 \preceq t_2}$$
+<p>In <strong>environment</strong> <span class="math inline">\(\Gamma\)</span> the type <span class="math inline">\(t_1\)</span> is a <strong>subtype</strong> of <span class="math inline">\(t_2\)</span></p>
+<p><span class="math display">\[\boxed{\Gamma \vdash t_1 \preceq t_2}\]</span></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-Where $\Gamma$ is **variable-and-type** bindings that are **in-scope** $$\Gamma \doteq \overline{\bindx{x_i}{P_i}}$$
-1. Predicate Subtyping [[NUPRL, PVS]](http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf) --------------------
+<p>Where <span class="math inline">\(\Gamma\)</span> is <strong>variable-and-type</strong> bindings that are <strong>in-scope</strong></p>
+<p><span class="math display">\[\Gamma \doteq \overline{\bindx{x_i}{P_i}}\]</span></p>
+</section>
+</div>
+<div id="slide-12" class="slide">
+<section id="predicate-subtyping-nuprl-pvs-2" class="level2">
+<h2>1. Predicate Subtyping <a href="http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf">[NUPRL, PVS]</a></h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-In **environment** $\Gamma$ the type $t_1$ is a **subtype** of $t_2$ $$\boxed{\Gamma \vdash t_1 \preceq t_2}$$
+<p>In <strong>environment</strong> <span class="math inline">\(\Gamma\)</span> the type <span class="math inline">\(t_1\)</span> is a <strong>subtype</strong> of <span class="math inline">\(t_2\)</span></p>
+<p><span class="math display">\[\boxed{\Gamma \vdash t_1 \preceq t_2}\]</span></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-$$ \begin{array}{rll} {\mathbf{If\ VC\ is\ Valid}} &amp; \bigwedge_i p_i \Rightarrow q \Rightarrow r &amp; (\mbox{By SMT}) \\ &amp; &amp; \\ {\mathbf{Then}} &amp; \overline{\bindx{x_i}{p_i}} \vdash \reft{v}{b}{q} \preceq \reft{v}{b}{r} &amp; \\ \end{array} $$ Example: Natural Numbers ------------------------
+<p><span class="math display">\[
+\begin{array}{rll}
+{\mathbf{If\ VC\ is\ Valid}}   &amp; \bigwedge_i p_i \Rightarrow  q  \Rightarrow r &amp; (\mbox{By SMT}) \\
+                &amp;  &amp; \\
+{\mathbf{Then}} &amp; \overline{\bindx{x_i}{p_i}} \vdash \reft{v}{b}{q} \preceq \reft{v}{b}{r} &amp; \\
+\end{array}
+\]</span></p>
+</section>
+</div>
+<div id="slide-13" class="slide">
+<section id="example-natural-numbers-1" class="level2">
+<h2>Example: Natural Numbers</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-$$ \begin{array}{rcrccll} \mathbf{VC\ is\ Valid:} &amp; \True &amp; \Rightarrow &amp; v = 0 &amp; \Rightarrow &amp; 0 \leq v &amp; \mbox{(by SMT)} \\ \mathbf{So:} &amp; \emptyset &amp; \vdash &amp; \Zero &amp; \preceq &amp; \Nat &amp; \\ \end{array} $$ Example: Natural Numbers ------------------------
+<p><span class="math display">\[
+\begin{array}{rcrccll}
+\mathbf{VC\ is\ Valid:} &amp; \True     &amp; \Rightarrow &amp;  v = 0   &amp; \Rightarrow &amp;  0 \leq v &amp; \mbox{(by SMT)} \\
+\mathbf{So:}            &amp; \emptyset &amp; \vdash      &amp; \Zero    &amp; \preceq     &amp; \Nat      &amp;   \\
+\end{array}
+\]</span></p>
+</section>
+</div>
+<div id="slide-14" class="slide">
+<section id="example-natural-numbers-2" class="level2">
+<h2>Example: Natural Numbers</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-$$ \begin{array}{rcrccll} \mathbf{VC\ is\ Valid:} &amp; \True &amp; \Rightarrow &amp; v = 0 &amp; \Rightarrow &amp; 0 \leq v &amp; \mbox{(by SMT)} \\ \mathbf{So:} &amp; \emptyset &amp; \vdash &amp; \Zero &amp; \preceq &amp; \Nat &amp; \\ \end{array} $$
+<p><span class="math display">\[
+\begin{array}{rcrccll}
+\mathbf{VC\ is\ Valid:} &amp; \True     &amp; \Rightarrow &amp;  v = 0   &amp; \Rightarrow &amp;  0 \leq v &amp; \mbox{(by SMT)} \\
+\mathbf{So:}            &amp; \emptyset &amp; \vdash      &amp; \Zero    &amp; \preceq     &amp; \Nat      &amp;   \\
+\end{array}
+\]</span></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-And so, we can type: \begin{code} {-@ zero'' :: Nat @-} zero'' = 0 -- as |- Zero &lt;: Nat \end{code}
-2. Typing Applications (Function Calls) ---------------------------------------
+<p>And so, we can type:</p>
+<div id="program-pane-4" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-4" class="programbox">{-@ zero'' :: Nat @-}
+zero''    =  0    -- as |-  Zero <: Nat</div>
+</div>
+
+</section>
+</div>
+<div id="slide-15" class="slide">
+<section id="typing-applications-function-calls" class="level2">
+<h2>2. Typing Applications (Function Calls)</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-Terms built up by function-applications. 2. Typing Applications (Function Calls) ---------------------------------------
+<p>Terms built up by function-applications.</p>
+</section>
+</div>
+<div id="slide-16" class="slide">
+<section id="typing-applications-function-calls-1" class="level2">
+<h2>2. Typing Applications (Function Calls)</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-Terms built up by function-applications.
+<p>Terms built up by function-applications.</p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Built-in Functions** \begin{spec}
-<div>
-
-</div>
-plus :: x:Int -&gt; y:Int -&gt; {v:Int|v = x + y} minus :: x:Int -&gt; y:Int -&gt; {v:Int|v = x - y} \end{spec}
+<p><strong>Built-in Functions</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Output Type is a Post-Condition** Specifies the _output_ value equals the sum/difference of the _inputs_
-2. Typing Applications (Function Calls) ---------------------------------------
+<p><strong>Output Type is a Post-Condition</strong></p>
+<p>Specifies the <em>output</em> value equals the sum/difference of the <em>inputs</em></p>
+</section>
+</div>
+<div id="slide-17" class="slide">
+<section id="typing-applications-function-calls-2" class="level2">
+<h2>2. Typing Applications (Function Calls)</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-Terms built up by function-applications.
+<p>Terms built up by function-applications.</p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-\begin{code} {-@ four :: Nat @-} four = plus x 1 where x = 3 \end{code}
+<div id="program-pane-5" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-5" class="programbox">{-@ four :: Nat @-}
+four  = plus x 1
+  where
+    x = 3</div>
+</div>
+
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-*How to prove* `four :: Nat` ? 2. Typing Applications (Function Calls) ---------------------------------------
+<p><em>How to prove</em> <code>four :: Nat</code> ?</p>
+</section>
+</div>
+<div id="slide-18" class="slide">
+<section id="typing-applications-function-calls-3" class="level2">
+<h2>2. Typing Applications (Function Calls)</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Dependent Application**
+<p><strong>Dependent Application</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-$$\begin{array}{rl} {\mathbf{If}} &amp; \Gamma \vdash f :: \bindx{x}{s} \rightarrow t \\ &amp; \Gamma \vdash y :: s \\ {\mathbf{Then}} &amp; \Gamma \vdash f\ y :: t[x \mapsto y] \\ \end{array}$$
+<p><span class="math display">\[\begin{array}{rl}
+{\mathbf{If}}   &amp; \Gamma \vdash f   :: \bindx{x}{s} \rightarrow t  \\
+                &amp; \Gamma \vdash y   :: s                   \\
+{\mathbf{Then}} &amp; \Gamma \vdash f\ y :: t[x \mapsto y]      \\
+\end{array}\]</span></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-i.e. Output type with *formals substituted by actuals* 2. Typing Applications (Function Calls) ---------------------------------------
+<p>i.e. Output type with <em>formals substituted by actuals</em></p>
+</section>
+</div>
+<div id="slide-19" class="slide">
+<section id="typing-applications-function-calls-4" class="level2">
+<h2>2. Typing Applications (Function Calls)</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Dependent Application: Example**
+<p><strong>Dependent Application: Example</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-$$ \begin{array}{rl} {\mathbf{If}} &amp; \Gamma \vdash \mathit{plus} :: \bindx{a}{\Int} \rightarrow \bindx{b}{\Int} \rightarrow \reft{v}{\Int}{v = a + b} \\ &amp; \Gamma \vdash x :: \Int \\ &amp; \Gamma \vdash 1 :: \Int \\ &amp; \\ {\mathbf{Then}} &amp; \Gamma \vdash \mathit{plus} x 1 :: \reft{v}{\Int}{v = x + 1} \end{array} $$ 2. Typing Applications (Function Calls) ---------------------------------------
+<p><span class="math display">\[
+\begin{array}{rl}
+{\mathbf{If}}   &amp; \Gamma \vdash \mathit{plus}     :: \bindx{a}{\Int} \rightarrow
+                                                     \bindx{b}{\Int} \rightarrow
+                                                     \reft{v}{\Int}{v = a + b} \\
+                &amp; \Gamma \vdash x                 :: \Int \\
+                &amp; \Gamma \vdash 1                 :: \Int \\
+                &amp;                                         \\
+{\mathbf{Then}} &amp; \Gamma \vdash \mathit{plus} x 1 :: \reft{v}{\Int}{v = x + 1}
+\end{array}
+\]</span></p>
+</section>
+</div>
+<div id="slide-20" class="slide">
+<section id="typing-applications-function-calls-5" class="level2">
+<h2>2. Typing Applications (Function Calls)</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-And so, we can type:
+<p>And so, we can type:</p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-\begin{code} {-@ four' :: Nat @-} four' = plus x 1 -- x = 3 |- {v = x+1} &lt;: Nat where -- as x = 3 -- x = 3 =&gt; v = x+1 =&gt; 0 &lt;= v \end{code}
+<div id="program-pane-6" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-6" class="programbox">{-@ four' :: Nat @-}
+four' = plus x 1   -- x = 3 |- {v = x+1} <: Nat
+  where            -- as
+    x = 3          -- x = 3 =>  v = x+1  => 0 <= v</div>
+</div>
+
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Exercise:** What happens if you replace `plus` with `minus`? 2. Typing Applications (Function Calls) ---------------------------------------
+<p><strong>Exercise:</strong> What happens if you replace <code>plus</code> with <code>minus</code>?</p>
+</section>
+</div>
+<div id="slide-21" class="slide">
+<section id="typing-applications-function-calls-6" class="level2">
+<h2>2. Typing Applications (Function Calls)</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-Similarly, we can type:
+<p>Similarly, we can type:</p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-\begin{code} {-@ incr :: Nat -&gt; Nat @-} incr x = plus x 1 -- {0 &lt;= x} |- {v = x + 1} &lt;: Nat -- as -- (0 &lt;= x) =&gt; v = x + 1 =&gt; 0 &lt;= v \end{code}
+<div id="program-pane-7" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-7" class="programbox">{-@ incr :: Nat -> Nat @-}
+incr x = plus x 1  -- {0 <= x} |- {v = x + 1} <: Nat
+                   -- as
+                   -- (0 <= x) =>  v = x + 1  => 0 <= v</div>
+</div>
+
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Exercise:** Now, what happens if you replace `plus` with `minus`? Recap: Basic Refinement Types -----------------------------
+<p><strong>Exercise:</strong> Now, what happens if you replace <code>plus</code> with <code>minus</code>?</p>
+</section>
+</div>
+<div id="slide-22" class="slide">
+<section id="recap-basic-refinement-types" class="level2">
+<h2>Recap: Basic Refinement Types</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Refinement Types** Types + Predicates Recap: Basic Refinement Types -----------------------------
+<p><strong>Refinement Types</strong></p>
+<p>Types + Predicates</p>
+</section>
+</div>
+<div id="slide-23" class="slide">
+<section id="recap-basic-refinement-types-1" class="level2">
+<h2>Recap: Basic Refinement Types</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Refinement Types** Types + Predicates
+<p><strong>Refinement Types</strong></p>
+<p>Types + Predicates</p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Refinement Checking** Dependent Application + Predicate Subtyping Recap: Refinement Types 101 ---------------------------
+<p><strong>Refinement Checking</strong></p>
+<p>Dependent Application + Predicate Subtyping</p>
+</section>
+</div>
+<div id="slide-24" class="slide">
+<section id="recap-refinement-types-101" class="level2">
+<h2>Recap: Refinement Types 101</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Refinement Types** Types + Predicates
+<p><strong>Refinement Types</strong></p>
+<p>Types + Predicates</p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Refinement Checking** Dependent Application + Predicate Subtyping
+<p><strong>Refinement Checking</strong></p>
+<p>Dependent Application + Predicate Subtyping</p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-Plan ----<br />
-**Part I:** [Refinements 101](02-refinements.html) Case Study: **[Vector Bounds](03-example-vectors.html)** **Part II:** [Properties of Structures](04-data-properties.html) Case Study: [Sorting](05-example-sort.html), [Interpreter](06-example-interpreter.html) **Part III:** [Invariants of Data Structures](07-data-legal.html) Case Study: [Sorting actually Sorts Lists](08-example-sort.html) **Part IV:** [Termination](09-termination.html) and [Correctness Proofs](10-reflection.html) Case Study: [Optimizing Arithmetic Expressions](11-example-opt.html) [mylink]: http://www.google.com [dml]: http://www.cs.bu.edu/~hwxi/DML/DML.html [vecspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Vector.spec [vec]: http://hackage.haskell.org/package/vector [agdavec]: http://code.haskell.org/Agda/examples/Vec.agda [ref101]: /blog/2013/01/01/refinement-types-101.lhs/ [ref102]: /blog/2013/01/27/refinements-101-reax.lhs/ [data-list]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [foldl]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [listtail]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [dmlarray]: http://www.cs.bu.edu/~hwxi/academic/papers/pldi98.pdf [liquid-tutorial]: http://github.com/ucsd-progsys/liquidhaskell-tutorial.git [liquid-emacs]: https://github.com/ucsd-progsys/liquid-types.el [liquid-vim]: https://github.com/ucsd-progsys/liquid-types.vim [z3]: http://z3.codeplex.com/ [cvc4]: http://cvc4.cs.nyu.edu/ [mathsat]: http://mathsat.fbk.eu/download.html [hoogle-assert]: https://www.haskell.org/hoogle/?hoogle=assert [apple-riser]: http://blog.jbapple.com/2008/01/extra-type-safety-using-polymorphic.html [safeList]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [kmeansI]: /blog/2013/02/16/kmeans-clustering-I.lhs/ [kmeansII]: /blog/2013/02/17/kmeans-clustering-II.lhs/ [URL-take]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/List.lhs#L334 [URL-groupBy]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:groupBy [URL-transpose]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html#transpose [maru]: http://www.youtube.com/watch?v=8uDuls5TyNE [URL-kmeans]: http://hackage.haskell.org/package/kmeans [hinze-icfp09]: http://www.cs.ox.ac.uk/ralf.hinze/publications/ICFP09.pdf [smt-set]: http://www.kroening.com/smt-lib-lsm.pdf) [setspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Set.spec [mccarthy]: http://www-formal.stanford.edu/jmc/towards.ps [xmonad-stackset]: http://hackage.haskell.org/package/xmonad-0.11/docs/XMonad-StackSet.html [bst-wiki]: http://en.wikipedia.org/wiki/Binary_search_tree [foreignptr]: http://hackage.haskell.org/package/base/docs/Foreign-Ptr.html [bytestring]: https://hackage.haskell.org/package/bytestring [xmonad]: http://xmonad.org/ [wiki-zipper]: http://en.wikipedia.org/wiki/Zipper_(data_structure) [wiki-contracts]: http://en.wikipedia.org/wiki/Design_by_contract [smart-ctr-wiki]: https://www.haskell.org/haskellwiki/Smart_constructors [smt-wiki]: http://en.wikipedia.org/wiki/Satisfiability_Modulo_Theories [vazou13]: http://goto.ucsd.edu/~rjhala/liquid/abstract_refinement_types.pdf [liquidpldi08]: http://goto.ucsd.edu/~rjhala/liquid/liquid_types.pdf [bird-pearls]: http://www.amazon.com/Pearls-Functional-Algorithm-Design-Richard/dp/0521513383 [mitchell-riser]: http://neilmitchell.blogspot.com/2008/03/sorting-at-speed.html [blog-set]: /blog/2013/03/26/talking-about-sets.lhs/ [z3cal]: http://research.microsoft.com/en-us/um/people/leonardo/fmcad09.pdf [sbv]: https://github.com/LeventErkok/sbv [leon]: http://lara.epfl.ch/w/leon [ptrspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/Ptr.spec [okasaki95]: http://www.westpoint.edu/eecs/SiteAssets/SitePages/Faculty%20Publication%20Documents/Okasaki/jfp95queue.pdf [queue-wiki]: http://en.wikipedia.org/wiki/Queue_%28abstract_data_type%29 [avl-wiki]: http://en.wikipedia.org/wiki/AVL_tree [nelson-thesis]: http://research.microsoft.com/en-us/um/people/qadeer/cse599f/papers/nelsonthesis.pdf
+</section>
+</div>
+<div id="slide-25" class="slide">
+<section id="plan" class="level2">
+<h2>Plan</h2>
+<p><br></p>
+<p><strong>Part I:</strong> <a href="02-refinements.html">Refinements 101</a></p>
+<p>Case Study: <strong><a href="03-example-vectors.html">Vector Bounds</a></strong></p>
+<p><strong>Part II:</strong> <a href="04-data-properties.html">Properties of Structures</a></p>
+<p>Case Study: <a href="05-example-sort.html">Sorting</a>, <a href="06-example-interpreter.html">Interpreter</a></p>
+<p><strong>Part III:</strong> <a href="07-data-legal.html">Invariants of Data Structures</a></p>
+<p>Case Study: <a href="08-example-sort.html">Sorting actually Sorts Lists</a></p>
+<p><strong>Part IV:</strong> <a href="09-termination.html">Termination</a> and <a href="10-reflection.html">Correctness Proofs</a></p>
+<p>Case Study: <a href="11-example-opt.html">Optimizing Arithmetic Expressions</a></p>
+</section>
+</div>
 
 </div>
 </div>
@@ -598,17 +840,17 @@ Plan ----<br />
 
 <!-- JavaScript below! ============================================== -->
 
-  <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
-  <script src="/js/liquid/tooltip.js"></script>
-  <script src="/js/liquid/annot.js"></script>
-  <script src="/js/liquid/config.js"></script>
-  <script src="/js/liquid/slideshow.js"></script>
-  <script src="/js/liquid/liquid.js"></script>
+  <script src="./js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
+  <script src="./js/liquid/tooltip.js"></script>
+  <script src="./js/liquid/annot.js"></script>
+  <script src="./js/liquid/config.js"></script>
+  <script src="./js/liquid/slideshow.js"></script>
+  <script src="./js/liquid/liquid.js"></script>
 
   <script type="text/javascript">
-    var queryServerURL = "" ;
+    var queryServerURL = "https://liquid-demo.programming.systems/" ;
   </script>
 
   <!-- rust nav JS -->

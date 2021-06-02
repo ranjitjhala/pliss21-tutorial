@@ -6,12 +6,12 @@
     <meta name="generator" content="rustdoc">
     <title>07-example-interpreter</title>
 
-    <link href="/css/bootstrap.css" rel="stylesheet">
-    <link href="/css/bootstrap-theme.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/rust-book-slides.css">
-    <link rel="stylesheet" type="text/css" href="/css/editor-slides.css">
-    <link rel="stylesheet" type="text/css" href="/css/code-format.css">
-    <link rel="stylesheet" type="text/css" href="/css/slideshow.css">
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/bootstrap-theme.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./css/rust-book-slides.css">
+    <link rel="stylesheet" type="text/css" href="./css/editor-slides.css">
+    <link rel="stylesheet" type="text/css" href="./css/code-format.css">
+    <link rel="stylesheet" type="text/css" href="./css/slideshow.css">
     <style>
       body {
         text-align: center;
@@ -46,8 +46,8 @@
 
 
 
-<script type="text/javascript" src="/js/angular/angular.js"></script>
-<script type="text/javascript" src="/js/bootstrap/bootstrap.js"></script>
+<script type="text/javascript" src="./js/angular/angular.js"></script>
+<script type="text/javascript" src="./js/bootstrap/bootstrap.js"></script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -359,37 +359,399 @@ MathJax.Hub.Config({
 <div id='page-wrapper'>
 <div id='page'>
 
---- title: "Language-Integrated Verification" author: Ranjit Jhala date: Nov 16th, 2017 documentclass: book toc: true bibliography: sw.bib notitle: true root: "." liquidserver: "https://liquid-demo.programming.systems/" pdflink: "book.pdf" ---
 <div class="hidden">
-\begin{code} {-@ LIQUID "--short-names" @-} {-@ LIQUID "--no-warnings" @-} {-@ LIQUID "--no-termination" @-} module Interpreter (interpret) where import Prelude hiding (lookup) import qualified Data.Set as S {- CHEAT CODES :-) {-@ get :: x:_ -&gt; {s:_ | S.member x (vars s)} -&gt; _ @-} {-@ evalE :: st:_ -&gt; {e:_ | S.isSubsetOf (useE e) (vars st) } -&gt; _ @-} {-@ evalS :: st:_ -&gt; {s:_ | S.isSubsetOf (useS s) (vars st)} -&gt; {st':_ | S.isSubsetOf (S.union (vars st) (defS s)) (vars st') } @-} isSafe s = useS s == S.empty {-@ measure vars @-} vars :: State -&gt; S.Set Var vars (Bind x _ st) = S.union (S.singleton x) (vars st) vars Emp = S.empty {-@ measure useE @-} useE :: AExp -&gt; S.Set Var useE (AVal v) = S.empty useE (AVar x) = S.singleton x useE (AAdd e1 e2) = S.union (useE e1) (useE e2) {-@ measure useS @-} useS :: Stmt -&gt; S.Set Var useS (Asgn x e) = useE e useS (If e s1 s2) = S.union (useE e) (S.union (useS s1) (useS s2)) useS (While e s) = S.union (useE e) (useS s) useS (Seq s1 s2) = S.union (useS s1) (S.difference (useS s2) (defS s1)) useS Skip = S.empty {-@ measure defS @-} defS :: Stmt -&gt; S.Set Var defS (Asgn x e) = S.singleton x defS (If e s1 s2) = S.intersection (defS s1) (defS s2) defS (While e s) = S.empty defS (Seq s1 s2) = S.union (defS s1) (defS s2) defS Skip = S.empty -} \end{code}
+<div id="program-pane-0" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-0" class="programbox">{-@ LIQUID "--short-names"    @-}
+{-@ LIQUID "--no-warnings"    @-}
+{-@ LIQUID "--no-termination" @-}
+
+
+module Interpreter (interpret) where
+
+import           Prelude hiding (lookup)
+import qualified Data.Set as S
+
+{- CHEAT CODES :-)
+
+{-@ get :: x:_ -> {s:_ | S.member x (vars s)} -> _ @-}
+
+{-@ evalE :: st:_ -> {e:_ | S.isSubsetOf (useE e) (vars st) } -> _ @-}
+
+{-@ evalS :: st:_ 
+          -> {s:_ | S.isSubsetOf (useS s) (vars st)} 
+          -> {st':_ | S.isSubsetOf (S.union (vars st) (defS s)) (vars st') }
+  @-}
+
+isSafe s = useS s == S.empty 
+
+{-@ measure vars @-}
+vars :: State -> S.Set Var 
+vars (Bind x _ st) = S.union (S.singleton x) (vars st)
+vars Emp           = S.empty 
+
+{-@ measure useE @-}
+useE :: AExp -> S.Set Var
+useE (AVal v)     = S.empty
+useE (AVar x)     = S.singleton x
+useE (AAdd e1 e2) = S.union (useE e1) (useE e2)
+
+{-@ measure useS @-}
+useS :: Stmt -> S.Set Var
+useS (Asgn x e)   = useE e 
+useS (If e s1 s2) = S.union (useE e) (S.union (useS s1) (useS s2)) 
+useS (While e s)  = S.union (useE e) (useS s)
+useS (Seq s1 s2)  = S.union (useS s1) (S.difference (useS s2) (defS s1)) 
+useS Skip         = S.empty
+
+{-@ measure defS @-}
+defS :: Stmt -> S.Set Var
+defS (Asgn x e)   = S.singleton x
+defS (If e s1 s2) = S.intersection (defS s1) (defS s2)
+defS (While e s)  = S.empty
+defS (Seq s1 s2)  = S.union (defS s1) (defS s2) 
+defS Skip         = S.empty  
+
+
+-}</div>
 </div>
-Case Study: Interpreting an Imperative Language -----------------------------------------------<br />
-<br />
-Proving Something is Impossible -------------------------------<br />
-<br />
-**Calls to `impossible` only verify if they _never_ occur at runtime.**
-<div class="mybreak">
-<br />
 
 </div>
-\begin{code} {-@ impossible :: {v:String | false} -&gt; a @-} impossible msg = error msg \end{code} Proving Something is Impossible -------------------------------<br />
-<br />
-**Exercise:** What are valid inputs for `safeDiv`?
-<div class="mybreak">
-<br />
-
+<div id="slide-0" class="slide">
+<section id="case-study-interpreting-an-imperative-language" class="level2">
+<h2>Case Study: Interpreting an Imperative Language</h2>
+<p><br> <br></p>
+</section>
 </div>
-\begin{code} safeDiv :: Int -&gt; Int -&gt; Int safeDiv x y = if y == 0 then impossible "don't divide by zero!" else div x y \end{code} State ----- A datatype for mapping `Var` to their `Val`ue \begin{code} data State = Emp -- ^ Empty `State` | Bind Var Val State -- ^ Extend `State` by assigning `Var` to `Val` -- | Update `s` by setting the value of `x` to `v` set :: Var -&gt; Val -&gt; State -&gt; State set x v s = Bind x v s -- | Lookup the value of `x` in `s` get :: Var -&gt; State -&gt; Val get x (Bind y v s) | x == y = v -- ^ found the variable `x`, return v | otherwise = get x s -- ^ recursively search `s` get x Emp = impossible (x ++ " is undefined!") \end{code} **Exercise:** When is the last case in `get` indeed `impossible`? Arithmetic Expressions ----------------------<br />
-**A datatype for representing arithmetic expressions** Sums of variables and integer constants \begin{code} type Var = String type Val = Int data AExp = AVar Var -- ^ x | AVal Val -- ^ v | AAdd AExp AExp -- ^ e1 + e2 \end{code} Evaluating Arithmetic Expressions ---------------------------------<br />
-**A recursive *evaluator* for Arithmetic Expressions** \begin{code} evalE :: State -&gt; AExp -&gt; Val evalE _ (AVal v) = v evalE st (AVar x) = get x st evalE st (AAdd e1 e2) = (evalE st e1) + (evalE st e2) \end{code} **Exercise:** How to verify the call to `get` is actually safe? Variables Read in an Expression -------------------------------
+<div id="slide-1" class="slide">
+<section id="proving-something-is-impossible" class="level2">
+<h2>Proving Something is Impossible</h2>
+<p><br> <br></p>
+<p><strong>Calls to <code>impossible</code> only verify if they <em>never</em> occur at runtime.</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Specify the `Var`s we need to `get` to evaluate an `AExp`** \begin{code} {-@ measure useE @-} useE :: AExp -&gt; S.Set Var useE (AVar x) = S.empty -- TODO: replace with proper definition useE (AVal v) = S.empty -- TODO: replace with proper definition useE (AAdd e1 e2) = S.empty -- TODO: replace with proper definition {- | HINT : You may want to use * S.empty : the empty set * S.singleton x : the set containing just x * S.union s1 s2 : the union of s1 and s2 * S.intersection s1 s2 : the union of s1 and s2 * S.isSubsetOf s1 s2 : is s1 a subset of s2 ? -} \end{code} **Exercise:** Now, use `useE` to specify and verify `evalE`. Statements ----------<br />
-**A datatype for representing imperative programs** Assignments, Sequencing, Branching and Loops. \begin{code} data Stmt = Asgn Var AExp -- ^ x := e | If AExp Stmt Stmt -- ^ if (e != 0) {s1} else {s2} | While AExp Stmt -- ^ while (e != 0) {s} | Seq Stmt Stmt -- ^ s1; s2 | Skip -- ^ no-op \end{code} Evaluating Statements --------------------- **A recursive *interpreter* for Statements** \begin{code} evalS :: State -&gt; Stmt -&gt; State evalS st Skip = st evalS st (Asgn x e) = set x (evalE st e) st evalS st (If e s1 s2) = if (evalE st e /= 0) then evalS st s1 else evalS st s2 evalS st w@(While e s) = if (evalE st e /= 0) then evalS st (Seq s w) else st evalS st (Seq s1 s2) = evalS (evalS st s1) s2 \end{code} **Exercise:** When is it safe to call `evalE st e`? Specify Used-Before-Defined Variables ------------------------------------- **Problem: Which `Var`s are *used-before-definition* in a `Stmt`?** \begin{code} {-@ measure useS @-} useS :: Stmt -&gt; S.Set Var useS (Asgn x e) = S.empty -- TODO: replace with proper definition useS (If e s1 s2) = S.empty -- TODO: replace with proper definition useS (While e s) = S.empty -- TODO: replace with proper definition useS (Seq s1 s2) = S.empty -- TODO: replace with proper definition useS Skip = S.empty -- TODO: replace with proper definition {- | HINT: * S.empty : the empty set * S.singleton x : the set containing just x * S.union s1 s2 : the union of s1 and s2 * S.intersection s1 s2 : the union of s1 and s2 * S.isSubsetOf s1 s2 : is s1 a subset of s2 ? -} \end{code} **Exercise:** Now go back and specify and verify `EvalS` Statically Verifying a Dynamic Check ------------------------------------<br />
-**`interpret` uses a *run-time check* to see if `s` is safe to evaluate.** \begin{code} interpret :: Stmt -&gt; Maybe State interpret s | isSafe s = Just (evalS Emp s) | otherwise = Nothing {-@ inline isSafe @-} isSafe :: Stmt -&gt; Bool isSafe s = True -- EXERCISE: replace with correct condition \end{code} **Exercise:** What run-time check `isSafe` *statically ensures* `evalS Emp s` won't crash? Some Safe and Unsafe Programs ----------------------------- Here are some **safe** statements: \begin{code} safe1 = (Asgn "X" (AVal 5)) `Seq` -- x := 5 (Asgn "Y" (AVar "X")) -- y := x safe2 = (If (AVal 1) -- if 1 (Asgn "Z" (AVal 1)) -- then z := 1 (Asgn "Z" (AVal 2)) -- else z := 2 ) `Seq` -- y = z (Asgn "Y" (AVar "Z")) \end{code} Here are some **unsafe** ones: \begin{code} unsafe1 = (Asgn "X" (AVal 5)) `Seq` -- x := 5 (Asgn "Y" (AVar "Z")) -- y := z unsafe2 = (While (AVal 0) (Asgn "Z" (AVal 1))) `Seq` -- while (0) { z := 1} (Asgn "Y" (AVar "Z")) -- y := z \end{code} Plan ----<br />
-**Part I:** [Refinements 101](02-refinements.html) Case Study: [Vector Bounds](03-example-vectors.html) **Part II:** [Properties of Structures](04-data-properties.html) Case Study: [Sorting](05-example-sort.html), [Interpreter](06-example-interpreter.html) **Part III:** **[Invariants of Data Structures](07-data-legal.html)** Case Study: [Sorting actually Sorts Lists](08-example-sort.html) **Part IV:** [Termination](09-termination.html) and [Correctness Proofs](10-reflection.html) Case Study: [Optimizing Arithmetic Expressions](11-example-opt.html) [mylink]: http://www.google.com [dml]: http://www.cs.bu.edu/~hwxi/DML/DML.html [vecspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Vector.spec [vec]: http://hackage.haskell.org/package/vector [agdavec]: http://code.haskell.org/Agda/examples/Vec.agda [ref101]: /blog/2013/01/01/refinement-types-101.lhs/ [ref102]: /blog/2013/01/27/refinements-101-reax.lhs/ [data-list]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [foldl]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [listtail]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [dmlarray]: http://www.cs.bu.edu/~hwxi/academic/papers/pldi98.pdf [liquid-tutorial]: http://github.com/ucsd-progsys/liquidhaskell-tutorial.git [liquid-emacs]: https://github.com/ucsd-progsys/liquid-types.el [liquid-vim]: https://github.com/ucsd-progsys/liquid-types.vim [z3]: http://z3.codeplex.com/ [cvc4]: http://cvc4.cs.nyu.edu/ [mathsat]: http://mathsat.fbk.eu/download.html [hoogle-assert]: https://www.haskell.org/hoogle/?hoogle=assert [apple-riser]: http://blog.jbapple.com/2008/01/extra-type-safety-using-polymorphic.html [safeList]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [kmeansI]: /blog/2013/02/16/kmeans-clustering-I.lhs/ [kmeansII]: /blog/2013/02/17/kmeans-clustering-II.lhs/ [URL-take]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/List.lhs#L334 [URL-groupBy]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:groupBy [URL-transpose]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html#transpose [maru]: http://www.youtube.com/watch?v=8uDuls5TyNE [URL-kmeans]: http://hackage.haskell.org/package/kmeans [hinze-icfp09]: http://www.cs.ox.ac.uk/ralf.hinze/publications/ICFP09.pdf [smt-set]: http://www.kroening.com/smt-lib-lsm.pdf) [setspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Set.spec [mccarthy]: http://www-formal.stanford.edu/jmc/towards.ps [xmonad-stackset]: http://hackage.haskell.org/package/xmonad-0.11/docs/XMonad-StackSet.html [bst-wiki]: http://en.wikipedia.org/wiki/Binary_search_tree [foreignptr]: http://hackage.haskell.org/package/base/docs/Foreign-Ptr.html [bytestring]: https://hackage.haskell.org/package/bytestring [xmonad]: http://xmonad.org/ [wiki-zipper]: http://en.wikipedia.org/wiki/Zipper_(data_structure) [wiki-contracts]: http://en.wikipedia.org/wiki/Design_by_contract [smart-ctr-wiki]: https://www.haskell.org/haskellwiki/Smart_constructors [smt-wiki]: http://en.wikipedia.org/wiki/Satisfiability_Modulo_Theories [vazou13]: http://goto.ucsd.edu/~rjhala/liquid/abstract_refinement_types.pdf [liquidpldi08]: http://goto.ucsd.edu/~rjhala/liquid/liquid_types.pdf [bird-pearls]: http://www.amazon.com/Pearls-Functional-Algorithm-Design-Richard/dp/0521513383 [mitchell-riser]: http://neilmitchell.blogspot.com/2008/03/sorting-at-speed.html [blog-set]: /blog/2013/03/26/talking-about-sets.lhs/ [z3cal]: http://research.microsoft.com/en-us/um/people/leonardo/fmcad09.pdf [sbv]: https://github.com/LeventErkok/sbv [leon]: http://lara.epfl.ch/w/leon [ptrspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/Ptr.spec [okasaki95]: http://www.westpoint.edu/eecs/SiteAssets/SitePages/Faculty%20Publication%20Documents/Okasaki/jfp95queue.pdf [queue-wiki]: http://en.wikipedia.org/wiki/Queue_%28abstract_data_type%29 [avl-wiki]: http://en.wikipedia.org/wiki/AVL_tree [nelson-thesis]: http://research.microsoft.com/en-us/um/people/qadeer/cse599f/papers/nelsonthesis.pdf
+<div id="program-pane-1" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-1" class="programbox">{-@ impossible :: {v:String | false} -> a @-}
+impossible msg = error msg</div>
+</div>
+
+</section>
+</div>
+<div id="slide-2" class="slide">
+<section id="proving-something-is-impossible-1" class="level2">
+<h2>Proving Something is Impossible</h2>
+<p><br> <br></p>
+<p><strong>Exercise:</strong> What are valid inputs for <code>safeDiv</code>?</p>
+<div class="mybreak">
+<br>
+</div>
+<div id="program-pane-2" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-2" class="programbox">safeDiv :: Int -> Int -> Int 
+safeDiv x y = if y == 0 
+                then impossible "don't divide by zero!" 
+                else div x y </div>
+</div>
+
+</section>
+</div>
+<div id="slide-3" class="slide">
+<section id="state" class="level2">
+<h2>State</h2>
+<p>A datatype for mapping <code>Var</code> to their <code>Val</code>ue</p>
+<div id="program-pane-3" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-3" class="programbox">data State 
+  = Emp                   -- ^ Empty  `State`
+  | Bind Var Val State    -- ^ Extend `State` by assigning `Var` to `Val`
+
+-- | Update `s` by setting the value of `x` to `v` 
+set :: Var -> Val -> State -> State
+set x v s = Bind x v s
+
+-- | Lookup the value of `x` in `s`
+get :: Var -> State -> Val
+get x (Bind y v s) 
+  | x == y    = v         -- ^ found the variable `x`, return v
+  | otherwise = get x s   -- ^ recursively search `s`
+get x Emp     = impossible (x ++ " is undefined!") </div>
+</div>
+
+<p><strong>Exercise:</strong> When is the last case in <code>get</code> indeed <code>impossible</code>?</p>
+</section>
+</div>
+<div id="slide-4" class="slide">
+<section id="arithmetic-expressions" class="level2">
+<h2>Arithmetic Expressions</h2>
+<p><br></p>
+<p><strong>A datatype for representing arithmetic expressions</strong></p>
+<p>Sums of variables and integer constants</p>
+<div id="program-pane-4" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-4" class="programbox">type Var = String
+type Val = Int
+
+data AExp 
+  = AVar Var       -- ^ x
+  | AVal Val       -- ^ v
+  | AAdd AExp AExp -- ^ e1 + e2 </div>
+</div>
+
+</section>
+</div>
+<div id="slide-5" class="slide">
+<section id="evaluating-arithmetic-expressions" class="level2">
+<h2>Evaluating Arithmetic Expressions</h2>
+<p><br></p>
+<p><strong>A recursive <em>evaluator</em> for Arithmetic Expressions</strong></p>
+<div id="program-pane-5" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-5" class="programbox">evalE :: State -> AExp -> Val
+evalE _  (AVal v)     = v
+evalE st (AVar x)     = get x st
+evalE st (AAdd e1 e2) = (evalE st e1) + (evalE st e2)</div>
+</div>
+
+<p><strong>Exercise:</strong> How to verify the call to <code>get</code> is actually safe?</p>
+</section>
+</div>
+<div id="slide-6" class="slide">
+<section id="variables-read-in-an-expression" class="level2">
+<h2>Variables Read in an Expression</h2>
+<div class="mybreak">
+<br>
+</div>
+<p><strong>Specify the <code>Var</code>s we need to <code>get</code> to evaluate an <code>AExp</code></strong></p>
+<div id="program-pane-6" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-6" class="programbox">{-@ measure useE @-}
+useE :: AExp -> S.Set Var
+useE (AVar x)     = S.empty    -- TODO: replace with proper definition
+useE (AVal v)     = S.empty    -- TODO: replace with proper definition
+useE (AAdd e1 e2) = S.empty    -- TODO: replace with proper definition
+
+{- | HINT : You may want to use 
+     * S.empty              : the empty set
+     * S.singleton x        : the set containing just x 
+     * S.union s1 s2        : the union of s1 and s2         
+     * S.intersection s1 s2 : the union of s1 and s2         
+     * S.isSubsetOf s1 s2   : is s1 a subset of s2 ?
+-}</div>
+</div>
+
+<p><strong>Exercise:</strong> Now, use <code>useE</code> to specify and verify <code>evalE</code>.</p>
+</section>
+</div>
+<div id="slide-7" class="slide">
+<section id="statements" class="level2">
+<h2>Statements</h2>
+<p><br></p>
+<p><strong>A datatype for representing imperative programs</strong></p>
+<p>Assignments, Sequencing, Branching and Loops.</p>
+<div id="program-pane-7" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-7" class="programbox">data Stmt 
+  = Asgn  Var AExp       -- ^ x := e
+  | If    AExp Stmt Stmt -- ^ if (e != 0) {s1} else {s2}
+  | While AExp Stmt      -- ^ while (e != 0) {s}
+  | Seq   Stmt Stmt      -- ^ s1; s2
+  | Skip                 -- ^ no-op</div>
+</div>
+
+</section>
+</div>
+<div id="slide-8" class="slide">
+<section id="evaluating-statements" class="level2">
+<h2>Evaluating Statements</h2>
+<p><strong>A recursive <em>interpreter</em> for Statements</strong></p>
+<div id="program-pane-8" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-8" class="programbox">evalS :: State -> Stmt -> State
+
+evalS st Skip          = st
+
+evalS st (Asgn x e)    = set x (evalE st e) st
+
+evalS st (If e s1 s2)  = if (evalE st e /= 0)
+                           then evalS st s1
+                           else evalS st s2
+
+evalS st w@(While e s) = if (evalE st e /= 0)
+                           then evalS st (Seq s w) 
+                           else st
+
+evalS st (Seq s1 s2)   = evalS (evalS st s1) s2</div>
+</div>
+
+<p><strong>Exercise:</strong> When is it safe to call <code>evalE st e</code>?</p>
+</section>
+</div>
+<div id="slide-9" class="slide">
+<section id="specify-used-before-defined-variables" class="level2">
+<h2>Specify Used-Before-Defined Variables</h2>
+<p><strong>Problem: Which <code>Var</code>s are <em>used-before-definition</em> in a <code>Stmt</code>?</strong></p>
+<div id="program-pane-9" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-9" class="programbox">{-@ measure useS @-}
+useS :: Stmt -> S.Set Var
+useS (Asgn x e)   = S.empty    -- TODO: replace with proper definition 
+useS (If e s1 s2) = S.empty    -- TODO: replace with proper definition
+useS (While e s)  = S.empty    -- TODO: replace with proper definition
+useS (Seq s1 s2)  = S.empty    -- TODO: replace with proper definition
+useS Skip         = S.empty    -- TODO: replace with proper definition
+
+{- | HINT: * S.empty              : the empty set
+           * S.singleton x        : the set containing just x 
+           * S.union s1 s2        : the union of s1 and s2         
+           * S.intersection s1 s2 : the union of s1 and s2         
+           * S.isSubsetOf s1 s2   : is s1 a subset of s2 ?          -}</div>
+</div>
+
+<p><strong>Exercise:</strong> Now go back and specify and verify <code>EvalS</code></p>
+</section>
+</div>
+<div id="slide-10" class="slide">
+<section id="statically-verifying-a-dynamic-check" class="level2">
+<h2>Statically Verifying a Dynamic Check</h2>
+<p><br></p>
+<p><strong><code>interpret</code> uses a <em>run-time check</em> to see if <code>s</code> is safe to evaluate.</strong></p>
+<div id="program-pane-10" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-10" class="programbox">interpret :: Stmt -> Maybe State
+interpret s 
+  | isSafe s  = Just (evalS Emp s)
+  | otherwise = Nothing
+
+{-@ inline isSafe @-}
+isSafe :: Stmt -> Bool
+isSafe s = True  -- EXERCISE: replace with correct condition</div>
+</div>
+
+<p><strong>Exercise:</strong> What run-time check <code>isSafe</code> <em>statically ensures</em> <code>evalS Emp s</code> won’t crash?</p>
+</section>
+</div>
+<div id="slide-11" class="slide">
+<section id="some-safe-and-unsafe-programs" class="level2">
+<h2>Some Safe and Unsafe Programs</h2>
+<p>Here are some <strong>safe</strong> statements:</p>
+<div id="program-pane-11" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-11" class="programbox">safe1 = (Asgn "X" (AVal 5))   `Seq`       -- x := 5
+        (Asgn "Y" (AVar "X"))             -- y := x
+
+safe2 = (If (AVal 1)                      -- if 1 
+          (Asgn "Z" (AVal 1))             --   then z := 1
+          (Asgn "Z" (AVal 2))             --   else z := 2
+        ) `Seq`                           -- y = z
+        (Asgn "Y" (AVar "Z"))</div>
+</div>
+
+<p>Here are some <strong>unsafe</strong> ones:</p>
+<div id="program-pane-12" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-12" class="programbox">unsafe1 = (Asgn "X" (AVal 5)) `Seq`                   -- x := 5
+          (Asgn "Y" (AVar "Z"))                       -- y := z
+
+unsafe2 = (While (AVal 0) (Asgn "Z" (AVal 1)))  `Seq` -- while (0) { z := 1} 
+          (Asgn "Y" (AVar "Z"))                       -- y := z </div>
+</div>
+
+</section>
+</div>
+<div id="slide-12" class="slide">
+<section id="plan" class="level2">
+<h2>Plan</h2>
+<p><br></p>
+<p><strong>Part I:</strong> <a href="02-refinements.html">Refinements 101</a></p>
+<p>Case Study: <a href="03-example-vectors.html">Vector Bounds</a></p>
+<p><strong>Part II:</strong> <a href="04-data-properties.html">Properties of Structures</a></p>
+<p>Case Study: <a href="05-example-sort.html">Sorting</a>, <a href="06-example-interpreter.html">Interpreter</a></p>
+<p><strong>Part III:</strong> <strong><a href="07-data-legal.html">Invariants of Data Structures</a></strong></p>
+<p>Case Study: <a href="08-example-sort.html">Sorting actually Sorts Lists</a></p>
+<p><strong>Part IV:</strong> <a href="09-termination.html">Termination</a> and <a href="10-reflection.html">Correctness Proofs</a></p>
+<p>Case Study: <a href="11-example-opt.html">Optimizing Arithmetic Expressions</a></p>
+</section>
+</div>
 
 </div>
 </div>
@@ -411,17 +773,17 @@ Proving Something is Impossible -------------------------------<br />
 
 <!-- JavaScript below! ============================================== -->
 
-  <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
-  <script src="/js/liquid/tooltip.js"></script>
-  <script src="/js/liquid/annot.js"></script>
-  <script src="/js/liquid/config.js"></script>
-  <script src="/js/liquid/slideshow.js"></script>
-  <script src="/js/liquid/liquid.js"></script>
+  <script src="./js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
+  <script src="./js/liquid/tooltip.js"></script>
+  <script src="./js/liquid/annot.js"></script>
+  <script src="./js/liquid/config.js"></script>
+  <script src="./js/liquid/slideshow.js"></script>
+  <script src="./js/liquid/liquid.js"></script>
 
   <script type="text/javascript">
-    var queryServerURL = "" ;
+    var queryServerURL = "https://liquid-demo.programming.systems/" ;
   </script>
 
   <!-- rust nav JS -->

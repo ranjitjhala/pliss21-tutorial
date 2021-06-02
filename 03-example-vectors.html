@@ -6,12 +6,12 @@
     <meta name="generator" content="rustdoc">
     <title>03-example-vectors</title>
 
-    <link href="/css/bootstrap.css" rel="stylesheet">
-    <link href="/css/bootstrap-theme.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/rust-book-slides.css">
-    <link rel="stylesheet" type="text/css" href="/css/editor-slides.css">
-    <link rel="stylesheet" type="text/css" href="/css/code-format.css">
-    <link rel="stylesheet" type="text/css" href="/css/slideshow.css">
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/bootstrap-theme.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./css/rust-book-slides.css">
+    <link rel="stylesheet" type="text/css" href="./css/editor-slides.css">
+    <link rel="stylesheet" type="text/css" href="./css/code-format.css">
+    <link rel="stylesheet" type="text/css" href="./css/slideshow.css">
     <style>
       body {
         text-align: center;
@@ -46,8 +46,8 @@
 
 
 
-<script type="text/javascript" src="/js/angular/angular.js"></script>
-<script type="text/javascript" src="/js/bootstrap/bootstrap.js"></script>
+<script type="text/javascript" src="./js/angular/angular.js"></script>
+<script type="text/javascript" src="./js/bootstrap/bootstrap.js"></script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -359,211 +359,620 @@ MathJax.Hub.Config({
 <div id='page-wrapper'>
 <div id='page'>
 
-<p>--- title: "Language-Integrated Verification" author: Ranjit Jhala date: Nov 16th, 2017 documentclass: book toc: true bibliography: sw.bib notitle: true root: "." liquidserver: "https://liquid-demo.programming.systems/" pdflink: "book.pdf" ---</p>
 <div class="hidden">
-\begin{code} {-@ LIQUID "--no-termination" @-} {-@ LIQUID "--short-names" @-} module Examples ( sum , sum' , sum'' , range , binarySearch -- , average -- , length ) where import Prelude hiding (map, sum, length, (!)) data Vector a at :: Vector a -&gt; Int -&gt; a at = undefined size :: Vector a -&gt; Int size = undefined -- {-@ range :: lo:_ -&gt; hi:{lo &lt;= hi} -&gt; [{v:_ | lo &lt;= v &amp;&amp; v &lt; hi}] @-} \end{code}
+<div id="program-pane-0" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-0" class="programbox">{-@ LIQUID "--no-termination" @-}
+{-@ LIQUID "--short-names"    @-}
+
+module Examples
+       ( sum
+       , sum'
+       , sum''
+       , range
+       , binarySearch
+       -- , average
+       -- , length
+       )
+       where
+
+import Prelude hiding (map, sum, length, (!))
+
+data Vector a
+
+at   :: Vector a -> Int -> a
+at = undefined
+
+size :: Vector a -> Int
+size = undefined
+
+-- {-@ range :: lo:_ -> hi:{lo <= hi} -> [{v:_ | lo <= v && v < hi}] @-}</div>
 </div>
-<p>Case Study: Vector Bounds -------------------------<br />
-**Goal: Whirlwind Overview**</p>
-<div class="mybreak">
-<br />
 
 </div>
-<p>Specifications Verification Inference Collections &amp; HOFs Case Study: Vector Bounds -------------------------<br />
-**Goal: Whirlwind Overview**</p>
+<div id="slide-0" class="slide">
+<section id="case-study-vector-bounds" class="level2">
+<h2>Case Study: Vector Bounds</h2>
+<p><br></p>
+<p><strong>Goal: Whirlwind Overview</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p><font color="#1569C7">Specifications</font> Verification Inference Collections &amp; HOFs Case Study: Vector Bounds -------------------------<br />
-**Goal: Whirlwind Overview**</p>
+<p>Specifications</p>
+<p>Verification</p>
+<p>Inference</p>
+<p>Collections &amp; HOFs</p>
+</section>
+</div>
+<div id="slide-1" class="slide">
+<section id="case-study-vector-bounds-1" class="level2">
+<h2>Case Study: Vector Bounds</h2>
+<p><br></p>
+<p><strong>Goal: Whirlwind Overview</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
+</div>
+<p><font color="#1569C7">Specifications</font></p>
+<p>Verification</p>
+<p>Inference</p>
+<p>Collections &amp; HOFs</p>
+</section>
+</div>
+<div id="slide-2" class="slide">
+<section id="case-study-vector-bounds-2" class="level2">
+<h2>Case Study: Vector Bounds</h2>
+<p><br></p>
+<p><strong>Goal: Whirlwind Overview</strong></p>
+<div class="mybreak">
+<br>
 </div>
 <p>Specifications</p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Property: In-bounds Array Access** Case Study: Vector Bounds -------------------------<br />
-**Goal: Whirlwind Overview**</p>
+<p><strong>Property: In-bounds Array Access</strong></p>
+</section>
+</div>
+<div id="slide-3" class="slide">
+<section id="case-study-vector-bounds-3" class="level2">
+<h2>Case Study: Vector Bounds</h2>
+<p><br></p>
+<p><strong>Goal: Whirlwind Overview</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
 <p>Specifications</p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Property: In-bounds Array Access** \begin{code} {-@ measure vlen :: Vector a -&gt; Int @-} \end{code} An **uninterpreted function** describing the **size** of a `Vector` Specifications: Pre-Conditions ------------------------------</p>
+<p><strong>Property: In-bounds Array Access</strong></p>
+<div id="program-pane-1" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-1" class="programbox">{-@ measure vlen :: Vector a -> Int @-}</div>
+</div>
+
+<p>An <strong>uninterpreted function</strong> describing the <strong>size</strong> of a <code>Vector</code></p>
+</section>
+</div>
+<div id="slide-4" class="slide">
+<section id="specifications-pre-conditions" class="level2">
+<h2>Specifications: Pre-Conditions</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>What does a function **require** for correct execution? Specifications: Pre-Conditions ------------------------------</p>
+<p>What does a function <strong>require</strong> for correct execution?</p>
+</section>
+</div>
+<div id="slide-5" class="slide">
+<section id="specifications-pre-conditions-1" class="level2">
+<h2>Specifications: Pre-Conditions</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>What does a function **require** for correct execution?</p>
+<p>What does a function <strong>require</strong> for correct execution?</p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>\begin{code} {-@ at :: vec:Vector a -&gt; {i:Nat| i &lt; vlen vec} -&gt; a @-} \end{code}</p>
+<div id="program-pane-2" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-2" class="programbox">{-@ at :: vec:Vector a -> {i:Nat| i < vlen vec} -> a @-}</div>
+</div>
+
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Refinement on the function's Input Type** Input index must be between `0` and the size of `vec` Specifications: Post-Conditions -------------------------------</p>
+<p><strong>Refinement on the function’s Input Type</strong></p>
+<p>Input index must be between <code>0</code> and the size of <code>vec</code></p>
+</section>
+</div>
+<div id="slide-6" class="slide">
+<section id="specifications-post-conditions" class="level2">
+<h2>Specifications: Post-Conditions</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>What does a function **ensure** about its result? Specifications: Post-Conditions -------------------------------</p>
+<p>What does a function <strong>ensure</strong> about its result?</p>
+</section>
+</div>
+<div id="slide-7" class="slide">
+<section id="specifications-post-conditions-1" class="level2">
+<h2>Specifications: Post-Conditions</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>What does a function **ensure** about its result?</p>
+<p>What does a function <strong>ensure</strong> about its result?</p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>\begin{code} {-@ size :: vec:Vector a -&gt; {n:Nat | n == vlen vec} @-} \end{code}</p>
+<div id="program-pane-3" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-3" class="programbox">{-@ size :: vec:Vector a -> {n:Nat | n == vlen vec} @-}</div>
+</div>
+
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Refinement on the function's Output Type** Returned value equals the size of the input `vec` Case Study: Vector Bounds -------------------------<br />
-**Goal: Whirlwind Overview**</p>
+<p><strong>Refinement on the function’s Output Type</strong></p>
+<p>Returned value equals the size of the input <code>vec</code></p>
+</section>
+</div>
+<div id="slide-8" class="slide">
+<section id="case-study-vector-bounds-4" class="level2">
+<h2>Case Study: Vector Bounds</h2>
+<p><br></p>
+<p><strong>Goal: Whirlwind Overview</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>Specification <font color="#1569C7">Verification</font> Inference Collections &amp; HOFs Verification: Vector Sum ------------------------</p>
+<p>Specification</p>
+<p><font color="#1569C7">Verification</font></p>
+<p>Inference</p>
+<p>Collections &amp; HOFs</p>
+</section>
+</div>
+<div id="slide-9" class="slide">
+<section id="verification-vector-sum" class="level2">
+<h2>Verification: Vector Sum</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>\begin{code} sum :: Vector Int -&gt; Int sum v = loop 0 where {-@ loop :: Nat -&gt; Int @-} loop i | i &lt;= size v = at v i + loop (i + 1) | otherwise = 0 \end{code}</p>
+<div id="program-pane-4" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-4" class="programbox">sum :: Vector Int -> Int
+sum v = loop 0
+  where
+    {-@ loop :: Nat -> Int @-}
+    loop i
+      | i <= size v = at v i + loop (i + 1)
+      | otherwise   = 0</div>
+</div>
+
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Exercise:** Does the above verify? If not, can you fix it so it does? Verification: Vector Sum ------------------------ <img src="img/sum-code-numbers.png" height="200" /> Verification: Vector Sum ------------------------ <img src="img/sum-code-numbers.png" height="200" /> **Verification Conditions** $$\begin{array}{lll} \True &amp; \Rightarrow v = 0 &amp; \Rightarrow 0 \leq v &amp; \mbox{(A)} \\ 0 \leq i \wedge n = \mathit{vlen}\ v \wedge i &lt; n &amp; \Rightarrow v = i + 1 &amp; \Rightarrow 0 \leq v &amp; \mbox{(B)} \\ 0 \leq i \wedge n = \mathit{vlen}\ v \wedge i &lt; n &amp; \Rightarrow v = i &amp; \Rightarrow 0 \leq v &lt; \mathit{vlen}\ v &amp; \mbox{(C)} \\ \end{array}$$ Case Study: Vector Bounds ---------------------------<br />
-**Goal: Whirlwind Overview**</p>
+<p><strong>Exercise:</strong> Does the above verify? If not, can you fix it so it does?</p>
+</section>
+</div>
+<div id="slide-10" class="slide">
+<section id="verification-vector-sum-1" class="level2">
+<h2>Verification: Vector Sum</h2>
+<p><img src="img/sum-code-numbers.png" height=200px></p>
+</section>
+</div>
+<div id="slide-11" class="slide">
+<section id="verification-vector-sum-2" class="level2">
+<h2>Verification: Vector Sum</h2>
+<p><img src="img/sum-code-numbers.png" height=200px></p>
+<p><strong>Verification Conditions</strong></p>
+<p><span class="math display">\[\begin{array}{lll}
+\True
+  &amp; \Rightarrow v = 0
+  &amp; \Rightarrow 0 \leq v
+  &amp; \mbox{(A)} \\
+0 \leq i \wedge n = \mathit{vlen}\ v \wedge i &lt; n
+  &amp; \Rightarrow v = i + 1
+  &amp; \Rightarrow 0 \leq v
+  &amp; \mbox{(B)} \\
+0 \leq i \wedge n = \mathit{vlen}\ v \wedge i &lt; n
+  &amp; \Rightarrow v = i
+  &amp; \Rightarrow 0 \leq v &lt; \mathit{vlen}\ v
+  &amp; \mbox{(C)} \\
+\end{array}\]</span></p>
+</section>
+</div>
+<div id="slide-12" class="slide">
+<section id="case-study-vector-bounds-5" class="level2">
+<h2>Case Study: Vector Bounds</h2>
+<p><br></p>
+<p><strong>Goal: Whirlwind Overview</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>Specification Verification <font color="#1569C7">Inference</font> Collections &amp; HOFs Inference ---------<br />
-The more interesting your types get, the less fun it is to write them down. -- Benjamin Pierce Inference: Vector Sum ----------------------</p>
+<p>Specification</p>
+<p>Verification</p>
+<p><font color="#1569C7">Inference</font></p>
+<p>Collections &amp; HOFs</p>
+</section>
+</div>
+<div id="slide-13" class="slide">
+<section id="inference" class="level2">
+<h2>Inference</h2>
+<p><br></p>
+<pre><code>The more interesting your types get,
+the less fun it is to write them down.
+
+                   -- Benjamin Pierce</code></pre>
+</section>
+</div>
+<div id="slide-14" class="slide">
+<section id="inference-vector-sum" class="level2">
+<h2>Inference: Vector Sum</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>\begin{code} sum' :: Vector Int -&gt; Int sum' v = loop 0 where {-@ loop :: _ -&gt; _ @-} loop i | i &lt; size v = at v i + loop (i + 1) | otherwise = 0 \end{code} Inference: Vector Sum ---------------------<br />
-Not magic, just **Abstract Interpretation** Inference: Vector Sum ---------------------<br />
-Not magic, just Abstract Interpretation Represent **unknown refinements** with $\kvar{}{\cdot}$ variables ... ... Solve resulting **Horn Constraints**<br />
-[[PLDI 2008]][pldi08] Inference: Vector Sum --------------------- <img src="img/sum-code-infer.png" height="200" /> Inference: Vector Sum --------------------- <img src="img/sum-code-infer.png" height="200" /> **Horn Constraints** $$\begin{array}{lll} \True &amp; \Rightarrow v = 0 &amp; \Rightarrow \kvar{}{v} &amp; \mbox{(A)} \\ \kvar{}{i} \wedge n = \mathit{vlen}\ v \wedge i &lt; n &amp; \Rightarrow v = i + 1 &amp; \Rightarrow \kvar{}{v} &amp; \mbox{(B)} \\ \kvar{}{i} \wedge n = \mathit{vlen}\ v \wedge i &lt; n &amp; \Rightarrow v = i &amp; \Rightarrow 0 \leq v &lt; \mathit{vlen}\ v &amp; \mbox{(C)} \\ \end{array}$$ Inference: Vector Sum ---------------------</p>
+<div id="program-pane-5" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-5" class="programbox">sum' :: Vector Int -> Int
+sum' v = loop 0
+  where
+    {-@ loop :: _ -> _ @-}
+    loop i
+      | i < size v = at v i + loop (i + 1)
+      | otherwise  = 0</div>
+</div>
+
+</section>
+</div>
+<div id="slide-15" class="slide">
+<section id="inference-vector-sum-1" class="level2">
+<h2>Inference: Vector Sum</h2>
+<p><br></p>
+<p>Not magic, just <strong>Abstract Interpretation</strong></p>
+</section>
+</div>
+<div id="slide-16" class="slide">
+<section id="inference-vector-sum-2" class="level2">
+<h2>Inference: Vector Sum</h2>
+<p><br></p>
+<p>Not magic, just Abstract Interpretation</p>
+<p>Represent <strong>unknown refinements</strong> with <span class="math inline">\(\kvar{}{\cdot}\)</span> variables …</p>
+<p>… Solve resulting <strong>Horn Constraints</strong></p>
+<p><br></p>
+<p><a href="http://dl.acm.org/citation.cfm?id=1375602">[PLDI 2008]</a></p>
+</section>
+</div>
+<div id="slide-17" class="slide">
+<section id="inference-vector-sum-3" class="level2">
+<h2>Inference: Vector Sum</h2>
+<p><img src="img/sum-code-infer.png" height=200px></p>
+</section>
+</div>
+<div id="slide-18" class="slide">
+<section id="inference-vector-sum-4" class="level2">
+<h2>Inference: Vector Sum</h2>
+<p><img src="img/sum-code-infer.png" height=200px></p>
+<p><strong>Horn Constraints</strong></p>
+<p><span class="math display">\[\begin{array}{lll}
+\True
+  &amp; \Rightarrow v = 0
+  &amp; \Rightarrow \kvar{}{v}
+  &amp; \mbox{(A)} \\
+\kvar{}{i} \wedge n = \mathit{vlen}\ v \wedge i &lt; n
+  &amp; \Rightarrow v = i + 1
+  &amp; \Rightarrow \kvar{}{v}
+  &amp; \mbox{(B)} \\
+\kvar{}{i} \wedge n = \mathit{vlen}\ v \wedge i &lt; n
+  &amp; \Rightarrow v = i
+  &amp; \Rightarrow 0 \leq v &lt; \mathit{vlen}\ v
+  &amp; \mbox{(C)} \\
+\end{array}\]</span></p>
+</section>
+</div>
+<div id="slide-19" class="slide">
+<section id="inference-vector-sum-5" class="level2">
+<h2>Inference: Vector Sum</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Horn Constraints** $$\begin{array}{lll} \True &amp; \Rightarrow v = 0 &amp; \Rightarrow \kvar{}{v} &amp; \mbox{(A)} \\ \kvar{}{i} \wedge n = \mathit{vlen}\ v \wedge i &lt; n &amp; \Rightarrow v = i + 1 &amp; \Rightarrow \kvar{}{v} &amp; \mbox{(B)} \\ \kvar{}{i} \wedge n = \mathit{vlen}\ v \wedge i &lt; n &amp; \Rightarrow v = i &amp; \Rightarrow 0 \leq v &lt; \mathit{vlen}\ v &amp; \mbox{(C)} \\ \end{array}$$</p>
+<p><strong>Horn Constraints</strong></p>
+<p><span class="math display">\[\begin{array}{lll}
+\True
+  &amp; \Rightarrow v = 0
+  &amp; \Rightarrow \kvar{}{v}
+  &amp; \mbox{(A)} \\
+\kvar{}{i} \wedge n = \mathit{vlen}\ v \wedge i &lt; n
+  &amp; \Rightarrow v = i + 1
+  &amp; \Rightarrow \kvar{}{v}
+  &amp; \mbox{(B)} \\
+\kvar{}{i} \wedge n = \mathit{vlen}\ v \wedge i &lt; n
+  &amp; \Rightarrow v = i
+  &amp; \Rightarrow 0 \leq v &lt; \mathit{vlen}\ v
+  &amp; \mbox{(C)} \\
+\end{array}\]</span></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Synthesized Solution** $$\kvar{}{v} = 0 \leq v$$ Case Study: Vector Bounds ---------------------------<br />
-**Goal: Whirlwind Overview**</p>
+<p><strong>Synthesized Solution</strong></p>
+<p><span class="math display">\[\kvar{}{v} = 0 \leq v\]</span></p>
+</section>
+</div>
+<div id="slide-20" class="slide">
+<section id="case-study-vector-bounds-6" class="level2">
+<h2>Case Study: Vector Bounds</h2>
+<p><br></p>
+<p><strong>Goal: Whirlwind Overview</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>Specification Verification Inference <font color="#1569C7">Collections &amp; HOFs</font> Collections &amp; Higher-Order Functions ------------------------------------</p>
+<p>Specification</p>
+<p>Verification</p>
+<p>Inference</p>
+<p><font color="#1569C7">Collections &amp; HOFs</font></p>
+</section>
+</div>
+<div id="slide-21" class="slide">
+<section id="collections-higher-order-functions" class="level2">
+<h2>Collections &amp; Higher-Order Functions</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**HOFs &gt;&gt; Recursion!** Collections &amp; Higher-Order Functions ------------------------------------</p>
+<p><strong>HOFs &gt;&gt; Recursion!</strong></p>
+</section>
+</div>
+<div id="slide-22" class="slide">
+<section id="collections-higher-order-functions-1" class="level2">
+<h2>Collections &amp; Higher-Order Functions</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**HOFs &gt;&gt; Recursion!**<br />
-[Example: AWS Pagination API (OLD)](https://docs.aws.amazon.com/sdk-for-java/v2/developer-guide/examples-pagination.html) Collections &amp; Higher-Order Functions ------------------------------------</p>
+<p><strong>HOFs &gt;&gt; Recursion!</strong></p>
+<p><br></p>
+<p><a href="https://docs.aws.amazon.com/sdk-for-java/v2/developer-guide/examples-pagination.html">Example: AWS Pagination API (OLD)</a></p>
+</section>
+</div>
+<div id="slide-23" class="slide">
+<section id="collections-higher-order-functions-2" class="level2">
+<h2>Collections &amp; Higher-Order Functions</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**HOFs &gt;&gt; Recursion!**</p>
+<p><strong>HOFs &gt;&gt; Recursion!</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Example: AWS Pagination API (OLD)**</p>
-<p><img src="img/aws-pag-while.png" height="220" /></p>
-<p>Collections &amp; Higher-Order Functions ------------------------------------</p>
+<p><strong>Example: AWS Pagination API (OLD)</strong></p>
+<p align="center">
+<img src="img/aws-pag-while.png" height=220px style="-webkit-filter: drop-shadow(5px 5px 5px #222); filter: drop-shadow(5px 5px 5px #222);"/>
+</p>
+</section>
+</div>
+<div id="slide-24" class="slide">
+<section id="collections-higher-order-functions-3" class="level2">
+<h2>Collections &amp; Higher-Order Functions</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**HOFs &gt;&gt; Recursion!**</p>
+<p><strong>HOFs &gt;&gt; Recursion!</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Example: AWS Pagination API (NEW)**</p>
-<p><img src="img/aws-pag-stream.png" height="40" /></p>
-<p>Collections &amp; Higher-Order Functions ------------------------------------</p>
+<p><strong>Example: AWS Pagination API (NEW)</strong></p>
+<p align="center">
+<img src="img/aws-pag-stream.png" height=40px style="-webkit-filter: drop-shadow(5px 5px 5px #222); filter: drop-shadow(5px 5px 5px #222);"/>
+</p>
+</section>
+</div>
+<div id="slide-25" class="slide">
+<section id="collections-higher-order-functions-4" class="level2">
+<h2>Collections &amp; Higher-Order Functions</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Refining Sequences** \begin{code} range :: Int -&gt; Int -&gt; [Int] range lo hi | lo &lt; hi = lo : range (lo + 1) hi | otherwise = [] \end{code}</p>
+<p><strong>Refining Sequences</strong></p>
+<div id="program-pane-6" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-6" class="programbox">range :: Int -> Int -> [Int]
+range lo hi
+  | lo < hi   = lo : range (lo + 1) hi
+  | otherwise = []</div>
+</div>
+
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Exercise:** Can you write down a good type for `range`? Collections &amp; Higher-Order Functions ------------------------------------</p>
+<p><strong>Exercise:</strong> Can you write down a good type for <code>range</code>?</p>
+</section>
+</div>
+<div id="slide-26" class="slide">
+<section id="collections-higher-order-functions-5" class="level2">
+<h2>Collections &amp; Higher-Order Functions</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Reduce over Sequences (c.f. Map-Reduce)** \begin{code} reduce :: (a -&gt; b -&gt; a) -&gt; a -&gt; [b] -&gt; a reduce f acc [] = acc reduce f acc (x:xs) = let acc' = f acc x in reduce f acc' xs \end{code} **Type of `reduce` looks like Floyd-Hoare rule for Loops!** Type `a` is an *invariant* that holds on *initial* `acc` and is *inductively* by `f` Collections &amp; Higher-Order Functions ------------------------------------</p>
+<p><strong>Reduce over Sequences (c.f. Map-Reduce)</strong></p>
+<div id="program-pane-7" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-7" class="programbox">reduce :: (a -> b -> a) -> a -> [b] -> a
+reduce f acc []     = acc 
+reduce f acc (x:xs) = let acc' = f acc x 
+                      in
+                          reduce f acc' xs</div>
+</div>
+
+<p><strong>Type of <code>reduce</code> looks like Floyd-Hoare rule for Loops!</strong></p>
+<p>Type <code>a</code> is an <em>invariant</em> that holds on <em>initial</em> <code>acc</code> and is <em>inductively</em> by <code>f</code></p>
+</section>
+</div>
+<div id="slide-27" class="slide">
+<section id="collections-higher-order-functions-6" class="level2">
+<h2>Collections &amp; Higher-Order Functions</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Vector Sum by Reduction** \begin{code} sum'' :: Vector Int -&gt; Int sum'' vec = let is = range 0 (size vec) add = \n i -&gt; n + at vec i in reduce add 0 is \end{code} Polymorphic types enable [automatic refinement inference](100-range-constraints.html) \begin{spec}</p>
-<div>
+<p><strong>Vector Sum by Reduction</strong></p>
+<div id="program-pane-8" class="welleditor" style="background:#fff; position:relative">
 
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-8" class="programbox">sum''   :: Vector Int -> Int
+sum'' vec = let is  = range 0 (size vec)
+                add = \n i -> n + at vec i 
+            in 
+                reduce add 0 is               </div>
 </div>
-<p>is :: [{i:|0 &lt;= i &lt; len vec}] add :: Int -&gt; {i:|0 &lt;= i &lt; len vec} -&gt; Int \end{spec} Refinement Types and Collections --------------------------------<br />
-<br />
-<br />
-**Types are an Algorithm for Generalization and Instantiation** Refinement Types and Collections -------------------------------- **Types are an Algorithm for Generalization and Instantiation**</p>
+
+<p>Polymorphic types enable <a href="100-range-constraints.html">automatic refinement inference</a></p>
+</section>
+</div>
+<div id="slide-28" class="slide">
+<section id="refinement-types-and-collections" class="level2">
+<h2>Refinement Types and Collections</h2>
+<p><br> <br> <br></p>
+<p><strong>Types are an Algorithm for Generalization and Instantiation</strong></p>
+</section>
+</div>
+<div id="slide-29" class="slide">
+<section id="refinement-types-and-collections-1" class="level2">
+<h2>Refinement Types and Collections</h2>
+<p><strong>Types are an Algorithm for Generalization and Instantiation</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Generalization** Lift properties from single _value_ to whole _collection_ e.g. from individual values to whole collection in `range` Refinement Types and Collections -------------------------------- **Types are an Algorithm for Generalization and Instantiation**</p>
+<p><strong>Generalization</strong></p>
+<p>Lift properties from single <em>value</em> to whole <em>collection</em></p>
+<p>e.g. from individual values to whole collection in <code>range</code></p>
+</section>
+</div>
+<div id="slide-30" class="slide">
+<section id="refinement-types-and-collections-2" class="level2">
+<h2>Refinement Types and Collections</h2>
+<p><strong>Types are an Algorithm for Generalization and Instantiation</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>**Generalization** Lift properties from single _value_ to whole _collection_ e.g. from individual values to whole collection in `range` **Instantiation** Apply properties from whole _collection_ to single _value_ e.g. from whole collection to individual index in `sum` Case Study: Vector Bounds -------------------------<br />
-**Recap: Whirlwind Overview**</p>
+<p><strong>Generalization</strong></p>
+<p>Lift properties from single <em>value</em> to whole <em>collection</em></p>
+<p>e.g. from individual values to whole collection in <code>range</code></p>
+<p><strong>Instantiation</strong></p>
+<p>Apply properties from whole <em>collection</em> to single <em>value</em></p>
+<p>e.g. from whole collection to individual index in <code>sum</code></p>
+</section>
+</div>
+<div id="slide-31" class="slide">
+<section id="case-study-vector-bounds-7" class="level2">
+<h2>Case Study: Vector Bounds</h2>
+<p><br></p>
+<p><strong>Recap: Whirlwind Overview</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-<p>Specifications Verification Inference Collections &amp; HOFs Putting it All Together: Binary Search -------------------------------------- \begin{code} binarySearch :: Ord a =&gt; a -&gt; Vector a -&gt; Maybe Int binarySearch x v = if size v == 0 then Nothing else loop x v 0 (size v - 1) loop :: Ord a =&gt; a -&gt; Vector a -&gt; Int -&gt; Int -&gt; Maybe Int loop x v lo hi = do let mid = lo + ((hi - lo) `div` 2) if x &lt; (at v mid) then do let hi' = mid - 1 if lo &lt;= hi' then loop x v lo hi' else Nothing else if (at v mid) &lt; x then do let lo' = mid + 1 if lo' &lt;= hi then loop x v lo' hi else Nothing else Just mid \end{code} Plan ----<br />
-**Part I:** [Refinements 101](02-refinements.html) Case Study: [Vector Bounds](03-example-vectors.html) **Part II:** **[Properties of Structures](04-data-properties.html)** Case Study: [Sorting](05-example-sort.html), [Interpreter](06-example-interpreter.html) **Part III:** [Invariants of Data Structures](07-data-legal.html) Case Study: [Sorting actually Sorts Lists](08-example-sort.html) **Part IV:** [Termination](09-termination.html) and [Correctness Proofs](10-reflection.html) Case Study: [Optimizing Arithmetic Expressions](11-example-opt.html) [pldi08]: http://dl.acm.org/citation.cfm?id=1375602 [mylink]: http://www.google.com [dml]: http://www.cs.bu.edu/~hwxi/DML/DML.html [vecspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Vector.spec [vec]: http://hackage.haskell.org/package/vector [agdavec]: http://code.haskell.org/Agda/examples/Vec.agda [ref101]: /blog/2013/01/01/refinement-types-101.lhs/ [ref102]: /blog/2013/01/27/refinements-101-reax.lhs/ [data-list]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [foldl]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [listtail]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [dmlarray]: http://www.cs.bu.edu/~hwxi/academic/papers/pldi98.pdf [liquid-tutorial]: http://github.com/ucsd-progsys/liquidhaskell-tutorial.git [liquid-emacs]: https://github.com/ucsd-progsys/liquid-types.el [liquid-vim]: https://github.com/ucsd-progsys/liquid-types.vim [z3]: http://z3.codeplex.com/ [cvc4]: http://cvc4.cs.nyu.edu/ [mathsat]: http://mathsat.fbk.eu/download.html [hoogle-assert]: https://www.haskell.org/hoogle/?hoogle=assert [apple-riser]: http://blog.jbapple.com/2008/01/extra-type-safety-using-polymorphic.html [safeList]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [kmeansI]: /blog/2013/02/16/kmeans-clustering-I.lhs/ [kmeansII]: /blog/2013/02/17/kmeans-clustering-II.lhs/ [URL-take]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/List.lhs#L334 [URL-groupBy]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:groupBy [URL-transpose]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html#transpose [maru]: http://www.youtube.com/watch?v=8uDuls5TyNE [URL-kmeans]: http://hackage.haskell.org/package/kmeans [hinze-icfp09]: http://www.cs.ox.ac.uk/ralf.hinze/publications/ICFP09.pdf [smt-set]: http://www.kroening.com/smt-lib-lsm.pdf) [setspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Set.spec [mccarthy]: http://www-formal.stanford.edu/jmc/towards.ps [xmonad-stackset]: http://hackage.haskell.org/package/xmonad-0.11/docs/XMonad-StackSet.html [bst-wiki]: http://en.wikipedia.org/wiki/Binary_search_tree [foreignptr]: http://hackage.haskell.org/package/base/docs/Foreign-Ptr.html [bytestring]: https://hackage.haskell.org/package/bytestring [xmonad]: http://xmonad.org/ [wiki-zipper]: http://en.wikipedia.org/wiki/Zipper_(data_structure) [wiki-contracts]: http://en.wikipedia.org/wiki/Design_by_contract [smart-ctr-wiki]: https://www.haskell.org/haskellwiki/Smart_constructors [smt-wiki]: http://en.wikipedia.org/wiki/Satisfiability_Modulo_Theories [vazou13]: http://goto.ucsd.edu/~rjhala/liquid/abstract_refinement_types.pdf [liquidpldi08]: http://goto.ucsd.edu/~rjhala/liquid/liquid_types.pdf [bird-pearls]: http://www.amazon.com/Pearls-Functional-Algorithm-Design-Richard/dp/0521513383 [mitchell-riser]: http://neilmitchell.blogspot.com/2008/03/sorting-at-speed.html [blog-set]: /blog/2013/03/26/talking-about-sets.lhs/ [z3cal]: http://research.microsoft.com/en-us/um/people/leonardo/fmcad09.pdf [sbv]: https://github.com/LeventErkok/sbv [leon]: http://lara.epfl.ch/w/leon [ptrspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/Ptr.spec [okasaki95]: http://www.westpoint.edu/eecs/SiteAssets/SitePages/Faculty%20Publication%20Documents/Okasaki/jfp95queue.pdf [queue-wiki]: http://en.wikipedia.org/wiki/Queue_%28abstract_data_type%29 [avl-wiki]: http://en.wikipedia.org/wiki/AVL_tree [nelson-thesis]: http://research.microsoft.com/en-us/um/people/qadeer/cse599f/papers/nelsonthesis.pdf</p>
+<p>Specifications</p>
+<p>Verification</p>
+<p>Inference</p>
+<p>Collections &amp; HOFs</p>
+</section>
+</div>
+<div id="slide-32" class="slide">
+<section id="putting-it-all-together-binary-search" class="level2">
+<h2>Putting it All Together: Binary Search</h2>
+<div id="program-pane-9" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-9" class="programbox">binarySearch :: Ord a => a -> Vector a -> Maybe Int
+binarySearch x v = 
+  if size v == 0
+    then Nothing
+    else loop x v 0 (size v - 1)
+
+loop :: Ord a => a -> Vector a -> Int -> Int -> Maybe Int
+loop x v lo hi = do
+    let mid = lo + ((hi - lo) `div` 2)
+    if x < (at v mid)
+    then do let hi' = mid - 1
+            if lo <= hi'
+              then loop x v lo hi'
+              else Nothing
+    else if (at v mid) < x
+    then do let lo' = mid + 1
+            if lo' <= hi
+            then loop x v lo' hi
+            else Nothing
+    else Just mid</div>
+</div>
+
+</section>
+</div>
+<div id="slide-33" class="slide">
+<section id="plan" class="level2">
+<h2>Plan</h2>
+<p><br></p>
+<p><strong>Part I:</strong> <a href="02-refinements.html">Refinements 101</a></p>
+<p>Case Study: <a href="03-example-vectors.html">Vector Bounds</a></p>
+<p><strong>Part II:</strong> <strong><a href="04-data-properties.html">Properties of Structures</a></strong></p>
+<p>Case Study: <a href="05-example-sort.html">Sorting</a>, <a href="06-example-interpreter.html">Interpreter</a></p>
+<p><strong>Part III:</strong> <a href="07-data-legal.html">Invariants of Data Structures</a></p>
+<p>Case Study: <a href="08-example-sort.html">Sorting actually Sorts Lists</a></p>
+<p><strong>Part IV:</strong> <a href="09-termination.html">Termination</a> and <a href="10-reflection.html">Correctness Proofs</a></p>
+<p>Case Study: <a href="11-example-opt.html">Optimizing Arithmetic Expressions</a></p>
+</section>
+</div>
 
 </div>
 </div>
@@ -585,17 +994,17 @@ Not magic, just Abstract Interpretation Represent **unknown refinements** with $
 
 <!-- JavaScript below! ============================================== -->
 
-  <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
-  <script src="/js/liquid/tooltip.js"></script>
-  <script src="/js/liquid/annot.js"></script>
-  <script src="/js/liquid/config.js"></script>
-  <script src="/js/liquid/slideshow.js"></script>
-  <script src="/js/liquid/liquid.js"></script>
+  <script src="./js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
+  <script src="./js/liquid/tooltip.js"></script>
+  <script src="./js/liquid/annot.js"></script>
+  <script src="./js/liquid/config.js"></script>
+  <script src="./js/liquid/slideshow.js"></script>
+  <script src="./js/liquid/liquid.js"></script>
 
   <script type="text/javascript">
-    var queryServerURL = "" ;
+    var queryServerURL = "https://liquid-demo.programming.systems/" ;
   </script>
 
   <!-- rust nav JS -->

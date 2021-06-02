@@ -6,12 +6,12 @@
     <meta name="generator" content="rustdoc">
     <title>08-example-sort</title>
 
-    <link href="/css/bootstrap.css" rel="stylesheet">
-    <link href="/css/bootstrap-theme.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/rust-book-slides.css">
-    <link rel="stylesheet" type="text/css" href="/css/editor-slides.css">
-    <link rel="stylesheet" type="text/css" href="/css/code-format.css">
-    <link rel="stylesheet" type="text/css" href="/css/slideshow.css">
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/bootstrap-theme.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./css/rust-book-slides.css">
+    <link rel="stylesheet" type="text/css" href="./css/editor-slides.css">
+    <link rel="stylesheet" type="text/css" href="./css/code-format.css">
+    <link rel="stylesheet" type="text/css" href="./css/slideshow.css">
     <style>
       body {
         text-align: center;
@@ -46,8 +46,8 @@
 
 
 
-<script type="text/javascript" src="/js/angular/angular.js"></script>
-<script type="text/javascript" src="/js/bootstrap/bootstrap.js"></script>
+<script type="text/javascript" src="./js/angular/angular.js"></script>
+<script type="text/javascript" src="./js/bootstrap/bootstrap.js"></script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -359,69 +359,288 @@ MathJax.Hub.Config({
 <div id='page-wrapper'>
 <div id='page'>
 
---- title: "Language-Integrated Verification" author: Ranjit Jhala date: Nov 16th, 2017 documentclass: book toc: true bibliography: sw.bib notitle: true root: "." liquidserver: "https://liquid-demo.programming.systems/" pdflink: "book.pdf" ---
 <div class="hidden">
-\begin{code} {-@ LIQUID "--short-names" @-} {-@ LIQUID "--no-warnings" @-} {-@ LIQUID "--no-termination" @-} module Sort () where infixr 5 :&lt; data OList a = Emp | (:&lt;) { oHd :: a, oTl :: OList a } incList, decList, diffList :: [Int] \end{code}
+<div id="program-pane-0" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-0" class="programbox">{-@ LIQUID "--short-names"    @-}
+{-@ LIQUID "--no-warnings"    @-}
+{-@ LIQUID "--no-termination" @-}
+
+module Sort () where
+
+infixr 5 :< 
+
+data OList a = Emp 
+             | (:<) { oHd :: a, oTl :: OList a }
+
+incList, decList, diffList :: [Int]</div>
 </div>
-Case Study: Sorting Lists (Revisited) -------------------------------------<br />
-**Recall our datatype for Ordered Lists** (Each) head-value `oHd` no bigger than _each_ tail-value in `oTl` \begin{code} {-@ data OList a = Emp | (:&lt;) {oHd :: a, oTl :: OList {v:a|oHd&lt;=v}} @-} okList :: OList Int okList = 1 :&lt; 2 :&lt; 3 :&lt; Emp -- legal badList :: OList Int badList = 1 :&lt; 3 :&lt; 2 :&lt; Emp -- illegal \end{code}
+
+</div>
+<div id="slide-0" class="slide">
+<section id="case-study-sorting-lists-revisited" class="level2">
+<h2>Case Study: Sorting Lists (Revisited)</h2>
+<p><br></p>
+<p><strong>Recall our datatype for Ordered Lists</strong></p>
+<p>(Each) head-value <code>oHd</code> no bigger than <em>each</em> tail-value in <code>oTl</code></p>
+<div id="program-pane-1" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-1" class="programbox">{-@ data OList a = Emp
+                 | (:<) {oHd :: a, oTl :: OList {v:a|oHd<=v}}
+  @-}
+
+okList :: OList Int
+okList  = 1 :< 2 :< 3 :< Emp      -- legal 
+
+badList :: OList Int
+badList = 1 :< 3 :< 2 :< Emp      -- illegal</div>
+</div>
+
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-Lets use it to implement <font color="#1569C7">**Insertion Sort**</font> and **Merge-Sort** Exercise: Insertion Sort actually Sorts ---------------------------------------<br />
-**Update our code to verify that the output is sorted** \begin{code} {- isort :: (Ord a) =&gt; [a] -&gt; OList a isort [] = Emp isort (x:xs) = insert x (isort xs) insert :: (Ord a) =&gt; a -&gt; OList a -&gt; OList a insert x (y:ys) | x &lt;= y = y : x : ys | otherwise = y : insert x ys insert x [] = [x] -} \end{code} **Exercise:** Yikes, so much red. Can you fix it? Exercise: Merge Sort actually Sorts ----------------------------------- **Exercise:** Update our code to verify that the output is sorted \begin{code} {- msort :: (Ord a) =&gt; [a] -&gt; OList a msort [] = [] msort [x] = [x] msort xs = let (xs1, xs2) = split xs in merge (msort xs1) (msort xs2) split :: [a] -&gt; ([a], [a]) split (x:y:zs) = let (xs, ys) = split zs in (x:xs, y:ys) split xs = (xs, []) merge :: [a] -&gt; [a] -&gt; [a] merge xs [] = xs merge [] ys = ys merge (x:xs) (y:ys) | x &lt;= y = x : merge xs (y:ys) | otherwise = y : merge (x:xs) y -} \end{code} Invariants In Constructors --------------------------<br />
-<br />
-<br />
-<br />
-Make illegal values unrepresentable!
+<p>Lets use it to implement <font color="#1569C7"><strong>Insertion Sort</strong></font> and <strong>Merge-Sort</strong></p>
+</section>
+</div>
+<div id="slide-1" class="slide">
+<section id="exercise-insertion-sort-actually-sorts" class="level2">
+<h2>Exercise: Insertion Sort actually Sorts</h2>
+<p><br></p>
+<p><strong>Update our code to verify that the output is sorted</strong></p>
+<div id="program-pane-2" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-2" class="programbox">{- 
+isort :: (Ord a) => [a] -> OList a
+isort []       = Emp 
+isort (x:xs)   = insert x (isort xs)
+
+insert :: (Ord a) => a -> OList a -> OList a 
+insert x (y:ys)
+  | x <= y     = y : x : ys
+  | otherwise  = y : insert x ys
+insert x []    = [x] 
+-}</div>
+</div>
+
+<p><strong>Exercise:</strong> Yikes, so much red. Can you fix it?</p>
+</section>
+</div>
+<div id="slide-2" class="slide">
+<section id="exercise-merge-sort-actually-sorts" class="level2">
+<h2>Exercise: Merge Sort actually Sorts</h2>
+<p><strong>Exercise:</strong> Update our code to verify that the output is sorted</p>
+<div id="program-pane-3" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-3" class="programbox">{- 
+msort :: (Ord a) => [a] -> OList a
+msort []   = []
+msort [x]  = [x]
+msort xs   = let (xs1, xs2) = split xs in
+               merge (msort xs1) (msort xs2)
+
+split :: [a] -> ([a], [a]) 
+split (x:y:zs) = let (xs, ys) = split zs in 
+                   (x:xs, y:ys) 
+split xs       = (xs, [])
+
+merge :: [a] -> [a] -> [a]  
+merge xs []         = xs
+merge [] ys         = ys
+merge (x:xs) (y:ys)
+  | x <= y          = x : merge xs (y:ys)
+  | otherwise       = y : merge (x:xs) y
+-}</div>
+</div>
+
+</section>
+</div>
+<div id="slide-3" class="slide">
+<section id="invariants-in-constructors" class="level2">
+<h2>Invariants In Constructors</h2>
+<p><br> <br> <br> <br></p>
+<p>Make illegal values unrepresentable!</p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-But tedious to have **multiple list types** ... Abstracting Refinements -----------------------<br />
-<br />
-<br />
-<br />
-**Parameterize refinements over types** i.e. _decouple_ the invariant from the data structure Abstracting Refinements -----------------------
+<p>But tedious to have <strong>multiple list types</strong> …</p>
+</section>
+</div>
+<div id="slide-4" class="slide">
+<section id="abstracting-refinements" class="level2">
+<h2>Abstracting Refinements</h2>
+<p><br> <br> <br> <br></p>
+<p><strong>Parameterize refinements over types</strong></p>
+<p>i.e. <em>decouple</em> the invariant from the data structure</p>
+</section>
+</div>
+<div id="slide-5" class="slide">
+<section id="abstracting-refinements-1" class="level2">
+<h2>Abstracting Refinements</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Parameterize refinements over types**
+<p><strong>Parameterize refinements over types</strong></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-\begin{spec} data [a]<rel : a -> a -&gt; Bool&gt; where = [] | (:) { hd :: a , tl :: [{v:a | rel hd v}]} \end{spec} Abstracting Refinements -----------------------
+</section>
+</div>
+<div id="slide-6" class="slide">
+<section id="abstracting-refinements-2" class="level2">
+<h2>Abstracting Refinements</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Parameterize refinements over types** \begin{spec} data [a]<rel : a -> a -&gt; Bool&gt; where = [] | (:) { hd :: a , tl :: [{v:a | rel hd v}]} \end{spec} **Refinement says `rel hd v` holds for _every_ value `v` in `tl`** `rel` is `&lt;=` means list is increasing `rel` is `&gt;=` means list is increasing `rel` is `!=` means list is all-unique Abstracting Refinements -----------------------
+<p><strong>Parameterize refinements over types</strong></p>
+<p><strong>Refinement says <code>rel hd v</code> holds for <em>every</em> value <code>v</code> in <code>tl</code></strong></p>
+<p><code>rel</code> is <code>&lt;=</code> means list is increasing</p>
+<p><code>rel</code> is <code>&gt;=</code> means list is increasing</p>
+<p><code>rel</code> is <code>!=</code> means list is all-unique</p>
+</section>
+</div>
+<div id="slide-7" class="slide">
+<section id="abstracting-refinements-3" class="level2">
+<h2>Abstracting Refinements</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Instantiate** refinements to get different invariants! \begin{code} {-@ type Incrs a = [a]&lt;{\x y -&gt; x &lt;= y}&gt; @-} {-@ incList :: Incrs Int @-} incList = [1,2,3] {-@ type Decrs a = [a]&lt;{\x y -&gt; x &gt;= y}&gt; @-} {-@ decList :: Decrs Int @-} decList = [1,2,3] {-@ type Diffs a = [a]&lt;{\x y -&gt; x != y}&gt; @-} {-@ diffList :: Diffs Int @-} diffList = [3,1,1] \end{code} Abstract Refinements: Insertion Sort ------------------------------------
+<p><strong>Instantiate</strong> refinements to get different invariants!</p>
+<div id="program-pane-4" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-4" class="programbox">{-@ type Incrs a = [a]<{\x y -> x <= y}> @-}
+{-@ incList :: Incrs Int @-}
+incList = [1,2,3]
+
+{-@ type Decrs a = [a]<{\x y -> x >= y}> @-}
+{-@ decList :: Decrs Int @-}
+decList = [1,2,3]
+
+{-@ type Diffs a = [a]<{\x y -> x != y}> @-}
+{-@ diffList :: Diffs Int @-}
+diffList = [3,1,1]</div>
+</div>
+
+</section>
+</div>
+<div id="slide-8" class="slide">
+<section id="abstract-refinements-insertion-sort" class="level2">
+<h2>Abstract Refinements: Insertion Sort</h2>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Inference FTW!** \begin{code} {- {-@ isort' :: (Ord a) =&gt; [a] -&gt; Incrs a @-} isort' :: (Ord a) =&gt; [a] -&gt; [a] isort' [] = [] isort' (x:xs) = insert' x (isort' xs) insert' :: (Ord a) =&gt; a -&gt; [a] -&gt; [a] insert' x (y:ys) | x &lt;= y = x : y : ys | otherwise = y : insert' x ys insert' x [] = [x] -} \end{code} Abstract Refinements: Merge Sort -------------------------------- **Inference FTW!** \begin{code} {- {-@ msort' :: (Ord a) =&gt; [a] -&gt; Incrs a @-} msort' :: (Ord a) =&gt; [a] -&gt; [a] msort' [] = [] msort' xs = let (xs1, xs2) = split' xs in merge' (msort' xs1) (msort' xs2) split' :: [a] -&gt; ([a], [a]) split' (x:y:zs) = let (xs, ys) = split' zs in (x:xs, y:ys) split' xs = (xs, []) merge' :: (Ord a) =&gt; [a] -&gt; [a] -&gt; [a] merge' xs [] = xs merge' [] ys = ys merge' (x:xs) (y:ys) | x &lt;= y = x : merge' xs (y:ys) | otherwise = y : merge' (x:xs) ys -} \end{code} Recap: Invariant via Refined Constructors -----------------------------------------<br />
-<br />
-<br />
-\begin{spec}
-<div>
+<p><strong>Inference FTW!</strong></p>
+<div id="program-pane-5" class="welleditor" style="background:#fff; position:relative">
 
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-5" class="programbox">{-
+{-@ isort' :: (Ord a) => [a] -> Incrs a @-}
+isort' :: (Ord a) => [a] -> [a]
+isort' []      = [] 
+isort' (x:xs)  = insert' x (isort' xs)
+
+insert' :: (Ord a) => a -> [a] -> [a]
+insert' x (y:ys)
+  | x <= y       = x : y : ys
+  | otherwise    = y : insert' x ys
+insert' x []     = [x]
+-}</div>
 </div>
-Emp :: OList a (:&lt;) :: oHd:a -&gt; OList {v:a |oHd &lt; v} -&gt; OList a \end{spec}
+
+</section>
+</div>
+<div id="slide-9" class="slide">
+<section id="abstract-refinements-merge-sort" class="level2">
+<h2>Abstract Refinements: Merge Sort</h2>
+<p><strong>Inference FTW!</strong></p>
+<div id="program-pane-6" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-6" class="programbox">{-  {-@ msort' :: (Ord a) => [a] -> Incrs a @-}
+msort' :: (Ord a) => [a] -> [a]
+msort' []   = []
+msort' xs   = let (xs1, xs2) = split' xs in
+                merge' (msort' xs1) (msort' xs2)
+
+split' :: [a] -> ([a], [a]) 
+split' (x:y:zs) = let (xs, ys) = split' zs in 
+                   (x:xs, y:ys) 
+split' xs       = (xs, [])
+
+merge' :: (Ord a) => [a] -> [a] -> [a]  
+merge' xs []         = xs
+merge' [] ys         = ys
+merge' (x:xs) (y:ys)
+  | x <= y           = x : merge' xs (y:ys)
+  | otherwise        = y : merge' (x:xs) ys    -}</div>
+</div>
+
+</section>
+</div>
+<div id="slide-10" class="slide">
+<section id="recap-invariant-via-refined-constructors" class="level2">
+<h2>Recap: Invariant via Refined Constructors</h2>
+<p><br> <br> <br></p>
 <div class="mybreak">
-<br />
-
+<br>
 </div>
-**Invariant _Checked_ at Construction and _Instantiated_ at Pattern-Matching** Simply by *applying* and *un-applying* refined constructor type! Plan ----<br />
-**Part I:** [Refinements 101](02-refinements.html) Case Study: [Vector Bounds](03-example-vectors.html) **Part II:** [Properties of Structures](04-data-properties.html) Case Study: [Sorting](05-example-sort.html), [Interpreter](06-example-interpreter.html) **Part III:** [Invariants of Data Structures](07-data-legal.html) Case Study: [Sorting actually Sorts](08-example-sort.html) **Part IV:** **[Termination](09-termination.html)** and [Correctness Proofs](10-reflection.html) Case Study: [Optimizing Arithmetic Expressions](11-example-opt.html) [mylink]: http://www.google.com [dml]: http://www.cs.bu.edu/~hwxi/DML/DML.html [vecspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Vector.spec [vec]: http://hackage.haskell.org/package/vector [agdavec]: http://code.haskell.org/Agda/examples/Vec.agda [ref101]: /blog/2013/01/01/refinement-types-101.lhs/ [ref102]: /blog/2013/01/27/refinements-101-reax.lhs/ [data-list]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [foldl]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [listtail]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [dmlarray]: http://www.cs.bu.edu/~hwxi/academic/papers/pldi98.pdf [liquid-tutorial]: http://github.com/ucsd-progsys/liquidhaskell-tutorial.git [liquid-emacs]: https://github.com/ucsd-progsys/liquid-types.el [liquid-vim]: https://github.com/ucsd-progsys/liquid-types.vim [z3]: http://z3.codeplex.com/ [cvc4]: http://cvc4.cs.nyu.edu/ [mathsat]: http://mathsat.fbk.eu/download.html [hoogle-assert]: https://www.haskell.org/hoogle/?hoogle=assert [apple-riser]: http://blog.jbapple.com/2008/01/extra-type-safety-using-polymorphic.html [safeList]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [kmeansI]: /blog/2013/02/16/kmeans-clustering-I.lhs/ [kmeansII]: /blog/2013/02/17/kmeans-clustering-II.lhs/ [URL-take]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/List.lhs#L334 [URL-groupBy]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:groupBy [URL-transpose]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html#transpose [maru]: http://www.youtube.com/watch?v=8uDuls5TyNE [URL-kmeans]: http://hackage.haskell.org/package/kmeans [hinze-icfp09]: http://www.cs.ox.ac.uk/ralf.hinze/publications/ICFP09.pdf [smt-set]: http://www.kroening.com/smt-lib-lsm.pdf) [setspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Set.spec [mccarthy]: http://www-formal.stanford.edu/jmc/towards.ps [xmonad-stackset]: http://hackage.haskell.org/package/xmonad-0.11/docs/XMonad-StackSet.html [bst-wiki]: http://en.wikipedia.org/wiki/Binary_search_tree [foreignptr]: http://hackage.haskell.org/package/base/docs/Foreign-Ptr.html [bytestring]: https://hackage.haskell.org/package/bytestring [xmonad]: http://xmonad.org/ [wiki-zipper]: http://en.wikipedia.org/wiki/Zipper_(data_structure) [wiki-contracts]: http://en.wikipedia.org/wiki/Design_by_contract [smart-ctr-wiki]: https://www.haskell.org/haskellwiki/Smart_constructors [smt-wiki]: http://en.wikipedia.org/wiki/Satisfiability_Modulo_Theories [vazou13]: http://goto.ucsd.edu/~rjhala/liquid/abstract_refinement_types.pdf [liquidpldi08]: http://goto.ucsd.edu/~rjhala/liquid/liquid_types.pdf [bird-pearls]: http://www.amazon.com/Pearls-Functional-Algorithm-Design-Richard/dp/0521513383 [mitchell-riser]: http://neilmitchell.blogspot.com/2008/03/sorting-at-speed.html [blog-set]: /blog/2013/03/26/talking-about-sets.lhs/ [z3cal]: http://research.microsoft.com/en-us/um/people/leonardo/fmcad09.pdf [sbv]: https://github.com/LeventErkok/sbv [leon]: http://lara.epfl.ch/w/leon [ptrspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/Ptr.spec [okasaki95]: http://www.westpoint.edu/eecs/SiteAssets/SitePages/Faculty%20Publication%20Documents/Okasaki/jfp95queue.pdf [queue-wiki]: http://en.wikipedia.org/wiki/Queue_%28abstract_data_type%29 [avl-wiki]: http://en.wikipedia.org/wiki/AVL_tree [nelson-thesis]: http://research.microsoft.com/en-us/um/people/qadeer/cse599f/papers/nelsonthesis.pdf
+<p><strong>Invariant <em>Checked</em> at Construction and <em>Instantiated</em> at Pattern-Matching</strong></p>
+<p>Simply by <em>applying</em> and <em>un-applying</em> refined constructor type!</p>
+</section>
+</div>
+<div id="slide-11" class="slide">
+<section id="plan" class="level2">
+<h2>Plan</h2>
+<p><br></p>
+<p><strong>Part I:</strong> <a href="02-refinements.html">Refinements 101</a></p>
+<p>Case Study: <a href="03-example-vectors.html">Vector Bounds</a></p>
+<p><strong>Part II:</strong> <a href="04-data-properties.html">Properties of Structures</a></p>
+<p>Case Study: <a href="05-example-sort.html">Sorting</a>, <a href="06-example-interpreter.html">Interpreter</a></p>
+<p><strong>Part III:</strong> <a href="07-data-legal.html">Invariants of Data Structures</a></p>
+<p>Case Study: <a href="08-example-sort.html">Sorting actually Sorts</a></p>
+<p><strong>Part IV:</strong> <strong><a href="09-termination.html">Termination</a></strong> and <a href="10-reflection.html">Correctness Proofs</a></p>
+<p>Case Study: <a href="11-example-opt.html">Optimizing Arithmetic Expressions</a></p>
+</section>
+</div>
 
 </div>
 </div>
@@ -443,17 +662,17 @@ Emp :: OList a (:&lt;) :: oHd:a -&gt; OList {v:a |oHd &lt; v} -&gt; OList a \end
 
 <!-- JavaScript below! ============================================== -->
 
-  <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
-  <script src="/js/liquid/tooltip.js"></script>
-  <script src="/js/liquid/annot.js"></script>
-  <script src="/js/liquid/config.js"></script>
-  <script src="/js/liquid/slideshow.js"></script>
-  <script src="/js/liquid/liquid.js"></script>
+  <script src="./js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
+  <script src="./js/liquid/tooltip.js"></script>
+  <script src="./js/liquid/annot.js"></script>
+  <script src="./js/liquid/config.js"></script>
+  <script src="./js/liquid/slideshow.js"></script>
+  <script src="./js/liquid/liquid.js"></script>
 
   <script type="text/javascript">
-    var queryServerURL = "" ;
+    var queryServerURL = "https://liquid-demo.programming.systems/" ;
   </script>
 
   <!-- rust nav JS -->

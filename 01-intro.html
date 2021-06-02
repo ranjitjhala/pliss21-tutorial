@@ -6,12 +6,12 @@
     <meta name="generator" content="rustdoc">
     <title>01-intro</title>
 
-    <link href="/css/bootstrap.css" rel="stylesheet">
-    <link href="/css/bootstrap-theme.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/rust-book-slides.css">
-    <link rel="stylesheet" type="text/css" href="/css/editor-slides.css">
-    <link rel="stylesheet" type="text/css" href="/css/code-format.css">
-    <link rel="stylesheet" type="text/css" href="/css/slideshow.css">
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/bootstrap-theme.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./css/rust-book-slides.css">
+    <link rel="stylesheet" type="text/css" href="./css/editor-slides.css">
+    <link rel="stylesheet" type="text/css" href="./css/code-format.css">
+    <link rel="stylesheet" type="text/css" href="./css/slideshow.css">
     <style>
       body {
         text-align: center;
@@ -46,8 +46,8 @@
 
 
 
-<script type="text/javascript" src="/js/angular/angular.js"></script>
-<script type="text/javascript" src="/js/bootstrap/bootstrap.js"></script>
+<script type="text/javascript" src="./js/angular/angular.js"></script>
+<script type="text/javascript" src="./js/bootstrap/bootstrap.js"></script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -359,71 +359,185 @@ MathJax.Hub.Config({
 <div id='page-wrapper'>
 <div id='page'>
 
-<p>--- title: "Language-Integrated Verification" author: Ranjit Jhala date: Nov 16th, 2017 documentclass: book toc: true bibliography: sw.bib notitle: true root: "." liquidserver: "https://liquid-demo.programming.systems/" pdflink: "book.pdf" --- --- title: "Habits" ---</p>
 <div class="hidden">
-\begin{code} module Intro where dummy :: Int dummy = 7 \end{code}
+<div id="program-pane-0" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-0" class="programbox">module Intro where
+
+dummy :: Int
+dummy = 7</div>
+</div>
+
 </div>
 <div class="slide">
-<br />
-<br />
-<br />
-
-<section id="an-introduction-to-refinement-types" class="level1" style="border-bottom:none">
-<h1 style="border-bottom:none">An Introduction to Refinement Types</h1>
-<br />
-
-<section id="ranjit-jhala" class="level4" style="border-bottom:none">
-<h4 style="border-bottom:none"><font color="#1569C7">Ranjit Jhala</font></h4>
-<br />
-
-</section>
-<section id="uc-san-diego-awsarg" class="level4" style="border-bottom:none">
-<h4 style="border-bottom:none"><font color="green"> UC San Diego &amp; AWS/ARG </font></h4>
+<p><br> <br> <br></p>
+<p align="center">
+<h1 style="border-bottom:none">
+An Introduction to Refinement Types
+</h1>
+<p><br></p>
+<h4 style="border-bottom:none">
+<font color="#1569C7">Ranjit Jhala</font>
+</h4>
+<p><br></p>
+<h4 style="border-bottom:none">
+<font color="green"> UC San Diego &amp; AWS/ARG </font>
+</h4>
 </p>
-</section>
+</div>
+<div id="slide-0" class="slide">
+<section id="follow-along-at-this-url" class="level2">
+<h2>Follow Along at This URL</h2>
+<p><br> <br> <br></p>
+<p><a href="http://ranjitjhala.github.io/pliss21-tutorial/">http://ranjitjhala.github.io/pliss21-tutorial/</a></p>
+<p><br></p>
+<p><strong>Zoom in</strong> to see nav arrows</p>
 </section>
 </div>
-<p>Follow Along at This URL ------------------------<br />
-<br />
-<br />
-[http://ranjitjhala.github.io/pliss21-tutorial/](http://ranjitjhala.github.io/pliss21-tutorial/)<br />
-**Zoom in** to see nav arrows Program Analysis &amp; Verification -------------------------------<br />
-<br />
-<br />
-<br />
-Why limited broader impact and adoption? Program Analysis &amp; Verification ------------------------------- Why limited broader impact and adoption?</p>
-<p><img src="img/intro0.png" /></p>
-<p>Program Analysis &amp; Verification ------------------------------- Why limited broader impact and adoption?</p>
-<p><img src="img/intro1.png" /></p>
-<p>Program*mer's* Analysis &amp; Verification ---------------------------------------</p>
-<p><img src="img/intro2.png" /></p>
-<p>Analysis Influences Program's Design ------------------------------------</p>
-<p><img src="img/intro-fp0.png" /></p>
-<p>Analysis Influences Program's Design ------------------------------------</p>
-<p><img src="img/intro-fp1.png" /></p>
-<p>Analysis Influences Program's Design ------------------------------------<br />
-Uber NullAway [Sridharan et al.](https://eng.uber.com/nullaway/)</p>
-<p><img src="img/intro-uber.png" height="220" /></p>
-<p>Analysis Influences Program's Design ------------------------------------<br />
-Static Analysis at Google [Sadowski et al. 2018](https://ai.google/research/pubs/pub46576)</p>
-<p><img src="img/intro-google.png" height="220" /></p>
-<p>Analysis Influences Program's Design ------------------------------------<br />
-Infer Analysis at Facebook [Calcagno et al. 2018](https://research.fb.com/popl-2019-most-influential-paper-award-for-research-that-led-to-facebook-infer/)</p>
-<p><img src="img/intro-fb.png" height="250" /></p>
-<p>Program*mer's* Analysis &amp; Verification ---------------------------------------</p>
-<p><img src="img/intro2.png" /></p>
-<p>Program Influences Analysis' Abilities --------------------------------------</p>
-<p><img src="img/intro-out0.png" /></p>
-<p>Program Influences Analysis' Abilities --------------------------------------</p>
-<p><img src="img/intro-out1.png" /></p>
-<p>Language Integrated Verification (LIVE) ---------------------------------------</p>
-<p><img src="img/intro2.png" /></p>
-<p><br />
-This tutorial: **LIVE with Refinement Types** LIVE with Refinement Types --------------------------<br />
-**Tutorial Goals**<br />
-Why and how to *use* Refinement Types<br />
-How to *implement* Refinement Types Plan ----<br />
-**Part I:** **[Refinements 101](02-refinements.html)** Case Study: [Vector Bounds](03-example-vectors.html) **Part II:** [Refining Data](04-data-properties.html) Case Study: [Sorting](05-example-sort.html), [Interpreter](06-example-interpreter.html) **Part III:** [Invariants of Data Structures](07-data-legal.html) Case Study: [Sorting actually Sorts Lists](08-example-sort.html) **Part IV:** [Termination](09-termination.html) and [Correctness Proofs](10-reflection.html) Case Study: [Optimizing Arithmetic Expressions](11-example-opt.html) [mylink]: http://www.google.com [dml]: http://www.cs.bu.edu/~hwxi/DML/DML.html [vecspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Vector.spec [vec]: http://hackage.haskell.org/package/vector [agdavec]: http://code.haskell.org/Agda/examples/Vec.agda [ref101]: /blog/2013/01/01/refinement-types-101.lhs/ [ref102]: /blog/2013/01/27/refinements-101-reax.lhs/ [data-list]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [foldl]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [listtail]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [dmlarray]: http://www.cs.bu.edu/~hwxi/academic/papers/pldi98.pdf [liquid-tutorial]: http://github.com/ucsd-progsys/liquidhaskell-tutorial.git [liquid-emacs]: https://github.com/ucsd-progsys/liquid-types.el [liquid-vim]: https://github.com/ucsd-progsys/liquid-types.vim [z3]: http://z3.codeplex.com/ [cvc4]: http://cvc4.cs.nyu.edu/ [mathsat]: http://mathsat.fbk.eu/download.html [hoogle-assert]: https://www.haskell.org/hoogle/?hoogle=assert [apple-riser]: http://blog.jbapple.com/2008/01/extra-type-safety-using-polymorphic.html [safeList]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [kmeansI]: /blog/2013/02/16/kmeans-clustering-I.lhs/ [kmeansII]: /blog/2013/02/17/kmeans-clustering-II.lhs/ [URL-take]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/List.lhs#L334 [URL-groupBy]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:groupBy [URL-transpose]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html#transpose [maru]: http://www.youtube.com/watch?v=8uDuls5TyNE [URL-kmeans]: http://hackage.haskell.org/package/kmeans [hinze-icfp09]: http://www.cs.ox.ac.uk/ralf.hinze/publications/ICFP09.pdf [smt-set]: http://www.kroening.com/smt-lib-lsm.pdf) [setspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Set.spec [mccarthy]: http://www-formal.stanford.edu/jmc/towards.ps [xmonad-stackset]: http://hackage.haskell.org/package/xmonad-0.11/docs/XMonad-StackSet.html [bst-wiki]: http://en.wikipedia.org/wiki/Binary_search_tree [foreignptr]: http://hackage.haskell.org/package/base/docs/Foreign-Ptr.html [bytestring]: https://hackage.haskell.org/package/bytestring [xmonad]: http://xmonad.org/ [wiki-zipper]: http://en.wikipedia.org/wiki/Zipper_(data_structure) [wiki-contracts]: http://en.wikipedia.org/wiki/Design_by_contract [smart-ctr-wiki]: https://www.haskell.org/haskellwiki/Smart_constructors [smt-wiki]: http://en.wikipedia.org/wiki/Satisfiability_Modulo_Theories [vazou13]: http://goto.ucsd.edu/~rjhala/liquid/abstract_refinement_types.pdf [liquidpldi08]: http://goto.ucsd.edu/~rjhala/liquid/liquid_types.pdf [bird-pearls]: http://www.amazon.com/Pearls-Functional-Algorithm-Design-Richard/dp/0521513383 [mitchell-riser]: http://neilmitchell.blogspot.com/2008/03/sorting-at-speed.html [blog-set]: /blog/2013/03/26/talking-about-sets.lhs/ [z3cal]: http://research.microsoft.com/en-us/um/people/leonardo/fmcad09.pdf [sbv]: https://github.com/LeventErkok/sbv [leon]: http://lara.epfl.ch/w/leon [ptrspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/Ptr.spec [okasaki95]: http://www.westpoint.edu/eecs/SiteAssets/SitePages/Faculty%20Publication%20Documents/Okasaki/jfp95queue.pdf [queue-wiki]: http://en.wikipedia.org/wiki/Queue_%28abstract_data_type%29 [avl-wiki]: http://en.wikipedia.org/wiki/AVL_tree [nelson-thesis]: http://research.microsoft.com/en-us/um/people/qadeer/cse599f/papers/nelsonthesis.pdf</p>
+<div id="slide-1" class="slide">
+<section id="program-analysis-verification" class="level2">
+<h2>Program Analysis &amp; Verification</h2>
+<p><br> <br> <br> <br></p>
+<p>Why limited broader impact and adoption?</p>
+</section>
+</div>
+<div id="slide-2" class="slide">
+<section id="program-analysis-verification-1" class="level2">
+<h2>Program Analysis &amp; Verification</h2>
+<p>Why limited broader impact and adoption?</p>
+<p align="center">
+<img src="img/intro0.png" height=280px/>
+</p>
+</section>
+</div>
+<div id="slide-3" class="slide">
+<section id="program-analysis-verification-2" class="level2">
+<h2>Program Analysis &amp; Verification</h2>
+<p>Why limited broader impact and adoption?</p>
+<p align="center">
+<img src="img/intro1.png" height=280px/>
+</p>
+</section>
+</div>
+<div id="slide-4" class="slide">
+<section id="programmers-analysis-verification" class="level2">
+<h2>Program<em>mer’s</em> Analysis &amp; Verification</h2>
+<p align="center">
+<img src="img/intro2.png" height=330px/>
+</p>
+</section>
+</div>
+<div id="slide-5" class="slide">
+<section id="analysis-influences-programs-design" class="level2">
+<h2>Analysis Influences Program’s Design</h2>
+<p align="center">
+<img src="img/intro-fp0.png" height=330px/>
+</p>
+</section>
+</div>
+<div id="slide-6" class="slide">
+<section id="analysis-influences-programs-design-1" class="level2">
+<h2>Analysis Influences Program’s Design</h2>
+<p align="center">
+<img src="img/intro-fp1.png" height=330px/>
+</p>
+</section>
+</div>
+<div id="slide-7" class="slide">
+<section id="analysis-influences-programs-design-2" class="level2">
+<h2>Analysis Influences Program’s Design</h2>
+<p><br></p>
+<p>Uber NullAway <a href="https://eng.uber.com/nullaway/">Sridharan et al.</a></p>
+<p align="center">
+<img src="img/intro-uber.png" height=220px style="-webkit-filter: drop-shadow(5px 5px 5px #222); filter: drop-shadow(5px 5px 5px #222);"/>
+</p>
+</section>
+</div>
+<div id="slide-8" class="slide">
+<section id="analysis-influences-programs-design-3" class="level2">
+<h2>Analysis Influences Program’s Design</h2>
+<p><br></p>
+<p>Static Analysis at Google <a href="https://ai.google/research/pubs/pub46576">Sadowski et al. 2018</a></p>
+<p align="center">
+<img src="img/intro-google.png" height=220px style="-webkit-filter: drop-shadow(5px 5px 5px #222); filter: drop-shadow(5px 5px 5px #222);"/>
+</p>
+</section>
+</div>
+<div id="slide-9" class="slide">
+<section id="analysis-influences-programs-design-4" class="level2">
+<h2>Analysis Influences Program’s Design</h2>
+<p><br></p>
+<p>Infer Analysis at Facebook <a href="https://research.fb.com/popl-2019-most-influential-paper-award-for-research-that-led-to-facebook-infer/">Calcagno et al. 2018</a></p>
+<p align="center">
+<img src="img/intro-fb.png" height=250px style="-webkit-filter: drop-shadow(5px 5px 5px #222); filter: drop-shadow(5px 5px 5px #222);"/>
+</p>
+</section>
+</div>
+<div id="slide-10" class="slide">
+<section id="programmers-analysis-verification-1" class="level2">
+<h2>Program<em>mer’s</em> Analysis &amp; Verification</h2>
+<p align="center">
+<img src="img/intro2.png" height=330px/>
+</p>
+</section>
+</div>
+<div id="slide-11" class="slide">
+<section id="program-influences-analysis-abilities" class="level2">
+<h2>Program Influences Analysis’ Abilities</h2>
+<p align="center">
+<img src="img/intro-out0.png" height=330px/>
+</p>
+</section>
+</div>
+<div id="slide-12" class="slide">
+<section id="program-influences-analysis-abilities-1" class="level2">
+<h2>Program Influences Analysis’ Abilities</h2>
+<p align="center">
+<img src="img/intro-out1.png" height=330px/>
+</p>
+</section>
+</div>
+<div id="slide-13" class="slide">
+<section id="language-integrated-verification-live" class="level2">
+<h2>Language Integrated Verification (LIVE)</h2>
+<p align="center">
+<img src="img/intro2.png" height=260px/>
+</p>
+<p><br></p>
+<p>This tutorial: <strong>LIVE with Refinement Types</strong></p>
+</section>
+</div>
+<div id="slide-14" class="slide">
+<section id="live-with-refinement-types" class="level2">
+<h2>LIVE with Refinement Types</h2>
+<p><br></p>
+<p><strong>Tutorial Goals</strong></p>
+<p><br></p>
+<p>Why and how to <em>use</em> Refinement Types</p>
+<p><br></p>
+<p>How to <em>implement</em> Refinement Types</p>
+</section>
+</div>
+<div id="slide-15" class="slide">
+<section id="plan" class="level2">
+<h2>Plan</h2>
+<p><br></p>
+<p><strong>Part I:</strong> <strong><a href="02-refinements.html">Refinements 101</a></strong></p>
+<p>Case Study: <a href="03-example-vectors.html">Vector Bounds</a></p>
+<p><strong>Part II:</strong> <a href="04-data-properties.html">Refining Data</a></p>
+<p>Case Study: <a href="05-example-sort.html">Sorting</a>, <a href="06-example-interpreter.html">Interpreter</a></p>
+<p><strong>Part III:</strong> <a href="07-data-legal.html">Invariants of Data Structures</a></p>
+<p>Case Study: <a href="08-example-sort.html">Sorting actually Sorts Lists</a></p>
+<p><strong>Part IV:</strong> <a href="09-termination.html">Termination</a> and <a href="10-reflection.html">Correctness Proofs</a></p>
+<p>Case Study: <a href="11-example-opt.html">Optimizing Arithmetic Expressions</a></p>
+</section>
+</div>
 
 </div>
 </div>
@@ -445,17 +559,17 @@ How to *implement* Refinement Types Plan ----<br />
 
 <!-- JavaScript below! ============================================== -->
 
-  <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
-  <script src="/js/liquid/tooltip.js"></script>
-  <script src="/js/liquid/annot.js"></script>
-  <script src="/js/liquid/config.js"></script>
-  <script src="/js/liquid/slideshow.js"></script>
-  <script src="/js/liquid/liquid.js"></script>
+  <script src="./js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
+  <script src="./js/liquid/tooltip.js"></script>
+  <script src="./js/liquid/annot.js"></script>
+  <script src="./js/liquid/config.js"></script>
+  <script src="./js/liquid/slideshow.js"></script>
+  <script src="./js/liquid/liquid.js"></script>
 
   <script type="text/javascript">
-    var queryServerURL = "" ;
+    var queryServerURL = "https://liquid-demo.programming.systems/" ;
   </script>
 
   <!-- rust nav JS -->

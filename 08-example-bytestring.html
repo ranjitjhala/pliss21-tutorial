@@ -6,12 +6,12 @@
     <meta name="generator" content="rustdoc">
     <title>08-example-bytestring</title>
 
-    <link href="/css/bootstrap.css" rel="stylesheet">
-    <link href="/css/bootstrap-theme.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/rust-book-slides.css">
-    <link rel="stylesheet" type="text/css" href="/css/editor-slides.css">
-    <link rel="stylesheet" type="text/css" href="/css/code-format.css">
-    <link rel="stylesheet" type="text/css" href="/css/slideshow.css">
+    <link href="./css/bootstrap.css" rel="stylesheet">
+    <link href="./css/bootstrap-theme.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./css/rust-book-slides.css">
+    <link rel="stylesheet" type="text/css" href="./css/editor-slides.css">
+    <link rel="stylesheet" type="text/css" href="./css/code-format.css">
+    <link rel="stylesheet" type="text/css" href="./css/slideshow.css">
     <style>
       body {
         text-align: center;
@@ -46,8 +46,8 @@
 
 
 
-<script type="text/javascript" src="/js/angular/angular.js"></script>
-<script type="text/javascript" src="/js/bootstrap/bootstrap.js"></script>
+<script type="text/javascript" src="./js/angular/angular.js"></script>
+<script type="text/javascript" src="./js/bootstrap/bootstrap.js"></script>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -359,155 +359,803 @@ MathJax.Hub.Config({
 <div id='page-wrapper'>
 <div id='page'>
 
---- title: "Language-Integrated Verification" author: Ranjit Jhala date: Nov 16th, 2017 documentclass: book toc: true bibliography: sw.bib notitle: true root: "." liquidserver: "https://liquid-demo.programming.systems/" pdflink: "book.pdf" ---
 <div class="hidden">
-\begin{code} {-@ LIQUID "--no-termination" @-} {-@ LIQUID "--short-names" @-} {-@ LIQUID "--prune-unsorted" @-} {- LIQUID "--diffcheck" @-} {-# LANGUAGE ForeignFunctionInterface #-} module Memory where import Prelude hiding (null) import Data.Char import Data.Word import Foreign.C.Types import Foreign.ForeignPtr import Foreign.Ptr import Foreign.Storable import System.IO.Unsafe import Data.ByteString.Internal (c2w, w2c) import Language.Haskell.Liquid.Prelude \end{code}
+<div id="program-pane-0" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-0" class="programbox">{-@ LIQUID "--no-termination" @-}
+{-@ LIQUID "--short-names"    @-}
+{-@ LIQUID "--prune-unsorted" @-}
+{- LIQUID "--diffcheck"     @-}
+{-# LANGUAGE ForeignFunctionInterface #-}
+
+module Memory where
+
+import Prelude hiding (null)
+import Data.Char
+import Data.Word
+import Foreign.C.Types
+import Foreign.ForeignPtr
+import Foreign.Ptr
+import Foreign.Storable
+import System.IO.Unsafe
+import Data.ByteString.Internal (c2w, w2c)
+import Language.Haskell.Liquid.Prelude</div>
 </div>
-<br />
-Case Study: Low Level Memory ============================<br />
-"HeartBleed" in Haskell -----------------------<br />
-**Modern languages are built on top of C**<br />
 
-Implementation errors could open up vulnerabilities
-<br />
-"HeartBleed" in Haskell (1/3) -----------------------------<br />
-**A String Truncation Function**<br />
-
+</div>
+<p><br></p>
+<div id="slide-0" class="slide">
+<section id="case-study-low-level-memory" class="level1">
+<h1>Case Study: Low Level Memory</h1>
+<p><br></p>
+</section>
+</div>
+<div id="slide-1" class="slide">
+<section id="heartbleed-in-haskell" class="level2">
+<h2>“HeartBleed” in Haskell</h2>
+<p><br></p>
+<p><strong>Modern languages are built on top of C</strong></p>
+<p><br></p>
+<p>Implementation errors could open up vulnerabilities</p>
+<p><br></p>
+</section>
+</div>
+<div id="slide-2" class="slide">
+<section id="heartbleed-in-haskell-13" class="level2">
+<h2>“HeartBleed” in Haskell (1/3)</h2>
+<p><br></p>
+<p><strong>A String Truncation Function</strong></p>
+<p><br></p>
 <div class="hidden">
-\begin{spec} import Data.ByteString.Char8 (pack, unpack) import Data.ByteString.Unsafe (unsafeTake) \end{spec}
+
 </div>
-\begin{spec} chop :: String -&gt; Int -&gt; String chop s n = s' where b = pack s -- down to low-level b' = unsafeTake n b -- grab n chars s' = unpack b' -- up to high-level \end{spec}<br />
-"HeartBleed" in Haskell (2/3) ----------------------------- <img src="img/overflow.png" height="100" /> Works if you use the **valid prefix** size \begin{spec} λ&gt; let ex = "Ranjit Loves Jamon" λ&gt; heartBleed ex 10 "Ranjit Lov" \end{spec}<br />
-"HeartBleed" in Haskell (3/3) ----------------------------- <img src="img/overflow.png" height="100" /> Leaks *overflow buffer* if **invalid prefix** size! \begin{spec} λ&gt; let ex = "Ranjit Loves Jamon" λ&gt; heartBleed ex 30 "Ranjit Loves Jamon\NUL\201\&amp;1j\DC3\SOH\NUL" \end{spec} Types Against Overflows -----------------------<br />
-**Strategy: Specify and Verify Types for**<br />
-1.
-Low-level `Pointer` API
-2.
-Lib-level `ByteString` API
-3.
-User-level `Application` API
-<br />
+<p><br></p>
+</section>
+</div>
+<div id="slide-3" class="slide">
+<section id="heartbleed-in-haskell-23" class="level2">
+<h2>“HeartBleed” in Haskell (2/3)</h2>
+<p><img src="img/overflow.png" height=100px></p>
+<p>Works if you use the <strong>valid prefix</strong> size</p>
+<p><br></p>
+</section>
+</div>
+<div id="slide-4" class="slide">
+<section id="heartbleed-in-haskell-33" class="level2">
+<h2>“HeartBleed” in Haskell (3/3)</h2>
+<p><img src="img/overflow.png" height=100px></p>
+<p>Leaks <em>overflow buffer</em> if <strong>invalid prefix</strong> size!</p>
+</section>
+</div>
+<div id="slide-5" class="slide">
+<section id="types-against-overflows" class="level2">
+<h2>Types Against Overflows</h2>
+<p><br></p>
+<p><strong>Strategy: Specify and Verify Types for</strong></p>
+<p><br></p>
+<ol type="1">
+<li>Low-level <code>Pointer</code> API</li>
+<li>Lib-level <code>ByteString</code> API</li>
+<li>User-level <code>Application</code> API</li>
+</ol>
+<p><br></p>
+Errors at <em>each</em> level are prevented by types at <em>lower</em> levels
+</section>
+</div>
+<div id="slide-6" class="slide">
+<section id="low-level-pointer-api" class="level1">
+<h1>1. Low-level Pointer API</h1>
+<p><br></p>
+<p>Strategy: Specify and Verify Types for</p>
+<p><br></p>
+<ol type="1">
+<li><strong>Low-level <code>Pointer</code> API</strong></li>
+<li>Lib-level <code>ByteString</code> API</li>
+<li>User-level <code>Application</code> API</li>
+</ol>
+<p><br></p>
+<p>Errors at <em>each</em> level are prevented by types at <em>lower</em> levels</p>
+</section>
+</div>
+<div id="slide-7" class="slide">
+<section id="api-types" class="level2">
+<h2>API: Types</h2>
+<p><br></p>
+<p><strong>Low-level Pointers</strong></p>
+<p><strong>Foreign Pointers</strong></p>
+<p><code>ForeignPtr</code> wraps around <code>Ptr</code>; can be exported to/from C.</p>
+</section>
+</div>
+<div id="slide-8" class="slide">
+<section id="api-operations-12" class="level2">
+<h2>API: Operations (1/2)</h2>
+<p><br></p>
+<p><strong>Read</strong></p>
+<p><strong>Write</strong></p>
+<strong>Arithmetic</strong>
+</section>
+</div>
+<div id="slide-9" class="slide">
+<section id="api-operations-22" class="level2">
+<h2>API: Operations (2/2)</h2>
+<p><br></p>
+<p><strong>Create</strong></p>
+<p><br></p>
+<p><strong>Unwrap and Use</strong></p>
+</section>
+</div>
+<div id="slide-10" class="slide">
+<section id="example" class="level2">
+<h2>Example</h2>
+<p><br></p>
+<p><strong>Allocate a block and write 4 zeros into it</strong></p>
+<p><br></p>
+<div id="program-pane-1" class="welleditor" style="background:#fff; position:relative">
 
-Errors at *each* level are prevented by types at *lower* levels
-1. Low-level Pointer API ========================<br />
-Strategy: Specify and Verify Types for<br />
-1. **Low-level `Pointer` API** 2. Lib-level `ByteString` API 3. User-level `Application` API<br />
-Errors at *each* level are prevented by types at *lower* levels API: Types ----------<br />
-**Low-level Pointers** \begin{spec} data Ptr a \end{spec}
-**Foreign Pointers** \begin{spec} data ForeignPtr a \end{spec} `ForeignPtr` wraps around `Ptr`; can be exported to/from C.
-API: Operations (1/2) ---------------------<br />
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-1" class="programbox">zero4 = do fp <- malloc 4
+           withForeignPtr fp $ \p -> do
+             poke (p `plusPtr` 0) zero
+             poke (p `plusPtr` 1) zero
+             poke (p `plusPtr` 2) zero
+             poke (p `plusPtr` 3) zero
+           return fp
+        where
+           zero = 0 :: Word8</div>
+</div>
 
-**Read** \begin{spec} peek :: Ptr a -&gt; IO a \end{spec}
-**Write** \begin{spec} poke :: Ptr a -&gt; a -&gt; IO () \end{spec}
-**Arithmetic** \begin{spec} plusPtr :: Ptr a -&gt; Int -&gt; Ptr b \end{spec}
-API: Operations (2/2) ---------------------<br />
+</section>
+</div>
+<div id="slide-11" class="slide">
+<section id="example-1" class="level2">
+<h2>Example</h2>
+<p><br></p>
+<p>How to <strong>prevent overflows</strong> e.g. writing 5 or 50 zeros into 4-byte block ?</p>
+<p><br></p>
+<p><strong>Step 1</strong></p>
+<p><em>Refine pointers</em> with allocated size</p>
+<p><br></p>
+<p><strong>Step 2</strong></p>
+<p><em>Track sizes</em> in pointer operations</p>
+</section>
+</div>
+<div id="slide-12" class="slide">
+<section id="refined-api-types" class="level2">
+<h2>Refined API: Types</h2>
+<p><br></p>
+<p><strong>1. Refine pointers with allocated size</strong></p>
+<p><br></p>
+<p>Abbreviations for pointers of size <code>N</code></p>
+</section>
+</div>
+<div id="slide-13" class="slide">
+<section id="refined-api-ops-13" class="level2">
+<h2>Refined API: Ops (1/3)</h2>
+<p><br></p>
+<p><strong>Create</strong></p>
+<p><br></p>
+<p><strong>Unwrap and Use</strong></p>
+</section>
+</div>
+<div id="slide-14" class="slide">
+<section id="refined-api-ops-23" class="level2">
+<h2>Refined API: Ops (2/3)</h2>
+<p><br></p>
+<p><strong>Arithmetic</strong></p>
+<p>Refine type to track <em>remaining</em> buffer size</p>
+<p><br></p>
+</section>
+</div>
+<div id="slide-15" class="slide">
+<section id="refined-api-ops-33" class="level2">
+<h2>Refined API: Ops (3/3)</h2>
+<p><br></p>
+<p><strong>Read &amp; Write require non-empty remaining buffer</strong></p>
+<p><br></p>
+<p><strong>Read</strong></p>
+<p><strong>Write</strong></p>
+<p><br></p>
+</section>
+</div>
+<div id="slide-16" class="slide">
+<section id="example-overflow-prevented" class="level2">
+<h2>Example: Overflow Prevented</h2>
+<p><br></p>
+<p>How to <em>prevent overflows</em> e.g. writing 5 or 50 zeros?</p>
+<div id="program-pane-2" class="welleditor" style="background:#fff; position:relative">
 
-**Create** \begin{spec} malloc :: Int -&gt; ForeignPtr a \end{spec}
-<br />
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-2" class="programbox">exBad = do fp <- malloc 4
+           withForeignPtr fp $ \p -> do
+             poke (p `plusPtr` 0) zero
+             poke (p `plusPtr` 1) zero
+             poke (p `plusPtr` 2) zero
+             poke (p `plusPtr` 5) zero
+           return fp
+        where
+           zero = 0 :: Word8</div>
+</div>
 
-**Unwrap and Use** \begin{spec} withForeignPtr :: ForeignPtr a -- pointer -&gt; (Ptr a -&gt; IO b) -- action -&gt; IO b -- result \end{spec}
-Example -------<br />
-**Allocate a block and write 4 zeros into it**<br />
+<p><br></p>
+</section>
+</div>
+<div id="slide-17" class="slide">
+<section id="bytestring-api" class="level1">
+<h1>2. ByteString API</h1>
+<p><br></p>
+<p>Strategy: Specify and Verify Types for</p>
+<p><br></p>
+<ol type="1">
+<li>Low-level <code>Pointer</code> API</li>
+<li><strong>Lib-level <code>ByteString</code> API</strong></li>
+<li>User-level <code>Application</code> API</li>
+</ol>
+<p><br></p>
+<p>Errors at <em>each</em> level are prevented by types at <em>lower</em> levels</p>
+<p><br></p>
+</section>
+</div>
+<div id="slide-18" class="slide">
+<section id="bytestring-type" class="level2">
+<h2>ByteString Type</h2>
+<p><br></p>
+<p><img src="img/bytestring.png" height=150px></p>
+<div id="program-pane-3" class="welleditor" style="background:#fff; position:relative">
 
-\begin{code} zero4 = do fp &lt;- malloc 4 withForeignPtr fp $ \p -&gt; do poke (p `plusPtr` 0) zero poke (p `plusPtr` 1) zero poke (p `plusPtr` 2) zero poke (p `plusPtr` 3) zero return fp where zero = 0 :: Word8 \end{code}
-Example -------<br />
-How to **prevent overflows** e.g. writing 5 or 50 zeros into 4-byte block ?<br />
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-3" class="programbox">data ByteString = PS {
+    bPtr :: ForeignPtr Word8
+  , bOff :: !Int
+  , bLen :: !Int
+  }</div>
+</div>
 
-**Step 1** *Refine pointers* with allocated size
-<br />
+<p><br></p>
+</section>
+</div>
+<div id="slide-19" class="slide">
+<section id="refined-bytestring-type" class="level2">
+<h2>Refined ByteString Type</h2>
+<p><br></p>
+<p><img src="img/bytestring.png" height=150px></p>
+<div id="program-pane-4" class="welleditor" style="background:#fff; position:relative">
 
-**Step 2** *Track sizes* in pointer operations
-Refined API: Types ------------------<br />
-**1. Refine pointers with allocated size** \begin{spec} measure plen :: Ptr a -&gt; Int measure fplen :: ForeignPtr a -&gt; Int \end{spec}<br />
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-4" class="programbox">{-@ data ByteString = PS {
+      bPtr :: ForeignPtr Word8
+    , bOff :: {v:Nat| v        <= fplen bPtr}
+    , bLen :: {v:Nat| v + bOff <= fplen bPtr}
+    }                                       @-}</div>
+</div>
 
-Abbreviations for pointers of size `N` \begin{spec} type PtrN a N = {v:_ | plen v = N} type ForeignPtrN a N = {v:_ | fplen v = N} \end{spec}
-Refined API: Ops (1/3) ----------------------<br />
-
-**Create** \begin{spec} malloc :: n:Nat -&gt; ForeignPtrN a n \end{spec}
-<br />
-
-**Unwrap and Use** \begin{spec} withForeignPtr :: fp:ForeignPtr a -- pointer -&gt; (PtrN a (fplen fp) -&gt; IO b) -- action -&gt; IO b -- use \end{spec}
-Refined API: Ops (2/3) ----------------------<br />
-**Arithmetic** Refine type to track *remaining* buffer size<br />
-
-\begin{spec} plusPtr :: p:Ptr a -&gt; o:{Nat | o &lt;= plen p} -- offset in bounds -&gt; PtrN b {plen b - o} -- remainder \end{spec}
-Refined API: Ops (3/3) ----------------------<br />
-**Read &amp; Write require non-empty remaining buffer**<br />
-
-**Read** \begin{spec} peek :: {v:Ptr a | 0 &lt; plen v} -&gt; IO a \end{spec}
-**Write** \begin{spec} poke :: {v:Ptr a | 0 &lt; plen v} -&gt; a -&gt; IO () \end{spec}
-<br />
-Example: Overflow Prevented ---------------------------<br />
-How to *prevent overflows* e.g. writing 5 or 50 zeros?
-\begin{code} exBad = do fp &lt;- malloc 4 withForeignPtr fp $ \p -&gt; do poke (p `plusPtr` 0) zero poke (p `plusPtr` 1) zero poke (p `plusPtr` 2) zero poke (p `plusPtr` 5) zero return fp where zero = 0 :: Word8 \end{code}
-<br />
-2. ByteString API =================<br />
-Strategy: Specify and Verify Types for<br />
-1. Low-level `Pointer` API 2. **Lib-level `ByteString` API** 3. User-level `Application` API<br />
-Errors at *each* level are prevented by types at *lower* levels<br />
-ByteString Type ---------------<br />
-<img src="img/bytestring.png" height="150" /> \begin{code} data ByteString = PS { bPtr :: ForeignPtr Word8 , bOff :: !Int , bLen :: !Int } \end{code}<br />
-Refined ByteString Type -----------------------<br />
-<img src="img/bytestring.png" height="150" /> \begin{code} {-@ data ByteString = PS { bPtr :: ForeignPtr Word8 , bOff :: {v:Nat| v &lt;= fplen bPtr} , bLen :: {v:Nat| v + bOff &lt;= fplen bPtr} } @-} \end{code}<br />
-Refined ByteString Type -----------------------<br />
-<img src="img/bytestring.png" height="150" /><br />
-**A Useful Abbreviation** \begin{spec} type ByteStringN N = {v:ByteString| bLen v = N} \end{spec}
+<p><br></p>
+</section>
+</div>
+<div id="slide-20" class="slide">
+<section id="refined-bytestring-type-1" class="level2">
+<h2>Refined ByteString Type</h2>
+<p><br></p>
+<p><img src="img/bytestring.png" height=150px></p>
+<p><br></p>
+<p><strong>A Useful Abbreviation</strong></p>
 <div class="hidden">
-\begin{code} {-@ type ByteStringN N = {v:ByteString | bLen v = N} @-} \end{code}
+<div id="program-pane-5" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-5" class="programbox">{-@ type ByteStringN N = {v:ByteString | bLen v = N} @-}</div>
 </div>
-Legal Bytestrings -----------------<br />
-\begin{code} {-@ good1 :: IO (ByteStringN 5) @-} good1 = do fp &lt;- malloc 5 return (PS fp 0 5) {-@ good2 :: IO (ByteStringN 3) @-} good2 = do fp &lt;- malloc 5 return (PS fp 2 3) \end{code}<br />
 
-**Note:** *length* of `good2` is `3` which is *less than* allocated size `5`
-Illegal Bytestrings -----------------<br />
-\begin{code} bad1 = do fp &lt;- malloc 3 return (PS fp 0 10) bad2 = do fp &lt;- malloc 3 return (PS fp 2 2) \end{code}<br />
+</div>
+</section>
+</div>
+<div id="slide-21" class="slide">
+<section id="legal-bytestrings" class="level2">
+<h2>Legal Bytestrings</h2>
+<p><br></p>
+<div id="program-pane-6" class="welleditor" style="background:#fff; position:relative">
 
-Claimed length *exceeds* allocation ... **rejected** at compile time
-API `create` : Allocate and Fill a `ByteString` -----------------------------------------------
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-6" class="programbox">{-@ good1 :: IO (ByteStringN 5) @-}
+good1 = do fp <- malloc 5
+           return (PS fp 0 5)
+
+{-@ good2 :: IO (ByteStringN 3) @-}
+good2 = do fp <- malloc 5
+           return (PS fp 2 3)</div>
+</div>
+
+<p><br></p>
+<p><strong>Note:</strong> <em>length</em> of <code>good2</code> is <code>3</code> which is <em>less than</em> allocated size <code>5</code></p>
+</section>
+</div>
+<div id="slide-22" class="slide">
+<section id="illegal-bytestrings" class="level2">
+<h2>Illegal Bytestrings</h2>
+<p><br></p>
+<div id="program-pane-7" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-7" class="programbox">bad1 = do fp <- malloc 3
+          return (PS fp 0 10)
+
+bad2 = do fp <- malloc 3
+          return (PS fp 2 2)</div>
+</div>
+
+<p><br></p>
+<p>Claimed length <em>exceeds</em> allocation … <strong>rejected</strong> at compile time</p>
+</section>
+</div>
+<div id="slide-23" class="slide">
+<section id="api-create-allocate-and-fill-a-bytestring" class="level2">
+<h2>API <code>create</code> : Allocate and Fill a <code>ByteString</code></h2>
 <div class="hidden">
-\begin{code} create :: Int -&gt; (Ptr Word8 -&gt; IO ()) -&gt; ByteString \end{code}
-</div>
-<br />
+<div id="program-pane-8" class="welleditor" style="background:#fff; position:relative">
 
-**Specification** \begin{code} {-@ create :: n:Nat -&gt; (PtrN Word8 n -&gt; IO ()) -&gt; ByteStringN n @-} \end{code}
-**Implementation** \begin{code} create n fill = unsafePerformIO $ do fp &lt;- malloc n withForeignPtr fp fill return (PS fp 0 n) \end{code}
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-8" class="programbox">create :: Int -> (Ptr Word8 -> IO ()) -> ByteString</div>
+</div>
+
+</div>
+<p><br></p>
+<p><strong>Specification</strong></p>
+<div id="program-pane-9" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-9" class="programbox">{-@ create :: n:Nat -> (PtrN Word8 n -> IO ())
+           -> ByteStringN n                @-}</div>
+</div>
+
+<p><strong>Implementation</strong></p>
+<div id="program-pane-10" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-10" class="programbox">create n fill = unsafePerformIO $ do
+  fp  <- malloc n
+  withForeignPtr fp fill
+  return (PS fp 0 n)</div>
+</div>
+
 <!-- CUT
 <div class="fragment">
 Yikes, there is an error! How to fix?
 </div>
---> API `pack` : Convert List of `Char` into `ByteString` ------------<br />
-**Specification** \begin{code} {-@ pack :: s:String -&gt; ByteStringN (len s) @-} \end{code}
-**Implementation** \begin{code} pack str = create n $ \p -&gt; go p xs where n = length str xs = map c2w str go p (x:xs) = poke p x &gt;&gt; go (plusPtr p 1) xs go _ [] = return () \end{code}
-API `unsafeTake` : Extract *prefix* of size `n` -----------------------------------------------<br />
+-->
+</section>
+</div>
+<div id="slide-24" class="slide">
+<section id="api-pack-convert-list-of-char-into-bytestring" class="level2">
+<h2>API <code>pack</code> : Convert List of <code>Char</code> into <code>ByteString</code></h2>
+<p><br></p>
+<p><strong>Specification</strong></p>
+<div id="program-pane-11" class="welleditor" style="background:#fff; position:relative">
 
-**Specification** \begin{code} {-@ unsafeTake :: n:Nat -&gt; b:{ByteString | n &lt;= bLen b} -&gt; ByteStringN n @-} \end{code}
-**Implementation** \begin{code} unsafeTake n (PS x s l) = PS x s n \end{code}
-API `unpack` : Convert `ByteString` into List of `Char` -------------------------------------------------------<br />
-**Specification** \begin{spec} unpack :: b:ByteString -&gt; StringN (bLen b) \end{spec}<br />
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-11" class="programbox">{-@ pack :: s:String -> ByteStringN (len s) @-}</div>
+</div>
 
-**Implementation** \begin{spec} unpack b = you . get . the . idea -- see source \end{spec}
-<div class="hidden">
-\begin{code} {-@ qualif Unpack(v:a, acc:b, n:int) : len v = 1 + n + len acc @-} {-@ unpack :: b:ByteString -&gt; StringN (bLen b) @-} unpack :: ByteString -&gt; String unpack (PS _ _ 0) = [] unpack (PS ps s l) = unsafePerformIO $ withForeignPtr ps $ \p -&gt; go (p `plusPtr` s) (l - 1) [] where go p 0 acc = peek p &gt;&gt;= \e -&gt; return (w2c e : acc) go p n acc = peek (p `plusPtr` n) &gt;&gt;= \e -&gt; go p (n-1) (w2c e : acc) \end{code}
+<p><strong>Implementation</strong></p>
+<div id="program-pane-12" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-12" class="programbox">pack str      = create n $ \p -> go p xs
+  where
+  n           = length str
+  xs          = map c2w str
+  go p (x:xs) = poke p x >> go (plusPtr p 1) xs
+  go _ []     = return  ()</div>
 </div>
-3. Application API ==================<br />
-Strategy: Specify and Verify Types for<br />
-1. Low-level `Pointer` API 2. Lib-level `ByteString` API 3. **User-level `Application` API**<br />
-Errors at *each* level are prevented by types at *lower* levels Revisit "HeartBleed" --------------------<br />
-Lets revisit our potentially "bleeding" `chop`
-<div class="hidden">
-\begin{code} {-@ type StringN N = {v:String | len v = N} @-} \end{code}
+
+</section>
 </div>
-\begin{code} {-@ chop :: s:String -&gt; n:{Nat | n &lt;= len s} -&gt; StringN n @-} chop s n = s' where b = pack s -- down to low-level b' = unsafeTake n b -- grab n chars s' = unpack b' -- up to high-level \end{code}
-"HeartBleed" no more --------------------<br />
-\begin{code} demo = [ex6, ex30] where ex = "St. Louis" -- has size 9 ex6 = chop ex 6 -- ok ex30 = chop ex 30 -- out of bounds \end{code}<br />
-"Bleeding" `chop ex 30` *rejected* by compiler Recap: Types vs Overflows -------------------------<br />
-**Strategy: Specify and Verify Types for**<br />
-1. Low-level `Pointer` API 2. Lib-level `ByteString` API 3. User-level `Application` API<br />
-**Errors at *each* level are prevented by types at *lower* levels**
-<div class="hidden">
-Bonus Material ============== Nested ByteStrings ------------------ For a more in depth example, let's take a look at `group`, which transforms strings like `"foobaaar"` into *lists* of strings like `["f","oo", "b", "aaa", "r"]`. The specification is that `group` should produce a list of `ByteStrings` 1. that are all *non-empty* (safety) 2. the sum of whose lengths is equal to the length of the input string (precision) We use the type alias \begin{code} {-@ type ByteStringNE = {v:ByteString | bLen v &gt; 0} @-} \end{code} to specify (safety) and introduce a new measure \begin{code} {-@ measure bLens :: [ByteString] -&gt; Int bLens ([]) = 0 bLens (x:xs) = (bLen x + bLens xs) @-} \end{code} to specify (precision). The full type-specification looks like this: \begin{code} {-@ group :: b:ByteString -&gt; {v: [ByteStringNE] | bLens v = bLen b} @-} group xs | null xs = [] | otherwise = let y = unsafeHead xs (ys, zs) = spanByte (unsafeHead xs) (unsafeTail xs) in (y `cons` ys) : group zs \end{code} As you can probably tell, `spanByte` appears to be doing a lot of the work here, so let's take a closer look at it to see why the post-condition holds. \begin{code} spanByte :: Word8 -&gt; ByteString -&gt; (ByteString, ByteString) spanByte c ps@(PS x s l) = unsafePerformIO $ withForeignPtr x $ \p -&gt; go (p `plusPtr` s) 0 where go p i | i &gt;= l = return (ps, empty) | otherwise = do c' &lt;- peekByteOff p i if c /= c' then return (unsafeTake i ps, unsafeDrop i ps) else go p (i+1) \end{code} LiquidHaskell infers that `0 &lt;= i &lt;= l` and therefore that all of the memory accesses are safe. Furthermore, due to the precise specifications given to `unsafeTake` and `unsafeDrop`, it is able to prove that `spanByte` has the type \begin{code} {-@ spanByte :: Word8 -&gt; b:ByteString -&gt; (ByteStringPair b) @-} \end{code} where `ByteStringPair b` describes a pair of `ByteString`s whose lengths sum to the length of `b`. \begin{code} {-@ type ByteStringPair B = (ByteString, ByteString)&lt;{\x1 x2 -&gt; bLen x1 + bLen x2 = bLen B}&gt; @-} \end{code} \begin{code} ----------------------------------------------------------------------- -- Helper Code ----------------------------------------------------------------------- {-@ unsafeCreate :: l:Nat -&gt; ((PtrN Word8 l) -&gt; IO ()) -&gt; (ByteStringN l) @-} unsafeCreate n f = create n f -- unsafePerformIO $ create n f {-@ invariant {v:ByteString | bLen v &gt;= 0} @-} {-@ invariant {v:[ByteString] | bLens v &gt;= 0} @-} {-@ qualif PLLen(v:a, p:b) : (len v) &lt;= (plen p) @-} {-@ qualif ForeignPtrN(v:ForeignPtr a, n:int): fplen v = n @-} {-@ qualif FPLenPLen(v:Ptr a, fp:ForeignPtr a): fplen fp = plen v @-} {-@ qualif PtrLen(v:Ptr a, xs:List b): plen v = len xs @-} {-@ qualif PlenEq(v: Ptr a, x: int): x &lt;= (plen v) @-} {-@ unsafeHead :: {v:ByteString | (bLen v) &gt; 0} -&gt; Word8 @-} unsafeHead :: ByteString -&gt; Word8 unsafeHead (PS x s l) = liquidAssert (l &gt; 0) $ unsafePerformIO $ withForeignPtr x $ \p -&gt; peekByteOff p s {-@ unsafeTail :: b:{v:ByteString | (bLen v) &gt; 0} -&gt; {v:ByteString | (bLen v) = (bLen b) - 1} @-} unsafeTail :: ByteString -&gt; ByteString unsafeTail (PS ps s l) = liquidAssert (l &gt; 0) $ PS ps (s+1) (l-1) {-@ null :: b:ByteString -&gt; {v:Bool | v &lt;=&gt; (bLen b == 0)} @-} null :: ByteString -&gt; Bool null (PS _ _ l) = liquidAssert (l &gt;= 0) $ l &lt;= 0 {-@ unsafeDrop :: n:Nat -&gt; b:{v: ByteString | n &lt;= (bLen v)} -&gt; {v:ByteString | (bLen v) = (bLen b) - n} @-} unsafeDrop :: Int -&gt; ByteString -&gt; ByteString unsafeDrop n (PS x s l) = liquidAssert (0 &lt;= n &amp;&amp; n &lt;= l) $ PS x (s+n) (l-n) {-@ cons :: Word8 -&gt; b:ByteString -&gt; {v:ByteString | (bLen v) = 1 + (bLen b)} @-} cons :: Word8 -&gt; ByteString -&gt; ByteString cons c (PS x s l) = unsafeCreate (l+1) $ \p -&gt; withForeignPtr x $ \f -&gt; do poke p c memcpy (p `plusPtr` 1) (f `plusPtr` s) (fromIntegral l) {-@ empty :: {v:ByteString | (bLen v) = 0} @-} empty :: ByteString empty = PS nullForeignPtr 0 0 {-@ assume mallocForeignPtrBytes :: n:Nat -&gt; IO (ForeignPtrN a n) @-} {-@ type ForeignPtrN a N = {v:ForeignPtr a | fplen v = N} @-} {-@ malloc :: n:Nat -&gt; IO (ForeignPtrN a n) @-} malloc = mallocForeignPtrBytes {-@ assume c_memcpy :: dst:(PtrV Word8) -&gt; src:(PtrV Word8) -&gt; size: {v:CSize | (v &lt;= (plen src) &amp;&amp; v &lt;= (plen dst))} -&gt; IO (Ptr Word8) @-} foreign import ccall unsafe "string.h memcpy" c_memcpy :: Ptr Word8 -&gt; Ptr Word8 -&gt; CSize -&gt; IO (Ptr Word8) {-@ memcpy :: dst:(PtrV Word8) -&gt; src:(PtrV Word8) -&gt; size: {v:CSize | (v &lt;= (plen src) &amp;&amp; v &lt;= (plen dst))} -&gt; IO () @-} memcpy :: Ptr Word8 -&gt; Ptr Word8 -&gt; CSize -&gt; IO () memcpy p q s = c_memcpy p q s &gt;&gt; return () {-@ assume nullForeignPtr :: {v: ForeignPtr Word8 | (fplen v) = 0} @-} nullForeignPtr :: ForeignPtr Word8 nullForeignPtr = unsafePerformIO $ newForeignPtr_ nullPtr {-# NOINLINE nullForeignPtr #-} \end{code}
+<div id="slide-25" class="slide">
+<section id="api-unsafetake-extract-prefix-of-size-n" class="level2">
+<h2>API <code>unsafeTake</code> : Extract <em>prefix</em> of size <code>n</code></h2>
+<p><br></p>
+<p><strong>Specification</strong></p>
+<div id="program-pane-13" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-13" class="programbox">{-@ unsafeTake :: n:Nat
+               -> b:{ByteString | n <= bLen b}
+               -> ByteStringN n            @-}</div>
 </div>
-[mylink]: http://www.google.com [dml]: http://www.cs.bu.edu/~hwxi/DML/DML.html [vecspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Vector.spec [vec]: http://hackage.haskell.org/package/vector [agdavec]: http://code.haskell.org/Agda/examples/Vec.agda [ref101]: /blog/2013/01/01/refinement-types-101.lhs/ [ref102]: /blog/2013/01/27/refinements-101-reax.lhs/ [data-list]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [foldl]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html [listtail]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [dmlarray]: http://www.cs.bu.edu/~hwxi/academic/papers/pldi98.pdf [liquid-tutorial]: http://github.com/ucsd-progsys/liquidhaskell-tutorial.git [liquid-emacs]: https://github.com/ucsd-progsys/liquid-types.el [liquid-vim]: https://github.com/ucsd-progsys/liquid-types.vim [z3]: http://z3.codeplex.com/ [cvc4]: http://cvc4.cs.nyu.edu/ [mathsat]: http://mathsat.fbk.eu/download.html [hoogle-assert]: https://www.haskell.org/hoogle/?hoogle=assert [apple-riser]: http://blog.jbapple.com/2008/01/extra-type-safety-using-polymorphic.html [safeList]: /blog/2013/01/31/safely-catching-a-list-by-its-tail.lhs/ [kmeansI]: /blog/2013/02/16/kmeans-clustering-I.lhs/ [kmeansII]: /blog/2013/02/17/kmeans-clustering-II.lhs/ [URL-take]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/List.lhs#L334 [URL-groupBy]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/Data-List.html#v:groupBy [URL-transpose]: http://hackage.haskell.org/packages/archive/base/latest/doc/html/src/Data-List.html#transpose [maru]: http://www.youtube.com/watch?v=8uDuls5TyNE [URL-kmeans]: http://hackage.haskell.org/package/kmeans [hinze-icfp09]: http://www.cs.ox.ac.uk/ralf.hinze/publications/ICFP09.pdf [smt-set]: http://www.kroening.com/smt-lib-lsm.pdf) [setspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/Data/Set.spec [mccarthy]: http://www-formal.stanford.edu/jmc/towards.ps [xmonad-stackset]: http://hackage.haskell.org/package/xmonad-0.11/docs/XMonad-StackSet.html [bst-wiki]: http://en.wikipedia.org/wiki/Binary_search_tree [foreignptr]: http://hackage.haskell.org/package/base/docs/Foreign-Ptr.html [bytestring]: https://hackage.haskell.org/package/bytestring [xmonad]: http://xmonad.org/ [wiki-zipper]: http://en.wikipedia.org/wiki/Zipper_(data_structure) [wiki-contracts]: http://en.wikipedia.org/wiki/Design_by_contract [smart-ctr-wiki]: https://www.haskell.org/haskellwiki/Smart_constructors [smt-wiki]: http://en.wikipedia.org/wiki/Satisfiability_Modulo_Theories [vazou13]: http://goto.ucsd.edu/~rjhala/liquid/abstract_refinement_types.pdf [liquidpldi08]: http://goto.ucsd.edu/~rjhala/liquid/liquid_types.pdf [bird-pearls]: http://www.amazon.com/Pearls-Functional-Algorithm-Design-Richard/dp/0521513383 [mitchell-riser]: http://neilmitchell.blogspot.com/2008/03/sorting-at-speed.html [blog-set]: /blog/2013/03/26/talking-about-sets.lhs/ [z3cal]: http://research.microsoft.com/en-us/um/people/leonardo/fmcad09.pdf [sbv]: https://github.com/LeventErkok/sbv [leon]: http://lara.epfl.ch/w/leon [ptrspec]: https://github.com/ucsd-progsys/liquidhaskell/blob/master/include/GHC/Ptr.spec [okasaki95]: http://www.westpoint.edu/eecs/SiteAssets/SitePages/Faculty%20Publication%20Documents/Okasaki/jfp95queue.pdf [queue-wiki]: http://en.wikipedia.org/wiki/Queue_%28abstract_data_type%29 [avl-wiki]: http://en.wikipedia.org/wiki/AVL_tree [nelson-thesis]: http://research.microsoft.com/en-us/um/people/qadeer/cse599f/papers/nelsonthesis.pdf
+
+<p><strong>Implementation</strong></p>
+<div id="program-pane-14" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-14" class="programbox">unsafeTake n (PS x s l) = PS x s n</div>
+</div>
+
+</section>
+</div>
+<div id="slide-26" class="slide">
+<section id="api-unpack-convert-bytestring-into-list-of-char" class="level2">
+<h2>API <code>unpack</code> : Convert <code>ByteString</code> into List of <code>Char</code></h2>
+<p><br></p>
+<p><strong>Specification</strong></p>
+<p><br></p>
+<p><strong>Implementation</strong></p>
+<div class="hidden">
+<div id="program-pane-15" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-15" class="programbox">{-@ qualif Unpack(v:a, acc:b, n:int) : len v = 1 + n + len acc @-}
+
+{-@ unpack :: b:ByteString -> StringN (bLen b) @-}
+unpack :: ByteString -> String
+unpack (PS _  _ 0)  = []
+unpack (PS ps s l)  = unsafePerformIO $ withForeignPtr ps $ \p ->
+   go (p `plusPtr` s) (l - 1)  []
+  where
+   go p 0 acc = peek p >>= \e -> return (w2c e : acc)
+   go p n acc = peek (p `plusPtr` n) >>=   \e -> go p (n-1) (w2c e : acc)</div>
+</div>
+
+</div>
+</section>
+</div>
+<div id="slide-27" class="slide">
+<section id="application-api" class="level1">
+<h1>3. Application API</h1>
+<p><br></p>
+<p>Strategy: Specify and Verify Types for</p>
+<p><br></p>
+<ol type="1">
+<li>Low-level <code>Pointer</code> API</li>
+<li>Lib-level <code>ByteString</code> API</li>
+<li><strong>User-level <code>Application</code> API</strong></li>
+</ol>
+<p><br></p>
+<p>Errors at <em>each</em> level are prevented by types at <em>lower</em> levels</p>
+</section>
+</div>
+<div id="slide-28" class="slide">
+<section id="revisit-heartbleed" class="level2">
+<h2>Revisit “HeartBleed”</h2>
+<p><br></p>
+<p>Lets revisit our potentially “bleeding” <code>chop</code></p>
+<div class="hidden">
+<div id="program-pane-16" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-16" class="programbox">{-@ type StringN N = {v:String | len v = N} @-}</div>
+</div>
+
+</div>
+<div id="program-pane-17" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-17" class="programbox">{-@ chop :: s:String
+         -> n:{Nat | n <= len s}
+         -> StringN n
+  @-}
+chop s n =  s'
+  where
+    b    = pack s          -- down to low-level
+    b'   = unsafeTake n b  -- grab n chars
+    s'   = unpack b'       -- up to high-level</div>
+</div>
+
+</section>
+</div>
+<div id="slide-29" class="slide">
+<section id="heartbleed-no-more" class="level2">
+<h2>“HeartBleed” no more</h2>
+<p><br></p>
+<div id="program-pane-18" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-18" class="programbox">demo     = [ex6, ex30]
+  where
+    ex   = "St. Louis" -- has size 9
+    ex6  = chop ex 6   -- ok
+    ex30 = chop ex 30  -- out of bounds</div>
+</div>
+
+<p><br></p>
+<p>“Bleeding” <code>chop ex 30</code> <em>rejected</em> by compiler</p>
+</section>
+</div>
+<div id="slide-30" class="slide">
+<section id="recap-types-vs-overflows" class="level2">
+<h2>Recap: Types vs Overflows</h2>
+<p><br></p>
+<p><strong>Strategy: Specify and Verify Types for</strong></p>
+<p><br></p>
+<ol type="1">
+<li>Low-level <code>Pointer</code> API</li>
+<li>Lib-level <code>ByteString</code> API</li>
+<li>User-level <code>Application</code> API</li>
+</ol>
+<p><br></p>
+<p><strong>Errors at <em>each</em> level are prevented by types at <em>lower</em> levels</strong></p>
+</section>
+<section id="bonus-material" class="level1 hidden">
+<h1>Bonus Material</h1>
+<section id="nested-bytestrings" class="level2">
+<h2>Nested ByteStrings</h2>
+<p>For a more in depth example, let’s take a look at <code>group</code>, which transforms strings like</p>
+<p><code>"foobaaar"</code></p>
+<p>into <em>lists</em> of strings like</p>
+<p><code>["f","oo", "b", "aaa", "r"]</code>.</p>
+<p>The specification is that <code>group</code> should produce a list of <code>ByteStrings</code></p>
+<ol type="1">
+<li>that are all <em>non-empty</em> (safety)</li>
+<li>the sum of whose lengths is equal to the length of the input string (precision)</li>
+</ol>
+<p>We use the type alias</p>
+<div id="program-pane-19" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-19" class="programbox">{-@ type ByteStringNE = {v:ByteString | bLen v > 0} @-}</div>
+</div>
+
+<p>to specify (safety) and introduce a new measure</p>
+<div id="program-pane-20" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-20" class="programbox">{-@ measure bLens  :: [ByteString] -> Int
+    bLens ([])   = 0
+    bLens (x:xs) = (bLen x + bLens xs)
+  @-}</div>
+</div>
+
+<p>to specify (precision). The full type-specification looks like this:</p>
+<div id="program-pane-21" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-21" class="programbox">{-@ group :: b:ByteString -> {v: [ByteStringNE] | bLens v = bLen b} @-}
+group xs
+    | null xs   = []
+    | otherwise = let y = unsafeHead xs
+                      (ys, zs) = spanByte (unsafeHead xs) (unsafeTail xs)
+                  in (y `cons` ys) : group zs</div>
+</div>
+
+<p>As you can probably tell, <code>spanByte</code> appears to be doing a lot of the work here, so let’s take a closer look at it to see why the post-condition holds.</p>
+<div id="program-pane-22" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-22" class="programbox">spanByte :: Word8 -> ByteString -> (ByteString, ByteString)
+spanByte c ps@(PS x s l) = unsafePerformIO $ withForeignPtr x $ \p ->
+    go (p `plusPtr` s) 0
+  where
+    go p i | i >= l    = return (ps, empty)
+           | otherwise = do c' <- peekByteOff p i
+                            if c /= c'
+                                then return (unsafeTake i ps, unsafeDrop i ps)
+                                else go p (i+1)</div>
+</div>
+
+<p>LiquidHaskell infers that <code>0 &lt;= i &lt;= l</code> and therefore that all of the memory accesses are safe. Furthermore, due to the precise specifications given to <code>unsafeTake</code> and <code>unsafeDrop</code>, it is able to prove that <code>spanByte</code> has the type</p>
+<div id="program-pane-23" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-23" class="programbox">{-@ spanByte :: Word8 -> b:ByteString -> (ByteStringPair b) @-}</div>
+</div>
+
+<p>where <code>ByteStringPair b</code> describes a pair of <code>ByteString</code>s whose lengths sum to the length of <code>b</code>.</p>
+<div id="program-pane-24" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-24" class="programbox">{-@ type ByteStringPair B = (ByteString, ByteString)<{\x1 x2 ->
+       bLen x1 + bLen x2 = bLen B}> @-}</div>
+</div>
+
+<div id="program-pane-25" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-25" class="programbox">-----------------------------------------------------------------------
+-- Helper Code
+-----------------------------------------------------------------------
+
+{-@ unsafeCreate :: l:Nat -> ((PtrN Word8 l) -> IO ()) -> (ByteStringN l) @-}
+unsafeCreate n f = create n f -- unsafePerformIO $ create n f
+
+{-@ invariant {v:ByteString   | bLen  v >= 0} @-}
+{-@ invariant {v:[ByteString] | bLens v >= 0} @-}
+
+{-@ qualif PLLen(v:a, p:b) : (len v) <= (plen p) @-}
+{-@ qualif ForeignPtrN(v:ForeignPtr a, n:int): fplen v = n @-}
+{-@ qualif FPLenPLen(v:Ptr a, fp:ForeignPtr a): fplen fp = plen v @-}
+{-@ qualif PtrLen(v:Ptr a, xs:List b): plen v = len xs @-}
+{-@ qualif PlenEq(v: Ptr a, x: int): x <= (plen v) @-}
+
+{-@ unsafeHead :: {v:ByteString | (bLen v) > 0} -> Word8 @-}
+
+unsafeHead :: ByteString -> Word8
+unsafeHead (PS x s l) = liquidAssert (l > 0) $
+  unsafePerformIO  $  withForeignPtr x $ \p -> peekByteOff p s
+
+{-@ unsafeTail :: b:{v:ByteString | (bLen v) > 0}
+               -> {v:ByteString | (bLen v) = (bLen b) - 1} @-}
+unsafeTail :: ByteString -> ByteString
+unsafeTail (PS ps s l) = liquidAssert (l > 0) $ PS ps (s+1) (l-1)
+
+{-@ null :: b:ByteString -> {v:Bool | v <=> (bLen b == 0)} @-}
+null :: ByteString -> Bool
+null (PS _ _ l) = liquidAssert (l >= 0) $ l <= 0
+
+{-@ unsafeDrop :: n:Nat
+               -> b:{v: ByteString | n <= (bLen v)}
+               -> {v:ByteString | (bLen v) = (bLen b) - n} @-}
+unsafeDrop  :: Int -> ByteString -> ByteString
+unsafeDrop n (PS x s l) = liquidAssert (0 <= n && n <= l) $ PS x (s+n) (l-n)
+
+{-@ cons :: Word8 -> b:ByteString -> {v:ByteString | (bLen v) = 1 + (bLen b)} @-}
+cons :: Word8 -> ByteString -> ByteString
+cons c (PS x s l) = unsafeCreate (l+1) $ \p -> withForeignPtr x $ \f -> do
+        poke p c
+        memcpy (p `plusPtr` 1) (f `plusPtr` s) (fromIntegral l)
+
+{-@ empty :: {v:ByteString | (bLen v) = 0} @-}
+empty :: ByteString
+empty = PS nullForeignPtr 0 0
+
+{-@ assume mallocForeignPtrBytes :: n:Nat -> IO (ForeignPtrN a n) @-}
+{-@ type ForeignPtrN a N = {v:ForeignPtr a | fplen v = N} @-}
+{-@ malloc :: n:Nat -> IO (ForeignPtrN a n) @-}
+malloc = mallocForeignPtrBytes
+
+{-@ assume
+    c_memcpy :: dst:(PtrV Word8)
+             -> src:(PtrV Word8)
+             -> size: {v:CSize | (v <= (plen src) && v <= (plen dst))}
+             -> IO (Ptr Word8)
+  @-}
+foreign import ccall unsafe "string.h memcpy" c_memcpy
+    :: Ptr Word8 -> Ptr Word8 -> CSize -> IO (Ptr Word8)
+
+{-@ memcpy :: dst:(PtrV Word8)
+           -> src:(PtrV Word8)
+           -> size: {v:CSize | (v <= (plen src) && v <= (plen dst))}
+           -> IO ()
+  @-}
+memcpy :: Ptr Word8 -> Ptr Word8 -> CSize -> IO ()
+memcpy p q s = c_memcpy p q s >> return ()
+
+{-@ assume nullForeignPtr :: {v: ForeignPtr Word8 | (fplen v) = 0} @-}
+nullForeignPtr :: ForeignPtr Word8
+nullForeignPtr = unsafePerformIO $ newForeignPtr_ nullPtr
+{-# NOINLINE nullForeignPtr #-}</div>
+</div>
+
+</section>
+</section>
+</div>
 
 </div>
 </div>
@@ -529,17 +1177,17 @@ Bonus Material ============== Nested ByteStrings ------------------ For a more i
 
 <!-- JavaScript below! ============================================== -->
 
-  <script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
-  <script src="/js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
-  <script src="/js/liquid/tooltip.js"></script>
-  <script src="/js/liquid/annot.js"></script>
-  <script src="/js/liquid/config.js"></script>
-  <script src="/js/liquid/slideshow.js"></script>
-  <script src="/js/liquid/liquid.js"></script>
+  <script src="./js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
+  <script src="./js/liquid/tooltip.js"></script>
+  <script src="./js/liquid/annot.js"></script>
+  <script src="./js/liquid/config.js"></script>
+  <script src="./js/liquid/slideshow.js"></script>
+  <script src="./js/liquid/liquid.js"></script>
 
   <script type="text/javascript">
-    var queryServerURL = "" ;
+    var queryServerURL = "https://liquid-demo.programming.systems/" ;
   </script>
 
   <!-- rust nav JS -->
