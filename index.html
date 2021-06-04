@@ -4,49 +4,116 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <title>Language-Integrated Verification</title>
+    <title>index</title>
 
     <link href="./css/bootstrap.css" rel="stylesheet">
     <link href="./css/bootstrap-theme.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./css/rust-book-slides.css">
     <link rel="stylesheet" type="text/css" href="./css/editor-slides.css">
+    <link rel="stylesheet" type="text/css" href="./css/code-format.css">
+    <link rel="stylesheet" type="text/css" href="./css/slideshow.css">
+    <style>
+      body {
+        text-align: center;
+      }
+      .mybreak {
+        line-height: 1em;
+      }
+      table {
+        margin-left: 150px;
+        margin-right: auto;
+      }
+    </style>
 
-  <style type="text/css">code{white-space: pre;}</style>
-  <style type="text/css">
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; }
-code > span.dt { color: #902000; }
-code > span.dv { color: #40a070; }
-code > span.bn { color: #40a070; }
-code > span.fl { color: #40a070; }
-code > span.ch { color: #4070a0; }
-code > span.st { color: #4070a0; }
-code > span.co { color: #60a0b0; font-style: italic; }
-code > span.ot { color: #007020; }
-code > span.al { color: #ff0000; font-weight: bold; }
-code > span.fu { color: #06287e; }
-code > span.er { color: #ff0000; font-weight: bold; }
-  </style>
+    <!-- JQUERY MOBILE -->
+
+    <!-- Include jQuery Mobile stylesheets -->
+
+    <!-- Include the jQuery library -->
+     <!-- <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+     <script src="./js/jquery/jquery-1.11.3.min.js"></script>
+     <script src="./js/jquery/init-mobile.js"></script>
+
+     <!-- Include the jQuery Mobile library -->
+     <!-- <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
+     <script src="./js/jquery/jquery.mobile-1.4.5.min.js"></script>
+
+<!-- JQUERY LOCAL
+
+<script type="text/javascript" src="./js/jquery/jquery-2.0.3.min.js"></script>
+
+-->
+
+
+
+<script type="text/javascript" src="./js/angular/angular.js"></script>
+<script type="text/javascript" src="./js/bootstrap/bootstrap.js"></script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: {
+    extensions: ["color.js"],
+    Macros: {
+      True: "\\mathit{True}",
+      RR:   "{\\bf R}",
+      Int:  "\\mathtt{Int}",
+      Nat:  "\\mathtt{Nat}",
+      Zero: "\\mathtt{Zero}",
+      Pos:  "\\mathtt{Pos}",
+      Two: "\\mathtt{Two}",
+      foo:   ["{\\bf Jhala FOO #1}", 1],
+      kvar:  ["{\\color[rgb]{1,0,0}{K_{#1}({#2})}}", 2],
+      bindx: ["{{#1}\\!:\\!{#2}}", 2],
+      reft:  ["\\{\\bindx{#1}{#2} \\mid {#3}\\}", 3],
+      ereft: ["\\bindx{#1}{\\{#2 \\mid #3\\}}", 3],
+      reftx: ["\\{{#1}\\mid{#2}\\}", 2],
+      inferrule: ["\\frac{#2}{#3}\\;{#1}", 3]
+  }
+  }
+});
+</script>
+
+<!-- GITHUB
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+-->
+
+<!-- LOCAL -->
+<script src="js/MathJax-2.6.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+
 </head>
 
-<body class="rustdoc">
- 
+<body class="rustdoc" data-spy="scroll" data-target=".bs-docs-sidebar" ng-app="liquidDemo" ng-controller="LiquidDemoCtrl">
+
+
+
+  <div id="nav">
+
+        <button class="btn btn-xs btn-link actbutton firstbutton" type="button" style="font-size:15px; color:black; z-index:1">
+          <span class="glyphicon glyphicon-backward"></span>
+        </button>
+
+        <button class="btn btn-xs btn-link actbutton prevbutton" type="button" style="font-size:15px; color:black;  z-index:1">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </button>
+
+        <button id="toggle-nav" class="toggle-nav">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+
+        <button class="btn btn-xs btn-link actbutton nextbutton" type="button" style="font-size:15px; color:black; z-index:1">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
+
+        <button class="btn btn-xs btn-link actbutton lastbutton" type="button" style="font-size:15px; color:black; z-index:1">
+          <span class="glyphicon glyphicon-forward"></span>
+        </button>
+
+  </div>
+
 <div id='toc' class='mobile-hidden'>
-
-</div>
-
-<div id='page'>
-<h1 style="border-bottom:none">Language-Integrated Verification</b>
-<h2 style="border-bottom:none"></h2>
-<h4 style="border-bottom: 2px solid #ddd"><i>Ranjit Jhala</i></h4>
-<br>
-
-<p><a href="book.pdf">[PDF]</a></p>
-
 <ul class='chapter'>
 <li><a href='01-intro.html'><b>1.</b>title: "Habits"</a></li>
 <ul class='section'>
@@ -257,7 +324,122 @@ code > span.er { color: #ff0000; font-weight: bold; }
 </ul>
 </ul>
 
+</div>
+
+       <div id="checker-status">
+
+         <!-- Verifying ... -->
+         <button class="btn btn-xs btn-link actbutton" type="button" style="font-size:30px; z-index:1"
+                ng-show="isChecking" ng-click="verifySource()">
+          <span class="glyphicon glyphicon-hourglass"></span>
+         </button>
+
+
+         <!-- Safe -->
+         <button class="btn btn-xs btn-link actbutton" type="button" style="font-size:30px; color:green; z-index:1"
+                 ng-show="isSafe">
+           <span class="glyphicon glyphicon-ok"></span>
+         </button>
+
+         <div class="dropdown" ng-show="isBad">
+             <button class="btn btn-xs btn-link dropdown-toggle"
+                     type="button"
+                     id="errorblockdropdown"
+                     data-toggle="dropdown"
+                     style="font-size:30px; color:red; z-index:1">
+               <span class="glyphicon glyphicon-remove" style="vertical-align:middle"></span><font size="4">{{errorBlocks.length}}</font>
+               </span>
+             </button>
+             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+               <li ng-repeat="err in errorBlocks">
+                 <a tabindex="-1" ng-click="jumpToProgPane(err)">{{err.index}}</a>
+               </li>
+             </ul>
+         </div>
+       </div>
+
+
+<div id='page-wrapper'>
+<div id='page'>
+
+<meta http-equiv="refresh" content="1; URL=01-intro.html" />
+<p></p>
+<p><a href="01-index.html">Start</a></p>
 
 </div>
+</div>
+
+<!--Site Meter
+<div class="hidden">
+  <script type="text/javascript" src="http://s23.sitemeter.com/js/counter.js?site=s23liquidtypes"></script>
+  <noscript>
+    <a href="http://s23.sitemeter.com/stats.asp?site=s23liquidtypes"
+      target="_top">
+      <img src="http://s23.sitemeter.com/meter.asp?site=s23liquidtypes"
+      alt="Site Meter" border="0"/></a>
+  </noscript>
+</div>
+-->
+
+
+
+
+<!-- JavaScript below! ============================================== -->
+
+  <script src="./js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/theme-monokai.js" type="text/javascript" charset="utf-8"></script>
+  <script src="./js/ace/mode-haskell.js"  type="text/javascript" charset="utf-8"></script>
+  <script src="./js/liquid/tooltip.js"></script>
+  <script src="./js/liquid/annot.js"></script>
+  <script src="./js/liquid/config.js"></script>
+  <script src="./js/liquid/slideshow.js"></script>
+  <script src="./js/liquid/liquid.js"></script>
+
+  <script type="text/javascript">
+    var queryServerURL = "https://liquid-demo.programming.systems/" ;
+  </script>
+
+  <!-- rust nav JS -->
+  <script type="text/javascript">
+    window.playgroundUrl = "";
+  </script>
+
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function(event) {
+
+ document.getElementById("toggle-nav").onclick = toggleNav;
+
+  function toggleNav() {
+    var toc         = document.getElementById("toc");
+    var pagewrapper = document.getElementById("page-wrapper");
+    var status      = document.getElementById("checker-status");
+
+    toggleClass(toc,         "mobile-hidden");
+    // toggleClass(status,      "mobile-hidden");
+    toggleClass(pagewrapper, "mobile-hidden");
+  };
+
+  function toggleClass(el, className) {
+     // from http://youmightnotneedjquery.com/
+     if (el.classList) {
+       el.classList.toggle(className);
+     } else {
+       var classes = el.className.split(' ');
+       var existingIndex = classes.indexOf(className);
+
+       if (existingIndex >= 0) {
+         classes.splice(existingIndex, 1);
+       } else {
+         classes.push(className);
+       }
+       el.className = classes.join(' ');
+     }
+  }
+});
+</script>
+
+
+
+
 </body>
 </html>
