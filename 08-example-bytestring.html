@@ -394,8 +394,8 @@ import Language.Haskell.Liquid.Prelude</div>
 </div>
 <p><br></p>
 <div id="slide-0" class="slide">
-<section id="case-study-low-level-memory" class="level1">
-<h1>Case Study: Low Level Memory</h1>
+<section id="case-study-low-level-memory-safety" class="level1">
+<h1>Case Study: Low Level Memory Safety</h1>
 <p><br></p>
 </section>
 </div>
@@ -435,7 +435,7 @@ chop s n = s&#39;
 <h2>“HeartBleed” in Haskell (2/3)</h2>
 <p><img src="img/overflow.png" height=100px></p>
 <p>Works if you use the <strong>valid prefix</strong> size</p>
-<pre class="spec"><code>λ&gt; let ex = &quot;Ranjit Loves Jamon&quot;
+<pre class="spec"><code>λ&gt; let ex = &quot;Ranjit Loves Burritos&quot;
 
 λ&gt; heartBleed ex 10
 &quot;Ranjit Lov&quot;
@@ -448,10 +448,10 @@ chop s n = s&#39;
 <h2>“HeartBleed” in Haskell (3/3)</h2>
 <p><img src="img/overflow.png" height=100px></p>
 <p>Leaks <em>overflow buffer</em> if <strong>invalid prefix</strong> size!</p>
-<pre class="spec"><code>λ&gt; let ex = &quot;Ranjit Loves Jamon&quot;
+<pre class="spec"><code>λ&gt; let ex = &quot;Ranjit Loves Burritos&quot;
 
 λ&gt; heartBleed ex 30
-&quot;Ranjit Loves Jamon\NUL\201\&amp;1j\DC3\SOH\NUL&quot;
+&quot;Ranjit Loves Burritos\NUL\201\&amp;1j\DC3\SOH\NUL&quot;
 </code></pre>
 </section>
 </div>
