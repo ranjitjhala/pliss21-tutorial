@@ -59,6 +59,8 @@ MathJax.Hub.Config({
       Int:  "\\mathtt{Int}",
       Nat:  "\\mathtt{Nat}",
       Zero: "\\mathtt{Zero}",
+      Pos:  "\\mathtt{Pos}",
+      Two: "\\mathtt{Two}",
       foo:   ["{\\bf Jhala FOO #1}", 1],
       kvar:  ["{\\color[rgb]{1,0,0}{K_{#1}({#2})}}", 2],
       bindx: ["{{#1}\\!:\\!{#2}}", 2],
@@ -116,23 +118,24 @@ MathJax.Hub.Config({
 <li><a href='01-intro.html'><b>1.</b>title: "Habits"</a></li>
 <ul class='section'>
 <li><a href='01-intro.html#'><b>1.1.</b> Follow Along at This URL</a></li>
-<li><a href='01-intro.html#'><b>1.2.</b> Program Analysis &amp; Verification</a></li>
-<li><a href='01-intro.html#'><b>1.3.</b> Program Analysis &amp; Verification</a></li>
-<li><a href='01-intro.html#'><b>1.4.</b> Program Analysis &amp; Verification</a></li>
-<li><a href='01-intro.html#'><b>1.5.</b> Program<em>mer's</em> Analysis &amp; Verification</a></li>
-<li><a href='01-intro.html#'><b>1.6.</b> Analysis Influences Program's Design</a></li>
-<li><a href='01-intro.html#'><b>1.7.</b> Analysis Influences Program's Design</a></li>
-<li><a href='01-intro.html#'><b>1.8.</b> Analysis Influences Program's Design</a></li>
-<li><a href='01-intro.html#'><b>1.9.</b> Analysis Influences Program's Design</a></li>
-<li><a href='01-intro.html#'><b>1.10.</b> Analysis Influences Program's Design</a></li>
-<li><a href='01-intro.html#'><b>1.11.</b> Program<em>mer's</em> Analysis &amp; Verification</a></li>
-<li><a href='01-intro.html#'><b>1.12.</b> Program Influences Analysis' Abilities</a></li>
-<li><a href='01-intro.html#'><b>1.13.</b> Program Influences Analysis' Abilities</a></li>
-<li><a href='01-intro.html#'><b>1.14.</b> Language Integrated Verification (LIVE)</a></li>
-<li><a href='01-intro.html#'><b>1.15.</b> LIVE with Refinement Types</a></li>
-<li><a href='01-intro.html#'><b>1.16.</b> Plan</a></li>
+<li><a href='01-intro.html#'><b>1.2.</b> Whats this?</a></li>
+<li><a href='01-intro.html#'><b>1.3.</b> The First <em>Bug</em></a></li>
+<li><a href='01-intro.html#'><b>1.4.</b> Fast forward to Present Day</a></li>
+<li><a href='01-intro.html#'><b>1.5.</b> Fast forward to Present Day</a></li>
+<li><a href='01-intro.html#'><b>1.6.</b> Fast forward to Present Day</a></li>
+<li><a href='01-intro.html#'><b>1.7.</b> Program Analysis &amp; Verification</a></li>
+<li><a href='01-intro.html#'><b>1.8.</b> Modern Languages</a></li>
+<li><a href='01-intro.html#'><b>1.9.</b> Modern Languages</a></li>
+<li><a href='01-intro.html#'><b>1.10.</b> Modern Languages</a></li>
+<li><a href='01-intro.html#'><b>1.11.</b> Modern Languages?</a></li>
+<li><a href='01-intro.html#'><b>1.12.</b> Well-typed programs can go very wrong!</a></li>
+<li><a href='01-intro.html#'><b>1.13.</b> Well-typed programs can go very wrong!</a></li>
+<li><a href='01-intro.html#'><b>1.14.</b> Well-typed programs can go very wrong!</a></li>
+<li><a href='01-intro.html#'><b>1.15.</b> Goal: Language-Integrated Verification (LIVE)</a></li>
+<li><a href='01-intro.html#'><b>1.16.</b> Goal: Language-Integrated Verification (LIVE)</a></li>
+<li><a href='01-intro.html#'><b>1.17.</b> LIVE with Refinement Types</a></li>
 </ul>
-<li><a href='02-refinements.html'><b>2.</b>Basic Refinement Types</a></li>
+<li><a href='02-refinements.html'><b>2.</b>Refinement Types</a></li>
 <ul class='section'>
 <li><a href='02-refinements.html#'><b>2.1.</b> Types</a></li>
 <li><a href='02-refinements.html#'><b>2.2.</b> Predicates</a></li>
@@ -141,7 +144,7 @@ MathJax.Hub.Config({
 <li><a href='02-refinements.html#'><b>2.5.</b> Predicates</a></li>
 <li><a href='02-refinements.html#'><b>2.6.</b> Predicates</a></li>
 <li><a href='02-refinements.html#'><b>2.7.</b> Example: "Singletons"</a></li>
-<li><a href='02-refinements.html#'><b>2.8.</b> Example: Natural Numbers</a></li>
+<li><a href='02-refinements.html#'><b>2.8.</b> Example: Positive Numbers</a></li>
 <li><a href='02-refinements.html#'><b>2.9.</b> A Term Can Have <em>Many</em> Types</a></li>
 <li><a href='02-refinements.html#'><b>2.10.</b> 1. Predicate Subtyping <a href="http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf">[NUPRL, PVS]</a></a></li>
 <li><a href='02-refinements.html#'><b>2.11.</b> 1. Predicate Subtyping <a href="http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf">[NUPRL, PVS]</a></a></li>
@@ -196,63 +199,63 @@ MathJax.Hub.Config({
 <li><a href='03-example-vectors.html#'><b>3.32.</b> Putting it All Together: Binary Search</a></li>
 <li><a href='03-example-vectors.html#'><b>3.33.</b> Plan</a></li>
 </ul>
-<li><a href='04-data-properties.html'><b>4.</b>Properties of Data Structures</a></li>
+<li><a href='04-data-legal.html'><b>4.</b>Invariants of Data Structures</a></li>
 <ul class='section'>
-<li><a href='04-data-properties.html#'><b>4.1.</b> Properties of Data Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.2.</b> Example: List <code>average</code></a></li>
-<li><a href='04-data-properties.html#'><b>4.3.</b> Example: List <code>average</code></a></li>
-<li><a href='04-data-properties.html#'><b>4.4.</b> Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.5.</b> Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.6.</b> Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.7.</b> Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.8.</b> Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.9.</b> Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.10.</b> Example: <code>map</code> over Lists</a></li>
-<li><a href='04-data-properties.html#'><b>4.11.</b> Recap: Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.12.</b> Recap: Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.13.</b> Recap: Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.14.</b> Recap: Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.15.</b> Multiple Measures are Conjoined</a></li>
-<li><a href='04-data-properties.html#'><b>4.16.</b> Multiple Measures are Conjoined</a></li>
-<li><a href='04-data-properties.html#'><b>4.17.</b> Plan</a></li>
+<li><a href='04-data-legal.html#'><b>4.1.</b> Invariants of Data Structures</a></li>
+<li><a href='04-data-legal.html#'><b>4.2.</b> Recall: Properties of Structures</a></li>
+<li><a href='04-data-legal.html#'><b>4.3.</b> Recall: Properties of Structures</a></li>
+<li><a href='04-data-legal.html#'><b>4.4.</b> Strategy: Encode Invariants in <em>Constructors</em></a></li>
+<li><a href='04-data-legal.html#'><b>4.5.</b> Strategy: Encode Invariants in <em>Constructors</em></a></li>
+<li><a href='04-data-legal.html#'><b>4.6.</b> Invariant: Ordered Pairs</a></li>
+<li><a href='04-data-legal.html#'><b>4.7.</b> Invariant via Refined Constructors</a></li>
+<li><a href='04-data-legal.html#'><b>4.8.</b> Invariant via Refined Constructors</a></li>
+<li><a href='04-data-legal.html#'><b>4.9.</b> Invariant via Refined Constructors</a></li>
+<li><a href='04-data-legal.html#'><b>4.10.</b> Refined Data: CSV Tables</a></li>
+<li><a href='04-data-legal.html#'><b>4.11.</b> Exercise: Legal CSV Tables</a></li>
+<li><a href='04-data-legal.html#'><b>4.12.</b> Ordered Lists</a></li>
+<li><a href='04-data-legal.html#'><b>4.13.</b> Ordered Lists</a></li>
+<li><a href='04-data-legal.html#'><b>4.14.</b> Recap: Invariant via Refined Constructors</a></li>
+<li><a href='04-data-legal.html#'><b>4.15.</b> Recap: Invariant via Refined Constructors</a></li>
+<li><a href='04-data-legal.html#'><b>4.16.</b> Plan</a></li>
 </ul>
-<li><a href='05-example-sort.html'><b>5.</b>Case Study: Sorting Lists</a></li>
+<li><a href='05-data-properties.html'><b>5.</b>Properties of Data Structures</a></li>
 <ul class='section'>
-<li><a href='05-example-sort.html#'><b>5.1.</b> Case Study: Sorting Lists</a></li>
-<li><a href='05-example-sort.html#'><b>5.2.</b> Insertion Sort</a></li>
-<li><a href='05-example-sort.html#'><b>5.3.</b> Goal: Verified Insertion Sort</a></li>
-<li><a href='05-example-sort.html#'><b>5.4.</b> Goal: Verified Insertion Sort</a></li>
-<li><a href='05-example-sort.html#'><b>5.5.</b> Property 1: Size</a></li>
-<li><a href='05-example-sort.html#'><b>5.6.</b> Property 1: Size</a></li>
-<li><a href='05-example-sort.html#'><b>5.7.</b> Goal: Verified Insertion Sort</a></li>
-<li><a href='05-example-sort.html#'><b>5.8.</b> Property 2: Permutation</a></li>
-<li><a href='05-example-sort.html#'><b>5.9.</b> SMT Solvers Reason About Sets</a></li>
-<li><a href='05-example-sort.html#'><b>5.10.</b> Specifying A List's Elements</a></li>
-<li><a href='05-example-sort.html#'><b>5.11.</b> Property 2: Permutation</a></li>
-<li><a href='05-example-sort.html#'><b>5.12.</b> Goal: Verified Insertion Sort</a></li>
-<li><a href='05-example-sort.html#'><b>5.13.</b> Case Study: Sorting Lists</a></li>
-<li><a href='05-example-sort.html#'><b>5.14.</b> MergeSort: Size</a></li>
-<li><a href='05-example-sort.html#'><b>5.15.</b> MergeSort: Permutation</a></li>
-<li><a href='05-example-sort.html#'><b>5.16.</b> Plan</a></li>
+<li><a href='05-data-properties.html#'><b>5.1.</b> Properties of Data Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.2.</b> Example: List <code>average</code></a></li>
+<li><a href='05-data-properties.html#'><b>5.3.</b> Example: List <code>average</code></a></li>
+<li><a href='05-data-properties.html#'><b>5.4.</b> Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.5.</b> Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.6.</b> Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.7.</b> Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.8.</b> Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.9.</b> Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.10.</b> Example: <code>map</code> over Lists</a></li>
+<li><a href='05-data-properties.html#'><b>5.11.</b> Recap: Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.12.</b> Recap: Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.13.</b> Recap: Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.14.</b> Recap: Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.15.</b> Multiple Measures are Conjoined</a></li>
+<li><a href='05-data-properties.html#'><b>5.16.</b> Multiple Measures are Conjoined</a></li>
+<li><a href='05-data-properties.html#'><b>5.17.</b> Plan</a></li>
 </ul>
-<li><a href='06-data-legal.html'><b>6.</b>Invariants of Data Structures</a></li>
+<li><a href='06-example-sort.html'><b>6.</b>Case Study: Sorting Lists</a></li>
 <ul class='section'>
-<li><a href='06-data-legal.html#'><b>6.1.</b> Invariants of Data Structures</a></li>
-<li><a href='06-data-legal.html#'><b>6.2.</b> Recall: Properties of Structures</a></li>
-<li><a href='06-data-legal.html#'><b>6.3.</b> Recall: Properties of Structures</a></li>
-<li><a href='06-data-legal.html#'><b>6.4.</b> Strategy: Encode Invariants in <em>Constructors</em></a></li>
-<li><a href='06-data-legal.html#'><b>6.5.</b> Strategy: Encode Invariants in <em>Constructors</em></a></li>
-<li><a href='06-data-legal.html#'><b>6.6.</b> Invariant: Ordered Pairs</a></li>
-<li><a href='06-data-legal.html#'><b>6.7.</b> Invariant via Refined Constructors</a></li>
-<li><a href='06-data-legal.html#'><b>6.8.</b> Invariant via Refined Constructors</a></li>
-<li><a href='06-data-legal.html#'><b>6.9.</b> Invariant via Refined Constructors</a></li>
-<li><a href='06-data-legal.html#'><b>6.10.</b> Refined Data: CSV Tables</a></li>
-<li><a href='06-data-legal.html#'><b>6.11.</b> Exercise: Legal CSV Tables</a></li>
-<li><a href='06-data-legal.html#'><b>6.12.</b> Ordered Lists</a></li>
-<li><a href='06-data-legal.html#'><b>6.13.</b> Ordered Lists</a></li>
-<li><a href='06-data-legal.html#'><b>6.14.</b> Recap: Invariant via Refined Constructors</a></li>
-<li><a href='06-data-legal.html#'><b>6.15.</b> Recap: Invariant via Refined Constructors</a></li>
-<li><a href='06-data-legal.html#'><b>6.16.</b> Plan</a></li>
+<li><a href='06-example-sort.html#'><b>6.1.</b> Case Study: Sorting Lists</a></li>
+<li><a href='06-example-sort.html#'><b>6.2.</b> Insertion Sort</a></li>
+<li><a href='06-example-sort.html#'><b>6.3.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='06-example-sort.html#'><b>6.4.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='06-example-sort.html#'><b>6.5.</b> Property 1: Size</a></li>
+<li><a href='06-example-sort.html#'><b>6.6.</b> Property 1: Size</a></li>
+<li><a href='06-example-sort.html#'><b>6.7.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='06-example-sort.html#'><b>6.8.</b> Property 2: Permutation</a></li>
+<li><a href='06-example-sort.html#'><b>6.9.</b> SMT Solvers Reason About Sets</a></li>
+<li><a href='06-example-sort.html#'><b>6.10.</b> Specifying A List's Elements</a></li>
+<li><a href='06-example-sort.html#'><b>6.11.</b> Property 2: Permutation</a></li>
+<li><a href='06-example-sort.html#'><b>6.12.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='06-example-sort.html#'><b>6.13.</b> Case Study: Sorting Lists</a></li>
+<li><a href='06-example-sort.html#'><b>6.14.</b> MergeSort: Size</a></li>
+<li><a href='06-example-sort.html#'><b>6.15.</b> MergeSort: Permutation</a></li>
+<li><a href='06-example-sort.html#'><b>6.16.</b> Plan</a></li>
 </ul>
 <li><a href='07-example-interpreter.html'><b>7.</b>Case Study: Interpreting an Imperative Language</a></li>
 <ul class='section'>
@@ -374,6 +377,7 @@ MathJax.Hub.Config({
 module Examples
        ( average
        , length
+       , hwAverage
        )
        where
 
@@ -434,7 +438,7 @@ reduce f acc (x:xs) = let acc' = f acc x
   </button>
  
   <div id="program-1" class="programbox">{-@ average :: [Int] -> Int @-}
-average xs  = let total = reduce (+) 0 xs
+average xs  = let total = reduce (+) 0 xs    -- sum xs
                   n     = length xs
               in  
                   div total n
@@ -466,7 +470,7 @@ length (_:t) = 1 + length t </div>
 <div class="mybreak">
 <br>
 </div>
-<p><strong>Allow (some) Functions Inside Refinements</strong></p>
+<p><strong>Allow (some) functions inside refinements</strong></p>
 </section>
 </div>
 <div id="slide-6" class="slide">
@@ -475,7 +479,7 @@ length (_:t) = 1 + length t </div>
 <div class="mybreak">
 <br>
 </div>
-<p><strong>Allow (some) Functions Inside Refinements</strong></p>
+<p><strong>Allow (some) functions inside refinements</strong></p>
 <div id="program-pane-2" class="welleditor" style="background:#fff; position:relative">
 
   <!-- Verify Source -->
@@ -487,7 +491,7 @@ length (_:t) = 1 + length t </div>
   <div id="program-2" class="programbox">{-@ measure length @-}</div>
 </div>
 
-<p><strong>Which lets us define a type alias</strong></p>
+<p>Which lets us define a type for <strong>Non-Empty Lists</strong></p>
 <div id="program-pane-3" class="welleditor" style="background:#fff; position:relative">
 
   <!-- Verify Source -->
@@ -509,14 +513,20 @@ length (_:t) = 1 + length t </div>
 <section id="properties-of-structures-3" class="level2">
 <h2>Properties of Structures</h2>
 <p><br></p>
-<p><strong>Measures Yield Refined Constructors</strong></p>
+<p><strong>Measures Generate <em>Refined</em> Constructors</strong></p>
+<pre class="spec"><code>       []  :: {v:[a] | length v = 0}
+       (:) :: a -&gt; t:[a] -&gt; {v:[a] | length v = 1 + length t}
+</code></pre>
 </section>
 </div>
 <div id="slide-8" class="slide">
 <section id="properties-of-structures-4" class="level2">
 <h2>Properties of Structures</h2>
 <p><br></p>
-<p><strong>Measures Yield Refined Constructors</strong></p>
+<p><strong>Measures Generate <em>Refined</em> Constructors</strong></p>
+<pre class="spec"><code>       []  :: {v:[a] | length v = 0}
+       (:) :: a -&gt; t:[a] -&gt; {v:[a] | length v = 1 + length t}
+</code></pre>
 <div class="mybreak">
 <br>
 </div>
@@ -527,7 +537,10 @@ length (_:t) = 1 + length t </div>
 <section id="properties-of-structures-5" class="level2">
 <h2>Properties of Structures</h2>
 <p><br></p>
-<p><strong>Measures Yield Refined Constructors</strong></p>
+<p><strong>Measures Generate <em>Refined</em> Constructors</strong></p>
+<pre class="spec"><code>       []  :: {v:[a] | length v = 0}
+       (:) :: a -&gt; t:[a] -&gt; {v:[a] | length v = 1 + length t}
+</code></pre>
 <div class="mybreak">
 <br>
 </div>
@@ -572,6 +585,11 @@ map f (x:xs) = f x : map f xs</div>
 <br>
 </div>
 <p><strong>Measures specify properties as functions over Structures</strong></p>
+<pre class="spec"><code>                 {-@ measure length @-}
+                 length       :: [a] -&gt; Nat
+                 length []    = 0
+                 length (_:t) = 1 + length t
+</code></pre>
 </section>
 </div>
 <div id="slide-12" class="slide">
@@ -581,10 +599,18 @@ map f (x:xs) = f x : map f xs</div>
 <br>
 </div>
 <p><strong>Measures specify properties as functions over Structures</strong></p>
+<pre class="spec"><code>                 {-@ measure length @-}
+                 length       :: [a] -&gt; Nat
+                 length []    = 0
+                 length (_:t) = 1 + length t
+</code></pre>
 <div class="mybreak">
 <br>
 </div>
 <p><strong>Refined Constructor Types</strong></p>
+<pre class="spec"><code>       []  :: {v:[a] | length v = 0}
+       (:) :: a -&gt; t:[a] -&gt; {v:[a] | length v = 1 + length t}
+</code></pre>
 </section>
 </div>
 <div id="slide-13" class="slide">
@@ -594,8 +620,11 @@ map f (x:xs) = f x : map f xs</div>
 <br>
 </div>
 <p><strong>Refined Constructor Types</strong></p>
-<p><strong>Generalize Properties</strong></p>
-<p>During <em>construction</em> i.e. <em>applying</em> type of <code>[]</code> and <code>(:)</code></p>
+<pre class="spec"><code>       []  :: {v:[a] | length v = 0}
+       (:) :: a -&gt; t:[a] -&gt; {v:[a] | length v = 1 + length t}
+</code></pre>
+<p><strong>Generalize Properties during Construction</strong></p>
+<p>When <em>applying</em> type of <code>[]</code> and <code>(:)</code></p>
 <div class="mybreak">
 <br>
 </div>
@@ -608,42 +637,41 @@ map f (x:xs) = f x : map f xs</div>
 <br>
 </div>
 <p><strong>Refined Constructor Types</strong></p>
-<p><strong>Generalize Properties</strong></p>
-<p>During <em>construction</em> i.e. <em>applying</em> type of <code>[]</code> and <code>(:)</code></p>
+<pre class="spec"><code>       []  :: {v:[a] | length v = 0}
+       (:) :: a -&gt; t:[a] -&gt; {v:[a] | length v = 1 + length t}
+</code></pre>
+<p><strong>Generalize Properties during Construction</strong></p>
+<p>When <em>applying</em> type of <code>[]</code> and <code>(:)</code></p>
 <div class="mybreak">
 <br>
 </div>
-<p><strong>Instantiate Properties</strong></p>
-<p>During <em>pattern-matching</em> i.e. <em>unapplying</em> type of <code>[]</code> and <code>(:)</code></p>
+<p><strong>Instantiate Properties during Pattern-Matching</strong></p>
+<p>When <em>unapplying</em> type of <code>[]</code> and <code>(:)</code></p>
 </section>
 </div>
 <div id="slide-15" class="slide">
 <section id="multiple-measures-are-conjoined" class="level2">
 <h2>Multiple Measures are Conjoined</h2>
 <p><br> <br></p>
-<p>We wrote multiple measures for lists</p>
+<p><strong>We can write <em>multiple</em> measures for lists</strong></p>
+<pre class="spec"><code>                      length :: [a] -&gt; Int 
+                      elems  :: [a] -&gt; Set a
+</code></pre>
 </section>
 </div>
 <div id="slide-16" class="slide">
 <section id="multiple-measures-are-conjoined-1" class="level2">
 <h2>Multiple Measures are Conjoined</h2>
-<p>We wrote multiple measures for lists</p>
-<p>Their data constructor refinements are <strong>conjoined</strong></p>
-<p><strong>Allows programmer to easily <em>extend</em> properties</strong></p>
-</section>
-</div>
-<div id="slide-17" class="slide">
-<section id="plan" class="level2">
-<h2>Plan</h2>
-<p><br></p>
-<p><strong>Part I:</strong> <a href="02-refinements.html">Refinements 101</a></p>
-<p>Case Study: <a href="03-example-vectors.html">Vector Bounds</a></p>
-<p><strong>Part II:</strong> <a href="04-data-properties.html">Properties of Structures</a></p>
-<p>Case Study: <strong><a href="05-example-sort.html">Sorting</a></strong>, <a href="06-example-interpreter.html">Interpreter</a></p>
-<p><strong>Part III:</strong> <a href="07-data-legal.html">Invariants of Data Structures</a></p>
-<p>Case Study: <a href="08-example-sort.html">Sorting actually Sorts Lists</a></p>
-<p><strong>Part IV:</strong> <a href="09-termination.html">Termination</a> and <a href="10-reflection.html">Correctness Proofs</a></p>
-<p>Case Study: <a href="11-example-opt.html">Optimizing Arithmetic Expressions</a></p>
+<p><strong>We can write <em>multiple</em> measures for lists</strong></p>
+<pre class="spec"><code>                      length :: [a] -&gt; Int 
+                      elems  :: [a] -&gt; Set a
+</code></pre>
+<p><strong>Constructor refinements are <em>conjoined</em></strong></p>
+<pre class="spec"><code>  []  :: {v:[a] | length v = 0 &amp;&amp; elems v = empty}
+  (:) :: x:a -&gt; xs:[a] -&gt; {v:[a] |  length v = 1 + length xs
+                                 &amp;&amp; elems v  = addElem x  xs }
+</code></pre>
+<p><strong>Allows programmer to easily <em>extend</em> properties</strong> <a href="00-plan.html">continue …</a></p>
 </section>
 </div>
 

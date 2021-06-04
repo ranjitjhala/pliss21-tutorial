@@ -59,6 +59,8 @@ MathJax.Hub.Config({
       Int:  "\\mathtt{Int}",
       Nat:  "\\mathtt{Nat}",
       Zero: "\\mathtt{Zero}",
+      Pos:  "\\mathtt{Pos}",
+      Two: "\\mathtt{Two}",
       foo:   ["{\\bf Jhala FOO #1}", 1],
       kvar:  ["{\\color[rgb]{1,0,0}{K_{#1}({#2})}}", 2],
       bindx: ["{{#1}\\!:\\!{#2}}", 2],
@@ -116,23 +118,24 @@ MathJax.Hub.Config({
 <li><a href='01-intro.html'><b>1.</b>title: "Habits"</a></li>
 <ul class='section'>
 <li><a href='01-intro.html#'><b>1.1.</b> Follow Along at This URL</a></li>
-<li><a href='01-intro.html#'><b>1.2.</b> Program Analysis &amp; Verification</a></li>
-<li><a href='01-intro.html#'><b>1.3.</b> Program Analysis &amp; Verification</a></li>
-<li><a href='01-intro.html#'><b>1.4.</b> Program Analysis &amp; Verification</a></li>
-<li><a href='01-intro.html#'><b>1.5.</b> Program<em>mer's</em> Analysis &amp; Verification</a></li>
-<li><a href='01-intro.html#'><b>1.6.</b> Analysis Influences Program's Design</a></li>
-<li><a href='01-intro.html#'><b>1.7.</b> Analysis Influences Program's Design</a></li>
-<li><a href='01-intro.html#'><b>1.8.</b> Analysis Influences Program's Design</a></li>
-<li><a href='01-intro.html#'><b>1.9.</b> Analysis Influences Program's Design</a></li>
-<li><a href='01-intro.html#'><b>1.10.</b> Analysis Influences Program's Design</a></li>
-<li><a href='01-intro.html#'><b>1.11.</b> Program<em>mer's</em> Analysis &amp; Verification</a></li>
-<li><a href='01-intro.html#'><b>1.12.</b> Program Influences Analysis' Abilities</a></li>
-<li><a href='01-intro.html#'><b>1.13.</b> Program Influences Analysis' Abilities</a></li>
-<li><a href='01-intro.html#'><b>1.14.</b> Language Integrated Verification (LIVE)</a></li>
-<li><a href='01-intro.html#'><b>1.15.</b> LIVE with Refinement Types</a></li>
-<li><a href='01-intro.html#'><b>1.16.</b> Plan</a></li>
+<li><a href='01-intro.html#'><b>1.2.</b> Whats this?</a></li>
+<li><a href='01-intro.html#'><b>1.3.</b> The First <em>Bug</em></a></li>
+<li><a href='01-intro.html#'><b>1.4.</b> Fast forward to Present Day</a></li>
+<li><a href='01-intro.html#'><b>1.5.</b> Fast forward to Present Day</a></li>
+<li><a href='01-intro.html#'><b>1.6.</b> Fast forward to Present Day</a></li>
+<li><a href='01-intro.html#'><b>1.7.</b> Program Analysis &amp; Verification</a></li>
+<li><a href='01-intro.html#'><b>1.8.</b> Modern Languages</a></li>
+<li><a href='01-intro.html#'><b>1.9.</b> Modern Languages</a></li>
+<li><a href='01-intro.html#'><b>1.10.</b> Modern Languages</a></li>
+<li><a href='01-intro.html#'><b>1.11.</b> Modern Languages?</a></li>
+<li><a href='01-intro.html#'><b>1.12.</b> Well-typed programs can go very wrong!</a></li>
+<li><a href='01-intro.html#'><b>1.13.</b> Well-typed programs can go very wrong!</a></li>
+<li><a href='01-intro.html#'><b>1.14.</b> Well-typed programs can go very wrong!</a></li>
+<li><a href='01-intro.html#'><b>1.15.</b> Goal: Language-Integrated Verification (LIVE)</a></li>
+<li><a href='01-intro.html#'><b>1.16.</b> Goal: Language-Integrated Verification (LIVE)</a></li>
+<li><a href='01-intro.html#'><b>1.17.</b> LIVE with Refinement Types</a></li>
 </ul>
-<li><a href='02-refinements.html'><b>2.</b>Basic Refinement Types</a></li>
+<li><a href='02-refinements.html'><b>2.</b>Refinement Types</a></li>
 <ul class='section'>
 <li><a href='02-refinements.html#'><b>2.1.</b> Types</a></li>
 <li><a href='02-refinements.html#'><b>2.2.</b> Predicates</a></li>
@@ -141,7 +144,7 @@ MathJax.Hub.Config({
 <li><a href='02-refinements.html#'><b>2.5.</b> Predicates</a></li>
 <li><a href='02-refinements.html#'><b>2.6.</b> Predicates</a></li>
 <li><a href='02-refinements.html#'><b>2.7.</b> Example: "Singletons"</a></li>
-<li><a href='02-refinements.html#'><b>2.8.</b> Example: Natural Numbers</a></li>
+<li><a href='02-refinements.html#'><b>2.8.</b> Example: Positive Numbers</a></li>
 <li><a href='02-refinements.html#'><b>2.9.</b> A Term Can Have <em>Many</em> Types</a></li>
 <li><a href='02-refinements.html#'><b>2.10.</b> 1. Predicate Subtyping <a href="http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf">[NUPRL, PVS]</a></a></li>
 <li><a href='02-refinements.html#'><b>2.11.</b> 1. Predicate Subtyping <a href="http://pvs.csl.sri.com/papers/subtypes98/tse98.pdf">[NUPRL, PVS]</a></a></li>
@@ -196,63 +199,63 @@ MathJax.Hub.Config({
 <li><a href='03-example-vectors.html#'><b>3.32.</b> Putting it All Together: Binary Search</a></li>
 <li><a href='03-example-vectors.html#'><b>3.33.</b> Plan</a></li>
 </ul>
-<li><a href='04-data-properties.html'><b>4.</b>Properties of Data Structures</a></li>
+<li><a href='04-data-legal.html'><b>4.</b>Invariants of Data Structures</a></li>
 <ul class='section'>
-<li><a href='04-data-properties.html#'><b>4.1.</b> Properties of Data Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.2.</b> Example: List <code>average</code></a></li>
-<li><a href='04-data-properties.html#'><b>4.3.</b> Example: List <code>average</code></a></li>
-<li><a href='04-data-properties.html#'><b>4.4.</b> Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.5.</b> Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.6.</b> Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.7.</b> Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.8.</b> Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.9.</b> Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.10.</b> Example: <code>map</code> over Lists</a></li>
-<li><a href='04-data-properties.html#'><b>4.11.</b> Recap: Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.12.</b> Recap: Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.13.</b> Recap: Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.14.</b> Recap: Properties of Structures</a></li>
-<li><a href='04-data-properties.html#'><b>4.15.</b> Multiple Measures are Conjoined</a></li>
-<li><a href='04-data-properties.html#'><b>4.16.</b> Multiple Measures are Conjoined</a></li>
-<li><a href='04-data-properties.html#'><b>4.17.</b> Plan</a></li>
+<li><a href='04-data-legal.html#'><b>4.1.</b> Invariants of Data Structures</a></li>
+<li><a href='04-data-legal.html#'><b>4.2.</b> Recall: Properties of Structures</a></li>
+<li><a href='04-data-legal.html#'><b>4.3.</b> Recall: Properties of Structures</a></li>
+<li><a href='04-data-legal.html#'><b>4.4.</b> Strategy: Encode Invariants in <em>Constructors</em></a></li>
+<li><a href='04-data-legal.html#'><b>4.5.</b> Strategy: Encode Invariants in <em>Constructors</em></a></li>
+<li><a href='04-data-legal.html#'><b>4.6.</b> Invariant: Ordered Pairs</a></li>
+<li><a href='04-data-legal.html#'><b>4.7.</b> Invariant via Refined Constructors</a></li>
+<li><a href='04-data-legal.html#'><b>4.8.</b> Invariant via Refined Constructors</a></li>
+<li><a href='04-data-legal.html#'><b>4.9.</b> Invariant via Refined Constructors</a></li>
+<li><a href='04-data-legal.html#'><b>4.10.</b> Refined Data: CSV Tables</a></li>
+<li><a href='04-data-legal.html#'><b>4.11.</b> Exercise: Legal CSV Tables</a></li>
+<li><a href='04-data-legal.html#'><b>4.12.</b> Ordered Lists</a></li>
+<li><a href='04-data-legal.html#'><b>4.13.</b> Ordered Lists</a></li>
+<li><a href='04-data-legal.html#'><b>4.14.</b> Recap: Invariant via Refined Constructors</a></li>
+<li><a href='04-data-legal.html#'><b>4.15.</b> Recap: Invariant via Refined Constructors</a></li>
+<li><a href='04-data-legal.html#'><b>4.16.</b> Plan</a></li>
 </ul>
-<li><a href='05-example-sort.html'><b>5.</b>Case Study: Sorting Lists</a></li>
+<li><a href='05-data-properties.html'><b>5.</b>Properties of Data Structures</a></li>
 <ul class='section'>
-<li><a href='05-example-sort.html#'><b>5.1.</b> Case Study: Sorting Lists</a></li>
-<li><a href='05-example-sort.html#'><b>5.2.</b> Insertion Sort</a></li>
-<li><a href='05-example-sort.html#'><b>5.3.</b> Goal: Verified Insertion Sort</a></li>
-<li><a href='05-example-sort.html#'><b>5.4.</b> Goal: Verified Insertion Sort</a></li>
-<li><a href='05-example-sort.html#'><b>5.5.</b> Property 1: Size</a></li>
-<li><a href='05-example-sort.html#'><b>5.6.</b> Property 1: Size</a></li>
-<li><a href='05-example-sort.html#'><b>5.7.</b> Goal: Verified Insertion Sort</a></li>
-<li><a href='05-example-sort.html#'><b>5.8.</b> Property 2: Permutation</a></li>
-<li><a href='05-example-sort.html#'><b>5.9.</b> SMT Solvers Reason About Sets</a></li>
-<li><a href='05-example-sort.html#'><b>5.10.</b> Specifying A List's Elements</a></li>
-<li><a href='05-example-sort.html#'><b>5.11.</b> Property 2: Permutation</a></li>
-<li><a href='05-example-sort.html#'><b>5.12.</b> Goal: Verified Insertion Sort</a></li>
-<li><a href='05-example-sort.html#'><b>5.13.</b> Case Study: Sorting Lists</a></li>
-<li><a href='05-example-sort.html#'><b>5.14.</b> MergeSort: Size</a></li>
-<li><a href='05-example-sort.html#'><b>5.15.</b> MergeSort: Permutation</a></li>
-<li><a href='05-example-sort.html#'><b>5.16.</b> Plan</a></li>
+<li><a href='05-data-properties.html#'><b>5.1.</b> Properties of Data Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.2.</b> Example: List <code>average</code></a></li>
+<li><a href='05-data-properties.html#'><b>5.3.</b> Example: List <code>average</code></a></li>
+<li><a href='05-data-properties.html#'><b>5.4.</b> Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.5.</b> Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.6.</b> Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.7.</b> Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.8.</b> Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.9.</b> Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.10.</b> Example: <code>map</code> over Lists</a></li>
+<li><a href='05-data-properties.html#'><b>5.11.</b> Recap: Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.12.</b> Recap: Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.13.</b> Recap: Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.14.</b> Recap: Properties of Structures</a></li>
+<li><a href='05-data-properties.html#'><b>5.15.</b> Multiple Measures are Conjoined</a></li>
+<li><a href='05-data-properties.html#'><b>5.16.</b> Multiple Measures are Conjoined</a></li>
+<li><a href='05-data-properties.html#'><b>5.17.</b> Plan</a></li>
 </ul>
-<li><a href='06-data-legal.html'><b>6.</b>Invariants of Data Structures</a></li>
+<li><a href='06-example-sort.html'><b>6.</b>Case Study: Sorting Lists</a></li>
 <ul class='section'>
-<li><a href='06-data-legal.html#'><b>6.1.</b> Invariants of Data Structures</a></li>
-<li><a href='06-data-legal.html#'><b>6.2.</b> Recall: Properties of Structures</a></li>
-<li><a href='06-data-legal.html#'><b>6.3.</b> Recall: Properties of Structures</a></li>
-<li><a href='06-data-legal.html#'><b>6.4.</b> Strategy: Encode Invariants in <em>Constructors</em></a></li>
-<li><a href='06-data-legal.html#'><b>6.5.</b> Strategy: Encode Invariants in <em>Constructors</em></a></li>
-<li><a href='06-data-legal.html#'><b>6.6.</b> Invariant: Ordered Pairs</a></li>
-<li><a href='06-data-legal.html#'><b>6.7.</b> Invariant via Refined Constructors</a></li>
-<li><a href='06-data-legal.html#'><b>6.8.</b> Invariant via Refined Constructors</a></li>
-<li><a href='06-data-legal.html#'><b>6.9.</b> Invariant via Refined Constructors</a></li>
-<li><a href='06-data-legal.html#'><b>6.10.</b> Refined Data: CSV Tables</a></li>
-<li><a href='06-data-legal.html#'><b>6.11.</b> Exercise: Legal CSV Tables</a></li>
-<li><a href='06-data-legal.html#'><b>6.12.</b> Ordered Lists</a></li>
-<li><a href='06-data-legal.html#'><b>6.13.</b> Ordered Lists</a></li>
-<li><a href='06-data-legal.html#'><b>6.14.</b> Recap: Invariant via Refined Constructors</a></li>
-<li><a href='06-data-legal.html#'><b>6.15.</b> Recap: Invariant via Refined Constructors</a></li>
-<li><a href='06-data-legal.html#'><b>6.16.</b> Plan</a></li>
+<li><a href='06-example-sort.html#'><b>6.1.</b> Case Study: Sorting Lists</a></li>
+<li><a href='06-example-sort.html#'><b>6.2.</b> Insertion Sort</a></li>
+<li><a href='06-example-sort.html#'><b>6.3.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='06-example-sort.html#'><b>6.4.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='06-example-sort.html#'><b>6.5.</b> Property 1: Size</a></li>
+<li><a href='06-example-sort.html#'><b>6.6.</b> Property 1: Size</a></li>
+<li><a href='06-example-sort.html#'><b>6.7.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='06-example-sort.html#'><b>6.8.</b> Property 2: Permutation</a></li>
+<li><a href='06-example-sort.html#'><b>6.9.</b> SMT Solvers Reason About Sets</a></li>
+<li><a href='06-example-sort.html#'><b>6.10.</b> Specifying A List's Elements</a></li>
+<li><a href='06-example-sort.html#'><b>6.11.</b> Property 2: Permutation</a></li>
+<li><a href='06-example-sort.html#'><b>6.12.</b> Goal: Verified Insertion Sort</a></li>
+<li><a href='06-example-sort.html#'><b>6.13.</b> Case Study: Sorting Lists</a></li>
+<li><a href='06-example-sort.html#'><b>6.14.</b> MergeSort: Size</a></li>
+<li><a href='06-example-sort.html#'><b>6.15.</b> MergeSort: Permutation</a></li>
+<li><a href='06-example-sort.html#'><b>6.16.</b> Plan</a></li>
 </ul>
 <li><a href='07-example-interpreter.html'><b>7.</b>Case Study: Interpreting an Imperative Language</a></li>
 <ul class='section'>
@@ -375,8 +378,8 @@ MathJax.Hub.Config({
 module SimpleRefinements where
 import Prelude hiding (abs, max)
 
-zero, zero', zero'', four, four' :: Int
-nats :: [Int]
+two, two', two'', four, four' :: Int
+digits :: [Int]
 
 {-@ plus :: x:Int -> y:Int -> {v:Int | v = x + y} @-}
 plus :: Int -> Int -> Int
@@ -384,18 +387,13 @@ plus x y = x + y
 
 {-@ minus:: x:Int -> y:Int -> {v:Int | v = x - y} @-}
 minus :: Int -> Int -> Int
-minus x y = x - y
-
-
--- zero'       :: Int
--- safeDiv     :: Int -> Int -> Int
--- size, size' :: [a] -> Int</div>
+minus x y = x - y</div>
 </div>
 
 </div>
 <div id="slide-0" class="slide">
-<section id="basic-refinement-types" class="level2">
-<h2>Basic Refinement Types</h2>
+<section id="refinement-types" class="level2">
+<h2>Refinement Types</h2>
 <p><br></p>
 <p>Refinement Types = <strong>Types</strong> + <strong>Predicates</strong></p>
 </section>
@@ -403,7 +401,12 @@ minus x y = x - y
 <div id="slide-1" class="slide">
 <section id="types" class="level2">
 <h2>Types</h2>
-<hr style="height:5px; visibility:hidden;" />
+<pre class="spec"><code>b := Int | Bool | Char ...  -- primitives
+   | a, b, c                -- type variables
+</code></pre>
+<pre class="spec"><code>t := {x:b | p}              -- refined base
+   | x:t -&gt; t               -- refined function
+</code></pre>
 <p><code>p</code> is a predicate from a <strong>decidable logic</strong></p>
 </section>
 </div>
@@ -417,20 +420,42 @@ minus x y = x - y
 <section id="predicates-1" class="level2">
 <h2>Predicates</h2>
 <p><strong>Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic</strong></p>
+<p><strong>Refinement Expressions</strong></p>
+<pre class="spec"><code>e := x, y, z, ...         -- variables
+   | 0, 1, 2, ...         -- constants
+   | e + e | c * e | ...  -- arithmetic
+   | f (e1 ... en)        -- functions
+</code></pre>
 </section>
 </div>
 <div id="slide-4" class="slide">
 <section id="predicates-2" class="level2">
 <h2>Predicates</h2>
 <p><strong>Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic</strong></p>
+<p><strong>Refinement Expressions</strong></p>
+<pre class="spec"><code>e := x, y, z, ...         -- variables
+   | 0, 1, 2, ...         -- constants
+   | e + e | c * e | ...  -- arithmetic
+   | f (e1 ... en)        -- functions
+</code></pre>
 <p><strong>Congruence Axiom for Uninterpreted Functions</strong></p>
-<p><span class="math display">\[\forall \overline{x}, \overline{y}.\ \overline{x} = \overline{y}\ \Rightarrow\ f(x) = f(y)\]</span></p>
+<p><span class="math display">\[\forall \overline{x}, \overline{y}.\ \overline{x} = \overline{y}\ \Rightarrow\ f(\overline{x}) = f (\overline{y})\]</span></p>
 </section>
 </div>
 <div id="slide-5" class="slide">
 <section id="predicates-3" class="level2">
 <h2>Predicates</h2>
 <p><strong>Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic</strong></p>
+<p><strong>Refinement Expressions</strong></p>
+<pre class="spec"><code>e := x, y, z, ...         -- variables
+   | 0, 1, 2, ...         -- constants
+   | e + e | c * e | ...  -- arithmetic
+   | f (e1 ... en)        -- functions
+</code></pre>
+<p><strong>Refinement Predicates</strong></p>
+<pre class="spec"><code>p := e &lt;= e | ...         -- atoms
+   | p &amp;&amp; p | p || p | !p -- boolean combinations
+</code></pre>
 </section>
 </div>
 <div id="slide-6" class="slide">
@@ -439,7 +464,7 @@ minus x y = x - y
 <p>Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic</p>
 <p><br></p>
 <p>Given a <strong>Verification Condition</strong> (VC)</p>
-<p><span class="math display">\[p_1 \Rightarrow \ldots \Rightarrow p_n\]</span></p>
+<p><span class="math display">\[p \Rightarrow q\]</span></p>
 <p>SMT solvers can <strong>decide if VC is Valid</strong> (“always true”)</p>
 </section>
 </div>
@@ -447,7 +472,7 @@ minus x y = x - y
 <section id="example-singletons" class="level2">
 <h2>Example: “Singletons”</h2>
 <hr style="height:5px; visibility:hidden;" />
-<p>The alias <code>Zero</code> describes a type inhabited by a <em>single</em> <code>Int</code> value <code>0</code></p>
+<p><code>Two</code> is a type inhabited by a <em>single</em> <code>Int</code> value <code>2</code></p>
 <div id="program-pane-1" class="welleditor" style="background:#fff; position:relative">
 
   <!-- Verify Source -->
@@ -456,10 +481,10 @@ minus x y = x - y
     <span class="glyphicon glyphicon-play"></span>
   </button>
  
-  <div id="program-1" class="programbox">{-@ type Zero = {v:Int | v == 0} @-}
+  <div id="program-1" class="programbox">{-@ type Two = {v:Int | v == 2} @-}
 
-{-@ zero :: Zero @-}
-zero = 0</div>
+{-@ two :: Two @-}
+two = 2 </div>
 </div>
 
 <p>Refinement types via special comments <code>{-@ ... @-}</code></p>
@@ -467,8 +492,8 @@ zero = 0</div>
 </section>
 </div>
 <div id="slide-8" class="slide">
-<section id="example-natural-numbers" class="level2">
-<h2>Example: Natural Numbers</h2>
+<section id="example-positive-numbers" class="level2">
+<h2>Example: Positive Numbers</h2>
 <hr style="height:5px; visibility:hidden;" />
 <div id="program-pane-2" class="welleditor" style="background:#fff; position:relative">
 
@@ -478,10 +503,10 @@ zero = 0</div>
     <span class="glyphicon glyphicon-play"></span>
   </button>
  
-  <div id="program-2" class="programbox">{-@ type Nat = {v:Int | 0 <= v} @-}
+  <div id="program-2" class="programbox">{-@ type Pos = {v:Int | 0 < v} @-}
 
-{-@ nats :: [Nat] @-}
-nats     =  [0, 1, 2, 3]</div>
+{-@ digits :: [Pos] @-}
+digits = [1, 2, 3]</div>
 </div>
 
 <p><strong>Exercise:</strong> What happens if you modify the code or type?</p>
@@ -493,7 +518,7 @@ nats     =  [0, 1, 2, 3]</div>
 <div class="mybreak">
 <br>
 </div>
-<p>What <em>is</em> the type of <code>0</code> ?</p>
+<p>What <em>is</em> the type of <code>2</code> ?</p>
 <div class="mybreak">
 <br>
 </div>
@@ -505,11 +530,11 @@ nats     =  [0, 1, 2, 3]</div>
     <span class="glyphicon glyphicon-play"></span>
   </button>
  
-  <div id="program-3" class="programbox">{-@ zero' :: Nat @-}
-zero' = zero</div>
+  <div id="program-3" class="programbox">{-@ two' :: Pos @-}
+two' = two</div>
 </div>
 
-<p>Is it <code>{v:Int|v=0}</code> or is it <code>{v:Int|0&lt;=v}</code> ?</p>
+<p>Is it <code>{v:Int|v=2}</code> or is it <code>{v:Int|0&lt;=v}</code> ?</p>
 </section>
 </div>
 <div id="slide-10" class="slide">
@@ -558,29 +583,29 @@ zero' = zero</div>
 </section>
 </div>
 <div id="slide-13" class="slide">
-<section id="example-natural-numbers-1" class="level2">
-<h2>Example: Natural Numbers</h2>
+<section id="example-positive-numbers-1" class="level2">
+<h2>Example: Positive Numbers</h2>
 <div class="mybreak">
 <br>
 </div>
 <p><span class="math display">\[
 \begin{array}{rcrccll}
-\mathbf{VC\ is\ Valid:} &amp; \True     &amp; \Rightarrow &amp;  v = 0   &amp; \Rightarrow &amp;  0 \leq v &amp; \mbox{(by SMT)} \\
-\mathbf{So:}            &amp; \emptyset &amp; \vdash      &amp; \Zero    &amp; \preceq     &amp; \Nat      &amp;   \\
+\mathbf{VC\ is\ Valid:} &amp; \True     &amp; \Rightarrow &amp;  v = 2   &amp; \Rightarrow &amp;  0 &lt; v &amp; \mbox{(by SMT)} \\
+\mathbf{So:}            &amp; \emptyset &amp; \vdash      &amp; \Two     &amp; \preceq     &amp; \Pos   &amp;   \\
 \end{array}
 \]</span></p>
 </section>
 </div>
 <div id="slide-14" class="slide">
-<section id="example-natural-numbers-2" class="level2">
-<h2>Example: Natural Numbers</h2>
+<section id="example-positive-numbers-2" class="level2">
+<h2>Example: Positive Numbers</h2>
 <div class="mybreak">
 <br>
 </div>
 <p><span class="math display">\[
 \begin{array}{rcrccll}
-\mathbf{VC\ is\ Valid:} &amp; \True     &amp; \Rightarrow &amp;  v = 0   &amp; \Rightarrow &amp;  0 \leq v &amp; \mbox{(by SMT)} \\
-\mathbf{So:}            &amp; \emptyset &amp; \vdash      &amp; \Zero    &amp; \preceq     &amp; \Nat      &amp;   \\
+\mathbf{VC\ is\ Valid:} &amp; \True     &amp; \Rightarrow &amp;  v = 2  &amp; \Rightarrow &amp;  0 &lt; v &amp; \mbox{(by SMT)} \\
+\mathbf{So:}            &amp; \emptyset &amp; \vdash      &amp; \Two    &amp; \preceq     &amp; \Pos   &amp;   \\
 \end{array}
 \]</span></p>
 <div class="mybreak">
@@ -595,8 +620,8 @@ zero' = zero</div>
     <span class="glyphicon glyphicon-play"></span>
   </button>
  
-  <div id="program-4" class="programbox">{-@ zero'' :: Nat @-}
-zero''    =  0    -- as |-  Zero <: Nat</div>
+  <div id="program-4" class="programbox">{-@ two'' :: Pos @-}
+two''    =  2    -- as |-  Two <: Pos</div>
 </div>
 
 </section>
@@ -621,6 +646,9 @@ zero''    =  0    -- as |-  Zero <: Nat</div>
 <br>
 </div>
 <p><strong>Built-in Functions</strong></p>
+<pre class="spec"><code>         plus  :: x:Int -&gt; y:Int -&gt; {v:Int|v = x + y} 
+         minus :: x:Int -&gt; y:Int -&gt; {v:Int|v = x - y} 
+</code></pre>
 <div class="mybreak">
 <br>
 </div>
@@ -646,7 +674,7 @@ zero''    =  0    -- as |-  Zero <: Nat</div>
     <span class="glyphicon glyphicon-play"></span>
   </button>
  
-  <div id="program-5" class="programbox">{-@ four :: Nat @-}
+  <div id="program-5" class="programbox">{-@ four :: Pos @-}
 four  = plus x 1
   where
     x = 3</div>
@@ -655,7 +683,7 @@ four  = plus x 1
 <div class="mybreak">
 <br>
 </div>
-<p><em>How to prove</em> <code>four :: Nat</code> ?</p>
+<p><em>How to prove</em> <code>four :: Pos</code> ?</p>
 </section>
 </div>
 <div id="slide-18" class="slide">
@@ -697,9 +725,10 @@ four  = plus x 1
                 &amp; \Gamma \vdash x                 :: \Int \\
                 &amp; \Gamma \vdash 1                 :: \Int \\
                 &amp;                                         \\
-{\mathbf{Then}} &amp; \Gamma \vdash \mathit{plus} x 1 :: \reft{v}{\Int}{v = x + 1}
+{\mathbf{Then}} &amp; \Gamma \vdash \mathit{plus}\ x\ 1 :: \reft{v}{\Int}{v = x + 1}
 \end{array}
 \]</span></p>
+<p>i.e. Output type <span class="math inline">\(\reft{v}{\Int}{v = a + b}\)</span> with <em>formals</em> <span class="math inline">\(a, b\)</span> substituted by <em>actuals</em> <span class="math inline">\(x, 1\)</span></p>
 </section>
 </div>
 <div id="slide-20" class="slide">
@@ -720,10 +749,10 @@ four  = plus x 1
     <span class="glyphicon glyphicon-play"></span>
   </button>
  
-  <div id="program-6" class="programbox">{-@ four' :: Nat @-}
-four' = plus x 1   -- x = 3 |- {v = x+1} <: Nat
+  <div id="program-6" class="programbox">{-@ four' :: Pos @-}
+four' = plus x 1   -- x = 3 |- {v = x+1} <: Pos
   where            -- as
-    x = 3          -- x = 3 =>  v = x+1  => 0 <= v</div>
+    x = 3          -- x = 3 =>  v = x+1  => 0 < v</div>
 </div>
 
 <div class="mybreak">
@@ -750,10 +779,10 @@ four' = plus x 1   -- x = 3 |- {v = x+1} <: Nat
     <span class="glyphicon glyphicon-play"></span>
   </button>
  
-  <div id="program-7" class="programbox">{-@ incr :: Nat -> Nat @-}
-incr x = plus x 1  -- {0 <= x} |- {v = x + 1} <: Nat
+  <div id="program-7" class="programbox">{-@ incr :: Pos -> Pos @-}
+incr x = plus x 1  -- {0 < x} |- {v = x + 1} <: Pos 
                    -- as
-                   -- (0 <= x) =>  v = x + 1  => 0 <= v</div>
+                   -- (0 < x) =>  v = x + 1  => 0 < v</div>
 </div>
 
 <div class="mybreak">
@@ -788,8 +817,8 @@ incr x = plus x 1  -- {0 <= x} |- {v = x + 1} <: Nat
 </section>
 </div>
 <div id="slide-24" class="slide">
-<section id="recap-refinement-types-101" class="level2">
-<h2>Recap: Refinement Types 101</h2>
+<section id="recap-basic-refinement-types-2" class="level2">
+<h2>Recap: Basic Refinement Types</h2>
 <div class="mybreak">
 <br>
 </div>
@@ -803,20 +832,7 @@ incr x = plus x 1  -- {0 <= x} |- {v = x + 1} <: Nat
 <div class="mybreak">
 <br>
 </div>
-</section>
-</div>
-<div id="slide-25" class="slide">
-<section id="plan" class="level2">
-<h2>Plan</h2>
-<p><br></p>
-<p><strong>Part I:</strong> <a href="02-refinements.html">Refinements 101</a></p>
-<p>Case Study: <strong><a href="03-example-vectors.html">Vector Bounds</a></strong></p>
-<p><strong>Part II:</strong> <a href="04-data-properties.html">Properties of Structures</a></p>
-<p>Case Study: <a href="05-example-sort.html">Sorting</a>, <a href="06-example-interpreter.html">Interpreter</a></p>
-<p><strong>Part III:</strong> <a href="07-data-legal.html">Invariants of Data Structures</a></p>
-<p>Case Study: <a href="08-example-sort.html">Sorting actually Sorts Lists</a></p>
-<p><strong>Part IV:</strong> <a href="09-termination.html">Termination</a> and <a href="10-reflection.html">Correctness Proofs</a></p>
-<p>Case Study: <a href="11-example-opt.html">Optimizing Arithmetic Expressions</a></p>
+<p><a href="00-plan.html">continue…</a></p>
 </section>
 </div>
 
