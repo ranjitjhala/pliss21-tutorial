@@ -375,8 +375,7 @@ MathJax.Hub.Config({
 {-@ LIQUID "--no-warnings"    @-}
 {-@ LIQUID "--no-termination" @-}
 
-
-module Interpreter (interpret) where
+module Interpreter (safeDiv, impossible, interpret) where
 
 import           Prelude hiding (lookup)
 import qualified Data.Set as S
