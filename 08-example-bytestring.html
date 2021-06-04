@@ -420,12 +420,12 @@ import Language.Haskell.Liquid.Prelude</div>
                 import Data.ByteString.Unsafe (unsafeTake)
 </code></pre>
 </div>
-<pre class="spec"><code>          chop     :: String -&gt; Int -&gt; String
-          chop s n = s&#39;
-            where
-              b    = pack s         -- down to low-level
-              b&#39;   = unsafeTake n b -- grab n chars
-              s&#39;   = unpack b&#39;      -- up to high-level
+<pre class="spec"><code>      chop     :: String -&gt; Int -&gt; String
+      chop s n = s&#39;
+        where
+          b    = pack s         -- convert String to low-level
+          b&#39;   = unsafeTake n b -- take prefix of n bytes
+          s&#39;   = unpack b&#39;      -- convert low-level to String
 </code></pre>
 <p><br></p>
 </section>
