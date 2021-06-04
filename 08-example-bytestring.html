@@ -416,16 +416,16 @@ import Language.Haskell.Liquid.Prelude</div>
 <p><strong>A String Truncation Function</strong></p>
 <p><br></p>
 <div class="hidden">
-<pre class="spec"><code>import Data.ByteString.Char8  (pack, unpack)
-import Data.ByteString.Unsafe (unsafeTake)
+<pre class="spec"><code>                import Data.ByteString.Char8  (pack, unpack)
+                import Data.ByteString.Unsafe (unsafeTake)
 </code></pre>
 </div>
-<pre class="spec"><code>chop     :: String -&gt; Int -&gt; String
-chop s n = s&#39;
-  where
-    b    = pack s         -- down to low-level
-    b&#39;   = unsafeTake n b -- grab n chars
-    s&#39;   = unpack b&#39;      -- up to high-level
+<pre class="spec"><code>                chop     :: String -&gt; Int -&gt; String
+                chop s n = s&#39;
+                  where
+                    b    = pack s         -- down to low-level
+                    b&#39;   = unsafeTake n b -- grab n chars
+                    s&#39;   = unpack b&#39;      -- up to high-level
 </code></pre>
 <p><br></p>
 </section>
