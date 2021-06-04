@@ -668,19 +668,14 @@ useE (AAdd e1 e2) = S.empty    -- TODO: replace with proper definition
   </button>
  
   <div id="program-11" class="programbox">evalS :: State -> Stmt -> State
-
 evalS st Skip          = st
-
 evalS st (Asgn x e)    = set x (evalE st e) st
-
 evalS st (If e s1 s2)  = if (evalE st e /= 0)
                            then evalS st s1
                            else evalS st s2
-
 evalS st w@(While e s) = if (evalE st e /= 0)
                            then evalS st (Seq s w) 
                            else st
-
 evalS st (Seq s1 s2)   = evalS (evalS st s1) s2</div>
 </div>
 
