@@ -878,7 +878,7 @@ sum'' vec = let is  = range 0 (size vec)
                 reduce add 0 is               </div>
 </div>
 
-<p>Polymorphic types enable <a href="100-range-constraints.html">automatic refinement inference</a></p>
+<p>Polymorphic types enable <a href="http://goto.ucsd.edu/~rjhala/papers/liquid_types.pdf">automatic refinement inference</a></p>
 <pre class="spec"><code>     is  :: [{i:|0 &lt;= i &lt; len vec}]              
      add :: Int  -&gt; {i:|0 &lt;= i &lt; len vec} -&gt; Int 
 </code></pre>
