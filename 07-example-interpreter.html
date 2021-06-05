@@ -407,14 +407,6 @@ useS (While e s)  = S.union (useE e) (useS s)
 useS (Seq s1 s2)  = S.union (useS s1) (S.difference (useS s2) (defS s1)) 
 useS Skip         = S.empty
 
-{-@ measure defS @-}
-defS :: Stmt -> S.Set Var
-defS (Asgn x e)   = S.singleton x
-defS (If e s1 s2) = S.intersection (defS s1) (defS s2)
-defS (While e s)  = S.empty
-defS (Seq s1 s2)  = S.union (defS s1) (defS s2) 
-defS Skip         = S.empty  
-
 
 -}</div>
 </div>
@@ -618,12 +610,11 @@ evalE st (AAdd e1 e2) = (evalE st e1) + (evalE st e2)</div>
  
   <div id="program-9" class="programbox">{-@ measure useE @-}
 useE :: AExp -> S.Set Var
+useE (AVal v)     = S.empty
 useE (AVar x)     = S.empty    -- TODO: replace with proper definition
-useE (AVal v)     = S.empty    -- TODO: replace with proper definition
 useE (AAdd e1 e2) = S.empty    -- TODO: replace with proper definition
 
 {- | HINT : You may want to use 
-     * S.empty              : the empty set
      * S.singleton x        : the set containing just x 
      * S.union s1 s2        : the union of s1 and s2                -}</div>
 </div>
@@ -683,9 +674,9 @@ evalS st (Seq s1 s2)   = evalS (evalS st s1) s2</div>
 </section>
 </div>
 <div id="slide-12" class="slide">
-<section id="specify-used-before-defined-variables" class="level2">
-<h2>Specify Used-Before-Defined Variables</h2>
-<p><strong>Problem: Which <code>Var</code>s are <em>used-before-definition</em> in a <code>Stmt</code>?</strong></p>
+<section id="specify-defined-variables" class="level2">
+<h2>Specify <em>Defined</em> Variables</h2>
+<p><br></p>
 <div id="program-pane-12" class="welleditor" style="background:#fff; position:relative">
 
   <!-- Verify Source -->
@@ -694,28 +685,22 @@ evalS st (Seq s1 s2)   = evalS (evalS st s1) s2</div>
     <span class="glyphicon glyphicon-play"></span>
   </button>
  
-  <div id="program-12" class="programbox">{-@ measure useS @-}
-useS :: Stmt -> S.Set Var
-useS (Asgn x e)   = S.empty    -- TODO: replace with proper definition 
-useS (If e s1 s2) = S.empty    -- TODO: replace with proper definition
-useS (While e s)  = S.empty    -- TODO: replace with proper definition
-useS (Seq s1 s2)  = S.empty    -- TODO: replace with proper definition
-useS Skip         = S.empty    -- TODO: replace with proper definition
-
-{- | HINT: * S.empty              : the empty set
-           * S.singleton x        : the set containing just x 
-           * S.union s1 s2        : the union of s1 and s2         
-           * S.intersection s1 s2 : the union of s1 and s2          -}</div>
+  <div id="program-12" class="programbox">{-@ measure defS @-}
+defS :: Stmt -> S.Set Var
+defS Skip         = S.empty  
+defS (Asgn x e)   = S.singleton x
+defS (If e s1 s2) = S.intersection (defS s1) (defS s2)
+defS (While e s)  = S.empty
+defS (Seq s1 s2)  = S.union (defS s1) (defS s2) </div>
 </div>
 
-<p><strong>Exercise:</strong> Now go back and specify and verify <code>EvalS</code></p>
+<p><strong>Exercise:</strong> Why is the <code>While</code> case <code>empty</code>?</p>
 </section>
 </div>
 <div id="slide-13" class="slide">
-<section id="statically-verifying-a-dynamic-check" class="level2">
-<h2>Statically Verifying a Dynamic Check</h2>
-<p><br></p>
-<p><strong><code>interpret</code> uses a <em>run-time check</em> to see if <code>s</code> is safe to evaluate.</strong></p>
+<section id="specify-used-before-definition-variables" class="level2">
+<h2>Specify <em>Used</em> (Before-Definition) Variables</h2>
+<p><strong>Problem: Which <code>Var</code>s are <em>used-before-definition</em> in a <code>Stmt</code>?</strong></p>
 <div id="program-pane-13" class="welleditor" style="background:#fff; position:relative">
 
   <!-- Verify Source -->
@@ -724,7 +709,34 @@ useS Skip         = S.empty    -- TODO: replace with proper definition
     <span class="glyphicon glyphicon-play"></span>
   </button>
  
-  <div id="program-13" class="programbox">interpret :: Stmt -> Maybe State
+  <div id="program-13" class="programbox">{-@ measure useS @-}
+useS :: Stmt -> S.Set Var
+useS (Asgn x e)   = useE e 
+useS (If e s1 s2) = S.union (useE e) (S.union (useS s1) (useS s2)) 
+useS (While e s)  = S.union (useE e) (useS s)
+useS (Seq s1 s2)  = S.empty -- TODO: replace with proper definition
+useS Skip         = S.empty
+
+{- | HINT: * S.difference s1 s2 : the difference of s1 and s2   -}</div>
+</div>
+
+<p><strong>Exercise:</strong> Now go back and specify and verify <code>evalS</code></p>
+</section>
+</div>
+<div id="slide-14" class="slide">
+<section id="statically-verifying-a-dynamic-check" class="level2">
+<h2>Statically Verifying a Dynamic Check</h2>
+<p><br></p>
+<p><strong><code>interpret</code> <em>checks</em> to see if <code>s</code> is safe to evaluate.</strong></p>
+<div id="program-pane-14" class="welleditor" style="background:#fff; position:relative">
+
+  <!-- Verify Source -->
+  <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
+          ng-show="isUnknown" ng-click="verifySource()">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+ 
+  <div id="program-14" class="programbox">interpret :: Stmt -> Maybe State
 interpret s 
   | isSafe s  = Just (evalS Emp s)
   | otherwise = Nothing
@@ -737,11 +749,11 @@ isSafe s = True  -- EXERCISE: replace with correct condition</div>
 <p><strong>Exercise:</strong> What run-time check <code>isSafe</code> <em>statically ensures</em> <code>evalS Emp s</code> won’t crash?</p>
 </section>
 </div>
-<div id="slide-14" class="slide">
+<div id="slide-15" class="slide">
 <section id="some-safe-and-unsafe-programs" class="level2">
 <h2>Some Safe and Unsafe Programs</h2>
 <p>Here are some <strong>safe</strong> statements:</p>
-<div id="program-pane-14" class="welleditor" style="background:#fff; position:relative">
+<div id="program-pane-15" class="welleditor" style="background:#fff; position:relative">
 
   <!-- Verify Source -->
   <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
@@ -749,7 +761,7 @@ isSafe s = True  -- EXERCISE: replace with correct condition</div>
     <span class="glyphicon glyphicon-play"></span>
   </button>
  
-  <div id="program-14" class="programbox">safe1 = (Asgn "X" (AVal 5))   `Seq`       -- x := 5
+  <div id="program-15" class="programbox">safe1 = (Asgn "X" (AVal 5))   `Seq`       -- x := 5
         (Asgn "Y" (AVar "X"))             -- y := x
 
 safe2 = (If (AVal 1)                      -- if 1 
@@ -760,7 +772,7 @@ safe2 = (If (AVal 1)                      -- if 1
 </div>
 
 <p>Here are some <strong>unsafe</strong> ones:</p>
-<div id="program-pane-15" class="welleditor" style="background:#fff; position:relative">
+<div id="program-pane-16" class="welleditor" style="background:#fff; position:relative">
 
   <!-- Verify Source -->
   <button class="btn btn-xs btn-link actbutton" type="button" style="z-index:1"
@@ -768,7 +780,7 @@ safe2 = (If (AVal 1)                      -- if 1
     <span class="glyphicon glyphicon-play"></span>
   </button>
  
-  <div id="program-15" class="programbox">unsafe1 = (Asgn "X" (AVal 5)) `Seq`                   -- x := 5
+  <div id="program-16" class="programbox">unsafe1 = (Asgn "X" (AVal 5)) `Seq`                   -- x := 5
           (Asgn "Y" (AVar "Z"))                       -- y := z
 
 unsafe2 = (While (AVal 0) (Asgn "Z" (AVal 1)))  `Seq` -- while (0) { z := 1} 
