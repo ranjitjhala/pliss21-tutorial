@@ -401,11 +401,11 @@ minus x y = x - y</div>
 <div id="slide-1" class="slide">
 <section id="types" class="level2">
 <h2>Types</h2>
-<pre class="spec"><code>b := Int | Bool | Char ...  -- primitives
-   | a, b, c                -- type variables
+<pre class="spec"><code>            b := Int | Bool | Char ...  -- primitives
+               | a, b, c                -- type variables
 </code></pre>
-<pre class="spec"><code>t := {x:b | p}              -- refined base
-   | x:t -&gt; t               -- refined function
+<pre class="spec"><code>            t := {x:b | p}              -- refined base
+               | x:t -&gt; t               -- refined function
 </code></pre>
 <p><code>p</code> is a predicate from a <strong>decidable logic</strong></p>
 </section>
@@ -421,10 +421,10 @@ minus x y = x - y</div>
 <h2>Predicates</h2>
 <p><strong>Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic</strong></p>
 <p><strong>Refinement Expressions</strong></p>
-<pre class="spec"><code>e := x, y, z, ...         -- variables
-   | 0, 1, 2, ...         -- constants
-   | e + e | c * e | ...  -- arithmetic
-   | f (e1 ... en)        -- functions
+<pre class="spec"><code>            e := x, y, z, ...         -- variables
+               | 0, 1, 2, ...         -- constants
+               | e + e | c * e | ...  -- arithmetic
+               | f (e1 ... en)        -- functions
 </code></pre>
 </section>
 </div>
@@ -433,10 +433,10 @@ minus x y = x - y</div>
 <h2>Predicates</h2>
 <p><strong>Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic</strong></p>
 <p><strong>Refinement Expressions</strong></p>
-<pre class="spec"><code>e := x, y, z, ...         -- variables
-   | 0, 1, 2, ...         -- constants
-   | e + e | c * e | ...  -- arithmetic
-   | f (e1 ... en)        -- functions
+<pre class="spec"><code>            e := x, y, z, ...         -- variables
+               | 0, 1, 2, ...         -- constants
+               | e + e | c * e | ...  -- arithmetic
+               | f (e1 ... en)        -- functions
 </code></pre>
 <p><strong>Congruence Axiom for Uninterpreted Functions</strong></p>
 <p><span class="math display">\[\forall \overline{x}, \overline{y}.\ \overline{x} = \overline{y}\ \Rightarrow\ f(\overline{x}) = f (\overline{y})\]</span></p>
@@ -447,14 +447,14 @@ minus x y = x - y</div>
 <h2>Predicates</h2>
 <p><strong>Quantifier-Free Logic of Uninterpreted Functions &amp; Linear Arithmetic</strong></p>
 <p><strong>Refinement Expressions</strong></p>
-<pre class="spec"><code>e := x, y, z, ...         -- variables
-   | 0, 1, 2, ...         -- constants
-   | e + e | c * e | ...  -- arithmetic
-   | f (e1 ... en)        -- functions
+<pre class="spec"><code>            e := x, y, z, ...         -- variables
+               | 0, 1, 2, ...         -- constants
+               | e + e | c * e | ...  -- arithmetic
+               | f (e1 ... en)        -- functions
 </code></pre>
 <p><strong>Refinement Predicates</strong></p>
-<pre class="spec"><code>p := e &lt;= e | ...         -- atoms
-   | p &amp;&amp; p | p || p | !p -- boolean combinations
+<pre class="spec"><code>            p := e &lt;= e | ...         -- atoms
+               | p &amp;&amp; p | p || p | !p -- boolean combinations
 </code></pre>
 </section>
 </div>
