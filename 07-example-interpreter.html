@@ -677,6 +677,8 @@ evalS st (Seq s1 s2)   = evalS (evalS st s1) s2</div>
 <section id="specify-defined-variables" class="level2">
 <h2>Specify <em>Defined</em> Variables</h2>
 <p><br></p>
+<p><code>defS s</code> computes the set of <code>Var</code> that are <em>definitely</em> assigned in statement <code>s</code></p>
+<p><br></p>
 <div id="program-pane-12" class="welleditor" style="background:#fff; position:relative">
 
   <!-- Verify Source -->
