@@ -528,6 +528,9 @@ get x Emp     = impossible (x ++ " is undefined!") </div>
 <div id="slide-6" class="slide">
 <section id="variables-defined-in-a-state" class="level2">
 <h2><code>Var</code>iables Defined in a <code>State</code></h2>
+<div class="mybreak">
+<br>
+</div>
 <p>Lets write a measure for the set of <code>Var</code> in a <code>State</code></p>
 <div id="program-pane-6" class="welleditor" style="background:#fff; position:relative">
 
@@ -676,9 +679,13 @@ evalS st (Seq s1 s2)   = evalS (evalS st s1) s2</div>
 <div id="slide-12" class="slide">
 <section id="specify-defined-variables" class="level2">
 <h2>Specify <em>Defined</em> Variables</h2>
-<p><br></p>
+<div class="mybreak">
+<br>
+</div>
 <p><code>defS s</code> computes the set of <code>Var</code> that are <em>definitely</em> assigned in statement <code>s</code></p>
-<p><br></p>
+<div class="mybreak">
+<br>
+</div>
 <div id="program-pane-12" class="welleditor" style="background:#fff; position:relative">
 
   <!-- Verify Source -->
@@ -702,6 +709,9 @@ defS (Seq s1 s2)  = S.union (defS s1) (defS s2) </div>
 <div id="slide-13" class="slide">
 <section id="specify-used-before-definition-variables" class="level2">
 <h2>Specify <em>Used</em> (Before-Definition) Variables</h2>
+<div class="mybreak">
+<br>
+</div>
 <p><strong>Problem: Which <code>Var</code>s are <em>used-before-definition</em> in a <code>Stmt</code>?</strong></p>
 <div id="program-pane-13" class="welleditor" style="background:#fff; position:relative">
 
@@ -728,7 +738,9 @@ useS Skip         = S.empty
 <div id="slide-14" class="slide">
 <section id="statically-verifying-a-dynamic-check" class="level2">
 <h2>Statically Verifying a Dynamic Check</h2>
-<p><br></p>
+<div class="mybreak">
+<br>
+</div>
 <p><strong><code>interpret</code> <em>checks</em> to see if <code>s</code> is safe to evaluate.</strong></p>
 <div id="program-pane-14" class="welleditor" style="background:#fff; position:relative">
 
@@ -752,9 +764,12 @@ isSafe s = True  -- EXERCISE: replace with correct condition</div>
 </section>
 </div>
 <div id="slide-15" class="slide">
-<section id="some-safe-and-unsafe-programs" class="level2">
-<h2>Some Safe and Unsafe Programs</h2>
-<p>Here are some <strong>safe</strong> statements:</p>
+<section id="some-safe-programs" class="level2">
+<h2>Some Safe Programs</h2>
+<div class="mybreak">
+<br>
+</div>
+<p>Here are some <strong>safe</strong> statements</p>
 <div id="program-pane-15" class="welleditor" style="background:#fff; position:relative">
 
   <!-- Verify Source -->
@@ -773,7 +788,15 @@ safe2 = (If (AVal 1)                      -- if 1
         (Asgn "Y" (AVar "Z"))</div>
 </div>
 
-<p>Here are some <strong>unsafe</strong> ones:</p>
+</section>
+</div>
+<div id="slide-16" class="slide">
+<section id="some-unsafe-programs" class="level2">
+<h2>Some Unsafe Programs</h2>
+<div class="mybreak">
+<br>
+</div>
+<p>Here are some <strong>unsafe</strong> statements</p>
 <div id="program-pane-16" class="welleditor" style="background:#fff; position:relative">
 
   <!-- Verify Source -->
@@ -789,6 +812,7 @@ unsafe2 = (While (AVal 0) (Asgn "Z" (AVal 1)))  `Seq` -- while (0) { z := 1}
           (Asgn "Y" (AVar "Z"))                       -- y := z </div>
 </div>
 
+<p><a href="00-plan.html">Continue …</a></p>
 </section>
 </div>
 
